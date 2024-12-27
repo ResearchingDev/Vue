@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id')->comment('Auto-incrementing ID for users'); // Auto-incrementing ID
             $table->unsignedInteger('client_id')->nullable()->index()->comment('Client ID linked to the clients table'); // Client ID (linked to clients table)
-            $table->unsignedInteger('role_id')->index()->comment('Role ID linked to user_roles table'); // Role ID (linked to user_roles table)
+            $table->unsignedInteger('role_id')->nullable()->index()->comment('Role ID linked to user_roles table'); // Role ID (linked to user_roles table)
             $table->string('username', 255)->nullable()->unique()->comment('Unique username for the user'); // Username
             $table->string('email', 100)->nullable()->unique()->comment('Unique email for the user'); // Email
             $table->string('password', 255)->comment('User password (hashed)'); // User password

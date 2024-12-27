@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_module_rights', function (Blueprint $table) {
             $table->increments('id'); // Auto-incrementing ID
-            $table->unsignedInteger('client_id')->index()->comment('Client ID'); // Client ID
+            $table->unsignedInteger('client_id')->nullable()->index()->comment('Client ID'); // Client ID
             $table->unsignedInteger('role_id')->index()->comment('Role ID'); // Role ID
             $table->unsignedInteger('menu_id')->index()->comment('Menu ID'); // Menu ID
             $table->enum('can_list', ['Yes', 'No', 'Hidden'])->default('Yes')->comment('List permission'); // List permission

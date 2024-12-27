@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('module_menus', function (Blueprint $table) {
             $table->increments('id'); // Auto-incrementing ID
-            $table->unsignedInteger('parent_id')->default(0)->index()->comment('Parent menu ID for hierarchical structure'); // Parent menu ID for hierarchical structure
+            $table->unsignedInteger('parent_id')->default(0)->nullable()->index()->comment('Parent menu ID for hierarchical structure'); // Parent menu ID for hierarchical structure
             $table->string('menu_display_name', 255)->nullable()->comment('Name of the module'); // Name of the module
             $table->string('icon', 255)->nullable()->comment('Icon associated with the menu'); // Icon for the menu
             $table->string('url', 250)->nullable()->comment('URL for the menu item'); // URL for the menu item
