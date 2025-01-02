@@ -26,21 +26,25 @@
                 <label :class="'badge badge-' + menuItem.badgeType" v-if="menuItem.badgeType">{{ (menuItem.badgeValue)
                 }}</label>
                 <a href="javascript:void(0)" class="sidebar-link sidebar-title" :class="{ 'active': menuItem.active }"
-                    v-if="menuItem.type == 'sub'" @click="setNavActive(menuItem, index)">
-
-                    <svg class="stroke-icon">
-                        <use :xlink:href="$getIconPath(menuItem.icon)"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                        <use :xlink:href="$getIconPath(menuItem.iconf)"></use>
-                    </svg>
-                    <span class="lan-3">
-                        {{ $t(menuItem.title) }}
-                    </span>
-                    <div class="according-menu" v-if="menuItem.children">
-                        <i class="fa fa-angle-right pull-right"></i>
-                    </div>
+                   v-if="menuItem.type == 'sub'" @click="setNavActive(menuItem, index)">
+                   
+                   <svg class="stroke-icon">
+                       <use v-bind:href="'/icon-sprite.svg#' + menuItem.icon"></use>
+                   </svg>
+                   
+                   <svg class="fill-icon">
+                       <use v-bind:href="'/icon-sprite.svg#' + menuItem.iconf"></use>
+                   </svg>
+                   
+                   <span class="lan-3">
+                       {{ $t(menuItem.title) }}
+                   </span>
+                   
+                   <div class="according-menu" v-if="menuItem.children">
+                       <i class="fa fa-angle-right pull-right"></i>
+                   </div>
                 </a>
+
 
                 <router-link :to="menuItem.path" class="sidebar-link sidebar-title" v-if="menuItem.type == 'link'"
                     :class="{ 'active': menuItem.active }" v-on:click="hidesecondmenu()"

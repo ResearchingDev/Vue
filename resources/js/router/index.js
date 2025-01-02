@@ -9,7 +9,7 @@ import login from "../pages/auth/login.vue";
 import Default from "../pages/dashboard/default.vue";
 
 //User
-import userProfile from "../pages/users/profile/userProfile.vue";
+import user from "../pages/users/index.vue";
 import userEdit from "../pages/users/profile/userEdit.vue";
 const routes = [
     {
@@ -55,9 +55,9 @@ const routes = [
             {
                 path: "",
                 name: "users",
-                component: userProfile,
+                component: user,
                 meta: {
-                    title: "Users Profile | Subscription - ERP Software",
+                    title: "Manage Users | Subscription - ERP Software",
                 },
             },
             {
