@@ -30,7 +30,7 @@
                             <td><span class="status-icon bg-success"></span> Active</td>
                             <td class="text-center">
                                 <a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal" ><i class="fa fa-pencil"></i> Edit</a> <a class="icon" href="javascript:void(0)"></a>
-                                <a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a>
+                                <button class="btn btn-danger sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i> Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -47,6 +47,51 @@ export default {
     components: {
         newTask,
     },
+    methods: {
+        advanced_success_alert:function(){
+            this.$swal({
+            text:'A wild Pikachu appeared! What do you want to do?',
+            showCancelButton: true,
+            showDenyButton: true,
+            denyButtonText: 'run away!',
+            confirmButtonText: 'Throw Pokéball!',
+            confirmButtonColor: '#4466f2',
+            cancelButtonText: 'Defeat',
+            cancelButtonColor: '#4466f2',
+
+            }).then((result)=>{
+            if(result.value){
+                this.$swal({
+                title:'Gotcha!',
+                text:'Pikachu was caught!',
+                type:'success'
+                });
+            }
+            else if(result.isDenied){
+                this.$swal({
+                text:'Go away Safely',
+                })
+            }
+            else{
+                this.$swal({
+                text:'Pikachu fainted! You gained 500 XP!'
+                });
+            }
+            });
+
+        },
+        advanced_danger_alert:function(){
+            this.$swal({
+            text:'Are you sure you want to do this?',
+            showCancelButton: true,
+            confirmButtonText: 'Ok',
+            confirmButtonColor: '#4466f2',
+            cancelButtonText: 'Cancel',
+            cancelButtonColor: '#efefef',
+            reverseButtons: true
+            });
+        },
+    }
 
 }
 </script>

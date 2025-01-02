@@ -15,7 +15,7 @@ export var menuItems={
       "active": true,
     },
     {
-      "title": "Users",
+      "title": "Manage Users",
       "icon": "stroke-user",
       "iconf":"fill-user",
       "type": "sub",
