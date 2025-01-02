@@ -24,6 +24,9 @@ import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
 import DropZone from 'dropzone-vue';
 import 'bootstrap/dist/js/bootstrap.bundle';
 
+import 'datatables.net-dt/css/dataTables.dataTables.css';
+import 'datatables.net/js/dataTables.js';
+
 // Import i18n localization
 import { createI18n } from 'vue-i18n';
 import English from './locales/en.json';

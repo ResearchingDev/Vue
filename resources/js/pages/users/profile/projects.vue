@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="table-responsive add-project">
-                <table class="table card-table table-vcenter text-nowrap">
+                <table class="table card-table table-vcenter text-nowrap" id="userTable">
                     <thead>
                         <tr>
                             <th>S.No</th>
@@ -21,18 +21,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><a class="text-inherit" href="#">Test Clinet</a></td>
-                            <td>test_client</td>
-                            <td>test_client@mail.com</td>
-                            <td>05/15/2020</td>
-                            <td><span class="status-icon bg-success"></span> Active</td>
-                            <td class="text-center">
-                                <a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal" ><i class="fa fa-pencil"></i> Edit</a> <a class="icon" href="javascript:void(0)"></a>
-                                <button class="btn btn-danger sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i> Delete</button>
-                            </td>
-                        </tr>
+                        <!-- Data will be populated here by DataTables -->
                     </tbody>
                 </table>
             </div>
@@ -42,56 +31,65 @@
 
 <script>
 import newTask from './newTask.vue';
+import $ from 'jquery';
+import 'datatables.net-vue3';
+import axios from 'axios';
+
 export default {
     name: 'userProfile',
     components: {
         newTask,
     },
-    methods: {
-        advanced_success_alert:function(){
-            this.$swal({
-            text:'A wild Pikachu appeared! What do you want to do?',
-            showCancelButton: true,
-            showDenyButton: true,
-            denyButtonText: 'run away!',
-            confirmButtonText: 'Throw Pokéball!',
-            confirmButtonColor: '#4466f2',
-            cancelButtonText: 'Defeat',
-            cancelButtonColor: '#4466f2',
-
-            }).then((result)=>{
-            if(result.value){
-                this.$swal({
-                title:'Gotcha!',
-                text:'Pikachu was caught!',
-                type:'success'
-                });
-            }
-            else if(result.isDenied){
-                this.$swal({
-                text:'Go away Safely',
-                })
-            }
-            else{
-                this.$swal({
-                text:'Pikachu fainted! You gained 500 XP!'
-                });
-            }
+    mounted() {
+        // Initialize DataTable after the component is mounted
+        $(document).ready(function () {
+            $('#userTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/api/users/list', // Adjusted URL to match the route
+                    type: 'GET',
+                    data: function (d) {
+                        // Pass necessary parameters for pagination, sorting, etc.
+                        d.draw = d.draw;
+                        d.start = d.start;
+                        d.length = d.length;
+                    }
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'first_name' },
+                    { data: 'user_type' },
+                    { data: 'email' },
+                    { data: 'created_at' },
+                    { data: 'status' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return `
+                                <a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-pencil"></i> Edit</a>
+                                <button class="btn btn-danger sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i> Delete</button>
+                            `;
+                        },
+                        orderable: false,
+                        searchable: false,
+                    }
+                ]
             });
-
-        },
+        });
+    },
+    methods: {
         advanced_danger_alert:function(){
             this.$swal({
-            text:'Are you sure you want to do this?',
-            showCancelButton: true,
-            confirmButtonText: 'Ok',
-            confirmButtonColor: '#4466f2',
-            cancelButtonText: 'Cancel',
-            cancelButtonColor: '#efefef',
-            reverseButtons: true
+                text: 'Are you sure you want to do this?',
+                showCancelButton: true,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#4466f2',
+                cancelButtonText: 'Cancel',
+                cancelButtonColor: '#efefef',
+                reverseButtons: true
             });
         },
     }
-
 }
 </script>
