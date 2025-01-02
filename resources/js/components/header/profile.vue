@@ -5,6 +5,7 @@
         class="b-r-10"
         src="@/assets/images/dashboard/profile.png"
         alt=""
+        width="35px" height="35px"
       />
       <div class="media-body">
         <span>Emay Walter</span>
@@ -15,7 +16,7 @@
     </div>
     <ul class="profile-dropdown onhover-show-div">
       <li>
-        <router-link :to="'/users/edit'"><vue-feather type="user"></vue-feather><span>Account </span></router-link>
+        <router-link :to="'/users/profile'"><vue-feather type="user"></vue-feather><span>Account </span></router-link>
       </li>
       <li>
         <a @click="logout"
