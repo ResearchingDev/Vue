@@ -52,16 +52,16 @@ const routes = [
         component: Body,
         children: [
             {
-                path: "profile",
-                name: "profile",
+                path: "manage",
+                name: "manage",
                 component: userProfile,
                 meta: {
                     title: "Users Profile | Subscription - ERP Software",
                 },
             },
             {
-                path: "edit",
-                name: "edit",
+                path: "profile",
+                name: "profile",
                 component: userEdit,
                 meta: {
                     title: "Users Edit | Subscription - ERP Software",

@@ -60,8 +60,6 @@
 
 <script>
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-
 export default {
   name: 'login',
   data() {
@@ -110,20 +108,13 @@ export default {
             email: this.user.email.value,
             password: this.user.password.value
           });
-
-          console.log(response.data); // Log full response for debugging
-          console.log(response.data.status); // Check status
-          console.log(response.data.data.token); // Check token
           // Handle successful login
           if (response.data.status === 'success' && response.data.data.token) {
             // Store the token and user info in localStorage
-            localStorage.setItem('User', JSON.stringify({ email: this.user.email.value, user: true }));
-            localStorage.setItem('token', response.data.token);  // Use response.data.token
-
             // Redirect based on the user role
             const user = response.data.data.user; // Correctly access the user object
-            console.log(user.role_code);  // Log role_code for debugging
-
+            localStorage.setItem('User', JSON.stringify(user));
+            localStorage.setItem('token', response.data.data.token);  // Use response.data.token
             if (user.role_code === 'admin') {
               this.$router.push('/admin/dashboard');
             } else {
