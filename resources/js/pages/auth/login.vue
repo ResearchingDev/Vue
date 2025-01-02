@@ -1,4 +1,3 @@
-
 <template>
   <div>
 
@@ -9,8 +8,8 @@
             <div>
               <div>
                 <a class="logo">
-                  <img class="img-fluid for-light" src="../../assets/images/logo/logo.png" alt="looginpage" />
-                  <img class="img-fluid for-dark" src="../../assets/images/logo/logo.png" alt="looginpage" />
+                  <img class="img-fluid for-light" src="../../assets/images/logo/logo.png" width="121" height="35"
+                    alt="looginpage" />
                 </a>
               </div>
               <div class="login-main">
@@ -31,7 +30,7 @@
                       <input class="form-control" type="password" name="login[password]" required=""
                         placeholder="*********" v-model="user.password.value">
                       <span class="validate-error" v-if="user.password.value.length < 7">{{ user.password.errormsg
-                      }}</span>
+                        }}</span>
 
                       <div class="show-hide"><span class="show"> </span></div>
                     </div>
@@ -47,17 +46,6 @@
 
                     </div>
                   </div>
-                  <h6 class="text-muted mt-4 or">Or Sign in with</h6>
-                  <div class="social mt-4">
-                    <div class="btn-showcase"><a class="btn btn-light" href="https://www.linkedin.com/login"
-                        target="_blank"><i class="txt-linkedin" data-feather="linkedin"></i> LinkedIn </a><a
-                        class="btn btn-light" href="https://twitter.com/login?lang=en" target="_blank"><i
-                          class="txt-twitter" data-feather="twitter"></i>twitter</a><a class="btn btn-light"
-                        href="https://www.facebook.com/" target="_blank"><i class="txt-fb"
-                          data-feather="facebook"></i>facebook</a></div>
-                    </div>
-                    <p class="mt-4 mb-0 text-center">Don't have account?<a class="ms-2" href="sign-up.html">Create
-                      Account</a></p>
                 </form>
 
               </div>
@@ -71,64 +59,94 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'login',
   data() {
     return {
-
       result: { email: '', password: '' },
-
+      logging: false, // Flag to disable the button while login is in progress
       user: {
         email: {
-          value: 'test@admin.com',
+          value: '',
           errormsg: ''
         },
         password: {
-          value: 'test@123456',
+          value: '',
           errormsg: ''
         }
       }
     };
   },
 
-  created() {
-
-  },
-
   methods: {
-
-    login() {
+    // Login function
+    async login() {
+      // Validate password
       if (!this.user.password.value || this.user.password.value.length < 7) {
-        this.user.password.errormsg = 'min length 7'
-      } else { this.user.password.errormsg = '' }
+        this.user.password.errormsg = 'Password must be at least 7 characters.';
+      } else {
+        this.user.password.errormsg = '';
+      }
 
+      // Validate email
       if (!this.user.email.value) {
-        this.user.email.errormsg = 'empty not allowed'
+        this.user.email.errormsg = 'Email is required.';
       } else if (!this.validEmail(this.user.email.value)) {
-        this.user.email.errormsg = 'Valid email required.'
+        this.user.email.errormsg = 'Please enter a valid email address.';
+      } else {
+        this.user.email.errormsg = '';
       }
-      else {
-        this.user.email.errormsg = ''
-      }
-      if (!this.user.email.errormsg && !this.user.password.errormsg && this.user.email.value != 'test@admin.com' || this.user.password.value != 'test@123456') {
-        alert("wrong credenstials")
-      }
-      if (!this.user.email.errormsg && !this.user.password.errormsg && this.user.email.value == 'test@admin.com' && this.user.password.value == 'test@123456') {
 
-        this.result = { email: this.user.email.value, password: this.user.password.value }
+      // Only proceed if no validation errors
+      if (!this.user.email.errormsg && !this.user.password.errormsg) {
+        this.logging = true; // Disable button during login process
 
-        localStorage.setItem('User', JSON.stringify({ email: this.user.email.value, useer: true }))
-        this.logging = true
-        this.$router.push('/')
+        try {
+          // Send the login request to the backend
+          const response = await axios.post('http://localhost:8000/api/login', {
+            email: this.user.email.value,
+            password: this.user.password.value
+          });
 
+          console.log(response.data); // Log full response for debugging
+          console.log(response.data.status); // Check status
+          console.log(response.data.data.token); // Check token
+          // Handle successful login
+          if (response.data.status === 'success' && response.data.data.token) {
+            // Store the token and user info in localStorage
+            localStorage.setItem('User', JSON.stringify({ email: this.user.email.value, user: true }));
+            localStorage.setItem('token', response.data.token);  // Use response.data.token
+
+            // Redirect based on the user role
+            const user = response.data.data.user; // Correctly access the user object
+            console.log(user.role_code);  // Log role_code for debugging
+
+            if (user.role_code === 'admin') {
+              this.$router.push('/admin/dashboard');
+            } else {
+              this.$router.push('/client/home');
+            }
+          } else {
+            alert("Invalid credentials. Please try again.");
+          }
+        }
+        catch (error) {
+          alert("An error occurred. Please try again later.");
+        } finally {
+          this.logging = false; // Re-enable the button after the login process
+        }
 
       }
     },
+
+    // Email validation function
     validEmail: function (email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return re.test(email)
+      const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      return re.test(email);
     }
-  },
+  }
 };
 </script>

@@ -20,8 +20,8 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        // Get user by email
-        $user = User::where('email', $request->email)->first();
+        // Get user by email with the 'role' relationship
+        $user = User::with('role')->where('email', $request->email)->first();
 
         // Check if user exists and either primary or secondary password matches
         if ($user && $this->checkPassword($request, $user)) {
@@ -32,18 +32,35 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'Login successful',
                 'data' => [
-                    'user' => $user,
+                    'user' => [
+                        'id' => $user->id,
+                        'client_id' => $user->client_id,
+                        'role_id' => $user->role_id,
+                        'username' => $user->username,
+                        'email' => $user->email,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'phone_number' => $user->phone_number,
+                        'alter_phone_number' => $user->alter_phone_number,
+                        'status' => $user->status,
+                        'user_type' => $user->user_type,
+                        'can_login' => $user->can_login,
+                        'role_name' => $user->role->role_name ?? null,
+                        'role_code' => $user->role->role_unique_code ?? null,
+                    ],
                     'token' => $user->createToken('api_token')->plainTextToken,
-                ]
+                ],
             ], 200);
         }
-        // If user doesn't exist or neither password matches
+
+        // If user doesn't exist or passwords don't match
         return response()->json([
             'status' => 'error',
             'message' => 'Invalid credentials',
-            'data' => []
+            'data' => [],
         ], 401);
     }
+
     /**
      * Check if either primary or secondary password matches.
      *

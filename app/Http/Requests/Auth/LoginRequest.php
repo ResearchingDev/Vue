@@ -23,7 +23,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:users,email', // Ensures email exists in the users table
+            'email' => 'required|email|exists:sub_users,email', // Ensures email exists in the users table
             'password' => 'required|string|min:8',           // Validates password
         ];
     }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_log_histories', function (Blueprint $table) {
+        Schema::create('sub_user_log_histories', function (Blueprint $table) {
             $table->increments('id'); // Auto-incrementing ID
             $table->unsignedInteger('user_id')->nullable()->index()->comment('User ID'); // User ID
             $table->string('ip_address', 50)->nullable()->comment('IP address of the user'); // IP address
@@ -26,9 +26,8 @@ return new class extends Migration
             $table->unsignedInteger('updated_by')->nullable()->comment('Updated by user ID'); // User ID of the updater
             $table->softDeletes(); // Soft delete support
             $table->timestamps(); // Created and updated timestamps
-
             // Define foreign key relationship for user_id
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('sub_users')->onDelete('cascade');
         });
     }
 
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_log_histories');
+        Schema::dropIfExists('sub_user_log_histories');
     }
 };

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_roles', function (Blueprint $table) {
+        Schema::create('sub_user_roles', function (Blueprint $table) {
             $table->increments('id'); // Auto-incrementing ID
             $table->unsignedInteger('client_id')->nullable()->index()->comment('Client ID'); // Client ID
             $table->string('role_name', 50)->comment('Role name'); // Role name
@@ -24,9 +24,8 @@ return new class extends Migration
             $table->unsignedInteger('updated_by')->nullable()->comment('Updated by user ID'); // User ID of the updater
             $table->softDeletes(); // Soft delete support
             $table->timestamps(); // Created and updated timestamps
-
             // Define foreign key relationship for client_id
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('sub_clients')->onDelete('cascade');
         });
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('sub_user_roles');
     }
 };

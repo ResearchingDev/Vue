@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;   
+    protected $table = 'sub_users';  // Use your custom table name here
 
 
     /**
@@ -32,6 +33,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'secondary_password',
         'remember_token',
         'created_at',
         'updated_at',
@@ -52,4 +54,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function role()
+{
+    return $this->belongsTo(SubUserRole::class, 'role_id', 'id');
+}
+
 }
