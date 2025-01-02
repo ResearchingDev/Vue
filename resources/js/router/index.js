@@ -5,9 +5,10 @@ import Body from "../components/body.vue";
 /* Auth */
 import login from "../pages/auth/login.vue";
 
+//Dashboard
 import Default from "../pages/dashboard/default.vue";
 
-// user
+//User
 import userProfile from "../pages/users/profile/userProfile.vue";
 import userEdit from "../pages/users/profile/userEdit.vue";
 const routes = [
@@ -52,8 +53,8 @@ const routes = [
         component: Body,
         children: [
             {
-                path: "manage",
-                name: "manage",
+                path: "",
+                name: "users",
                 component: userProfile,
                 meta: {
                     title: "Users Profile | Subscription - ERP Software",

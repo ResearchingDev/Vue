@@ -44,7 +44,6 @@ export default {
   },
   mounted() {
     // Log the user details when the component is mounted
-    console.log(this.user);
   },
   methods: {
     logout() {

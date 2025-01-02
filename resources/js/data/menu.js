@@ -1,7 +1,7 @@
 export var menuItems={
   "data": [
     {
-      "headTitle1": "General",
+      "headTitle1": "",
       "headTitle2": "Dashboards,Widgets & Layout.",
       "type": "headtitle"
     },
@@ -22,17 +22,11 @@ export var menuItems={
       "active": false,
       "children": [
         {
-          "path": "/users/profile",
+          "path": "/users",
           "title": "Users",
           "type": "link",
           "active":false
         },
-        // {
-        //   "path": "/users/edit",
-        //   "title": "Users Edit",
-        //   "type": "link",
-        //   "active":false
-        // }
       ]
     },
   ]
