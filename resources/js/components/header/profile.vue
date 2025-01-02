@@ -15,16 +15,7 @@
     </div>
     <ul class="profile-dropdown onhover-show-div">
       <li>
-        <router-link :to="'/users/profile'"><vue-feather type="user"></vue-feather><span>Account </span></router-link>
-      </li>
-      <li>
-        <router-link :to="'/email/readMail'"><vue-feather type="mail"></vue-feather><span>Inbox</span></router-link>
-      </li>
-      <li>
-        <router-link :to="'/app/task'"><vue-feather type="file-text"></vue-feather><span>Taskboard</span></router-link>
-      </li>
-      <li>
-        <router-link :to="'/pages/search'"><vue-feather type="settings"></vue-feather><span>Settings</span></router-link>
+        <router-link :to="'/users/edit'"><vue-feather type="user"></vue-feather><span>Account </span></router-link>
       </li>
       <li>
         <a @click="logout"

@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="customizer-links" :class="{ open: customizer }">
-      <div class="nav flex-column nac-pills" id="c-pills-tab">
+      <!-- <div class="nav flex-column nac-pills" id="c-pills-tab">
         <CustomizerTool />
         <CustomizerSetting />
         <Support />
         <Document />
         <CheckFeatures />
         <BuyNow />
-      </div>
+      </div> -->
     </div>
     <div class="customizer-contain" :class="{ open: customizer }">
       <div class="tab-content">
@@ -32,7 +32,7 @@
   import CustomizerConfiguration from './customizerconfiguration.vue';
   import Customlayout from './customlayout.vue';
   import CustomSetting from './customsetting.vue';
-  
+
 
   export default {
     name: 'customizer',
