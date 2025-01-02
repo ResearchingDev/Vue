@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import projects from '../profile/projects.vue';
+import projects from './profile/projects.vue';
 
 export default {
     name: 'userProfile',

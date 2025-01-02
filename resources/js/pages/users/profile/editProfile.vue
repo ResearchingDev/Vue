@@ -16,38 +16,32 @@
           <div class="row">
             <div class="col-md-5">
               <div class="mb-3">
-                <label class="form-label">Company</label>
-                <input class="form-control" type="text" v-model="user.company" placeholder="Company" />
+                <label class="form-label">Email address</label>
+                <input class="form-control" type="email" v-model="user.email" placeholder="Company" />
               </div>
             </div>
             <div class="col-sm-6 col-md-3">
-              <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input class="form-control" type="text" v-model="user.username" placeholder="Username" />
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-              <div class="mb-3">
-                <label class="form-label">Email address</label>
-                <input class="form-control" type="email" v-model="user.email" placeholder="Email" />
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6">
               <div class="mb-3">
                 <label class="form-label">First Name</label>
                 <input class="form-control" type="text" v-model="user.first_name" placeholder="First Name" />
               </div>
             </div>
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
               <div class="mb-3">
                 <label class="form-label">Last Name</label>
                 <input class="form-control" type="text" v-model="user.last_name" placeholder="Last Name" />
               </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-sm-6 col-md-4">
               <div class="mb-3">
-                <label class="form-label">Address</label>
-                <input class="form-control" type="text" v-model="user.address" placeholder="Home Address" />
+                <label class="form-label">Phone</label>
+                <input class="form-control" type="text" v-model="user.phone_number" placeholder="Enter Phone Number" />
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="mb-3">
+                <label class="form-label">State</label>
+                <input class="form-control" type="text" v-model="user.state" placeholder="State" />
               </div>
             </div>
             <div class="col-sm-6 col-md-4">
@@ -56,28 +50,10 @@
                 <input class="form-control" type="text" v-model="user.city" placeholder="City" />
               </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-4">
               <div class="mb-3">
                 <label class="form-label">Postal Code</label>
-                <input class="form-control" type="number" v-model="user.postal_code" placeholder="ZIP Code" />
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="mb-3">
-                <label class="form-label">Country</label>
-                <select class="form-control btn-square" v-model="user.country">
-                  <option value="0">--Select--</option>
-                  <option value="1">Germany</option>
-                  <option value="2">Canada</option>
-                  <option value="3">USA</option>
-                  <option value="4">Australia</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div>
-                <label class="form-label">About Me</label>
-                <textarea class="form-control" rows="5" v-model="user.about" placeholder="Enter About your description"></textarea>
+                <input class="form-control" type="number" v-model="user.zipcode" placeholder="ZIP Code" />
               </div>
             </div>
           </div>
@@ -97,16 +73,15 @@
     data() {
       return {
         user: {
-          company: '',
           username: '',
           email: '',
           first_name: '',
           last_name: '',
           address: '',
           city: '',
-          postal_code: '',
-          country: '',
-          about: ''
+          state: '',
+          zipcode: '',
+          phone_number : ''
         },
         isLoading: true, // Flag to show loading state
       };
@@ -129,7 +104,6 @@
   
           // Update the user object with the data returned from the API
           this.user = response.data;
-          console.log( this.user)
           // Set isLoading to false once data is fetched
           this.isLoading = false;
         } catch (error) {
@@ -141,7 +115,7 @@
         try {
           // Update the profile data via an API POST request
           const token = localStorage.getItem('token');
-          await axios.put('/api/admin/user', this.user, {
+          await axios.put('/api/users/'+this.user.id, this.user, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -155,8 +129,5 @@
     }
   };
   </script>
-  
-  <style scoped>
-  /* Add custom styles here */
-  </style>
+ 
   

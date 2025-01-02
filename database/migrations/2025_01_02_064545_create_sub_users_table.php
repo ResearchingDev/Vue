@@ -23,10 +23,14 @@ return new class extends Migration
             $table->string('last_name', length: 50)->nullable()->comment('Last name of the user'); // Last name
             $table->string('phone_number', 20)->nullable()->comment('Phone number of the user'); // Mobile number
             $table->string('alter_phone_number', 20)->nullable()->comment('Alter phone number of the user'); // Mobile number
-            $table->enum('status', ['Active', 'Inactive'])->default('Active')->comment('User status (Active/Inactive)'); // User status
+            $table->string('city', 70)->nullable()->comment('User city'); // Client city
+            $table->string('state', 30)->nullable()->comment('User state'); // Client state
+            $table->string('zipcode', 20)->nullable()->comment('User zipcode'); // Client zipcode
+            $table->string('timezone', 70)->nullable()->comment('User timezone'); // Client timezone
             $table->enum('user_type', ['Super Admin', 'Client', 'User'])->default('User')->comment('User type (Super Admin/Client/User)'); // Type of user
             $table->enum('can_login', ['Yes', 'No'])->default('Yes')->comment('Whether the user can log in (Yes/No)'); // Whether the user can login
             $table->rememberToken()->comment('Token for remembering user sessions'); // For remembering user sessions
+            $table->enum('status', ['Active', 'Inactive'])->default('Active')->comment('User status (Active/Inactive)'); // User status
             $table->unsignedInteger('created_by')->nullable()->comment('Created by user ID'); // User ID of the creator
             $table->unsignedInteger('updated_by')->nullable()->comment('Updated by user ID'); // User ID of the updater
             $table->softDeletes(); // Soft delete support

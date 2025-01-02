@@ -32,7 +32,6 @@ import { layoutClasses } from '../constants/layout';
 import Header from './header/index.vue';
 import Sidebar from './sidebar/index.vue';
 import Footer from './footer.vue';
-import Customizer from './customizer/index.vue';
 import TapTop from './tapTop.vue';
 
 export default {
@@ -42,7 +41,6 @@ export default {
     Header,
     Sidebar,
     Footer,
-    Customizer,
     TapTop
   },
   data() {
