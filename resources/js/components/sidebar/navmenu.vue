@@ -29,11 +29,11 @@
                    v-if="menuItem.type == 'sub'" @click="setNavActive(menuItem, index)">
                    
                    <svg class="stroke-icon">
-                       <use v-bind:href="'/icon-sprite.svg#' + menuItem.icon"></use>
+                    <use :xlink:href="`/assets/svg/icon-sprite.svg#`+menuItem.icon"></use>
                    </svg>
                    
                    <svg class="fill-icon">
-                       <use v-bind:href="'/icon-sprite.svg#' + menuItem.iconf"></use>
+                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
                    </svg>
                    
                    <span class="lan-3">
@@ -50,11 +50,12 @@
                     :class="{ 'active': menuItem.active }" v-on:click="hidesecondmenu()"
                     @click="setNavActive(menuItem, index)">
                     <svg class="stroke-icon">
-                        <use :xlink:href="$getIconPath(menuItem.icon)"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                        <use :xlink:href="$getIconPath(menuItem.iconf)"></use>
-                    </svg>
+                    <use :xlink:href="`/assets/svg/icon-sprite.svg#`+menuItem.icon"></use>
+                   </svg>
+                   
+                   <svg class="fill-icon">
+                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                   </svg>
                     <span>
                         {{ $t(menuItem.title) }}
                     </span>
@@ -64,11 +65,12 @@
                 <a :href="menuItem.path" class="sidebar-link sidebar-title" v-if="menuItem.type == 'extLink'"
                     @click="setNavActive(menuItem, index)">
                     <svg class="stroke-icon">
-                        <use :xlink:href="$getIconPath(menuItem.icon)"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                        <use :xlink:href="$getIconPath(menuItem.iconf)"></use>
-                    </svg>
+                    <use :xlink:href="`/assets/svg/icon-sprite.svg#`+menuItem.icon"></use>
+                   </svg>
+                   
+                   <svg class="fill-icon">
+                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                   </svg>
                     <span>
                         {{ (menuItem.title) }}
                     </span>
@@ -78,11 +80,12 @@
                 <a :href="menuItem.path" target="_blank" class="sidebar-link sidebar-title"
                     v-if="menuItem.type == 'extTabLink'" @click="setNavActive(menuItem, index)">
                     <svg class="stroke-icon">
-                        <use :xlink:href="$getIconPath(menuItem.icon)"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                        <use :xlink:href="$getIconPath(menuItem.iconf)"></use>
-                    </svg>
+                    <use :xlink:href="`/assets/svg/icon-sprite.svg#`+menuItem.icon"></use>
+                   </svg>
+                   
+                   <svg class="fill-icon">
+                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                   </svg>
                     <span>
                         {{ (menuItem.title) }}
                     </span>
