@@ -1,5 +1,5 @@
 <template>
-    <button class="badge-light-primary btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
+    <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
         data-bs-target="#exampleModal">Add
     </button>
     <div class="modal fade modal-bookmark" id="exampleModal" tabindex="-1" role="dialog"
@@ -10,8 +10,8 @@
                     <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" @click="clearForm"></button>
                 </div>
-                <div class="modal-body">
-                    <form class="form-bookmark needs-validation" id="bookmark-form" novalidate @submit.prevent="submitBookmark">
+                <form class="form-bookmark needs-validation" id="bookmark-form" novalidate @submit.prevent="submitBookmark">
+                    <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-md-6">
                                 <div class="mb-3">
@@ -61,20 +61,20 @@
                                     <input v-model="alter_phone_number" class="form-control" type="text" placeholder="Alternate number">
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
-                                    <select v-model="status" class="form-control btn-square" required>
+                                    <select v-model="status" class="form-control" required>
                                         <option value="">--Select--</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">User Type</label>
-                                    <select v-model="user_type" class="form-control btn-square" required>
+                                    <select v-model="user_type" class="form-control" required>
                                         <option value="">--Select--</option>
                                         <option value="Super Admin">Super Admin</option>
                                         <option value="Client">Client</option>
@@ -82,10 +82,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Mobile Login</label>
-                                    <select v-model="can_login" class="form-control btn-square" required>
+                                    <select v-model="can_login" class="form-control" required>
                                         <option value="">--Select--</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
@@ -93,10 +93,12 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
                         <button class="btn btn-secondary" type="submit">Save</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal" @click="clearForm">Cancel</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
