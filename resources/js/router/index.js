@@ -5,12 +5,12 @@ import Body from "../components/body.vue";
 /* Auth */
 import login from "../pages/auth/login.vue";
 
-//Dashboard
-import Default from "../pages/dashboard/default.vue";
-
 //User
 import user from "../pages/users/index.vue";
 import userEdit from "../pages/users/profile/userEdit.vue";
+
+//Dashboard
+import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
 const routes = [
     {
         path: "/",
@@ -19,7 +19,7 @@ const routes = [
             {
                 path: "",
                 name: "defaultRoot",
-                component: Default,
+                component: apex_chart,
                 meta: {
                     title: "Subscription - ERP Software",
                 },
@@ -33,7 +33,7 @@ const routes = [
             {
                 path: "dashboard",
                 name: "Dashboard",
-                component: Default,
+                component: apex_chart,
                 meta: {
                     title: " Dashboard | Subscription - ERP Software",
                 },
