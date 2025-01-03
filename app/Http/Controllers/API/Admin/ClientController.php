@@ -16,9 +16,6 @@ class ClientController extends Controller
      */
     public function list(Request $request)
     {
-    }
-    public function index(Request $request)
-    {
         // Get the page number and limit from the request
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
@@ -54,8 +51,11 @@ class ClientController extends Controller
             'data' => $users,                                   
         ]);
     }
+    public function index(Request $request)
+    {
+       
+    }
     
-
     /**
      * Store a newly created resource in storage.
      */
@@ -83,10 +83,10 @@ class ClientController extends Controller
                 'address' => $request->address,
                 'status' => $request->status,
             ]);
-
+            $subClientId = $subClient->id;
             // Insert into `users` table
-            $user = User::create([
-                'client_id' => $subClient->id,
+            $user = User::create(attributes: [
+                'client_id' => $subClientId,
                 'role_id' => 2, // Replace with your role logic
                 'username' => $request->username,
                 'email' => $request->email,
@@ -137,7 +137,7 @@ class ClientController extends Controller
             'alternate_phone_number' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:Active,Inactive',
-            'username' => 'sometimes|required|string|unique:sub_users,username,' . $client->id,
+            'username' => 'sometimes|required|string',
             'password' => 'nullable|string|min:8',
         ]);
 
@@ -149,7 +149,6 @@ class ClientController extends Controller
                 'client_name' => $request->client_name,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
-                'alternate_phone_number' => $request->alternate_phone_number,
                 'address' => $request->address,
                 'status' => $request->status,
             ]);
@@ -161,6 +160,9 @@ class ClientController extends Controller
                     'username' => $request->username,
                     'email' => $request->email,
                     'password' => $request->password ? Hash::make($request->password) : $user->password,
+                    'phone_number' => $request->phone_number,
+                    'alter_phone_number' => $request->alternate_phone_number
+
                 ]);
             }
 

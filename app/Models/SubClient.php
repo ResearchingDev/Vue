@@ -21,6 +21,11 @@ class SubClient extends Model
         'status',
         'username',
         'password',
+        'role_id'
     ];
     protected $hidden = ['password'];
+    public function user()
+    {
+        return $this->hasOne(User::class, 'client_id', 'id');
+    }
 }
