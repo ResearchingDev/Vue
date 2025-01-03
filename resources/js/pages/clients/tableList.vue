@@ -3,9 +3,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Users List</h4>
+                <h4 class="card-title mb-0">Client List</h4>
                 <div class="col-md-1 pull-right" style="margin: -27px 0px 0px 0px;">
-                    <newTask/>
+                    <userModals/>
                 </div>
             </div>
             <div class="table-responsive add-project">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import newTask from './newTask.vue';
+import userModals from './Modals.vue';
 import $ from 'jquery';
 import 'datatables.net-vue3';
 import editUser from './editUser.vue';
@@ -39,7 +39,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default {
-    name: 'userProfile',
+    name: 'clients',
     components: {
         newTask,
         editUser,

@@ -1,60 +1,70 @@
 <template>
   <div>
-
     <div class="container-fluid">
-      <div class="row ">
+      <div class="row">
         <div class="col-12 p-0">
           <div class="login-card">
             <div>
               <div>
                 <a class="logo">
                   <img class="img-fluid for-light" src="../../assets/images/logo/logo.png" width="121" height="35"
-                    alt="looginpage" />
+                    alt="loginpage" />
                 </a>
               </div>
               <div class="login-main">
                 <form class="theme-form">
                   <h4>Sign in to account</h4>
                   <p>Enter your email & password to login</p>
+
+                  <!-- Show error or success messages -->
+                  <div v-if="alertMessage" :class="['alert', alertMessage.type === 'success' ? 'alert-success' : 'alert-danger']">
+                    <span>{{ alertMessage.message }}</span>
+                    <span class="close" @click="alertMessage = null">&times;</span>
+                  </div>
+
                   <div class="form-group">
                     <label class="col-form-label">Email Address</label>
                     <input class="form-control" type="email" required="" placeholder="Test@gmail.com"
                       v-model="user.email.value">
-                    <span class="validate-error" v-if="!user.email.value || !validEmail(user.email.value)">{{
-                      user.email.errormsg }}</span>
-
+                    <span class="validate-error" v-if="!user.email.value || !validEmail(user.email.value)">{{ user.email.errormsg }}</span>
                   </div>
                   <div class="form-group">
                     <label class="col-form-label">Password</label>
                     <div class="form-input position-relative">
-                      <input class="form-control" type="password" name="login[password]" required=""
-                        placeholder="*********" v-model="user.password.value">
-                      <span class="validate-error" v-if="user.password.value.length < 7">{{ user.password.errormsg
-                        }}</span>
+                      <!-- Password input with dynamic type based on showPassword state -->
+                      <input 
+                        class="form-control" 
+                        :type="showPassword ? 'text' : 'password'" 
+                        name="login[password]" 
+                        required="" 
+                        placeholder="*********" 
+                        v-model="user.password.value">
+                      
+                      <span class="validate-error" v-if="user.password.value.length < 7">{{ user.password.errormsg }}</span>
 
-                      <div class="show-hide"><span class="show"> </span></div>
+                      <!-- Show/Hide password button -->
+                      <div class="show-hide" @click="togglePasswordVisibility">
+                        <span :class="showPassword ? 'hide' : 'show'"></span>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group mb-0">
                     <div class="checkbox p-0">
                       <input id="checkbox1" type="checkbox">
                       <label class="text-muted" for="checkbox1">Remember password</label>
-                    </div><router-link class="link" to="/authentication/forgetpassword"> Forgot password?</router-link>
+                    </div>
                     <div class="text-end mt-3">
                       <button class="btn btn-primary btn-block w-100" type="submit" @click.prevent="login">Sign
                         in</button>
-
                     </div>
                   </div>
                 </form>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -75,7 +85,9 @@ export default {
           value: '',
           errormsg: ''
         }
-      }
+      },
+      alertMessage: null, // Holds the alert message and its type (success or error)
+      showPassword: false // Flag to toggle password visibility
     };
   },
 
@@ -112,24 +124,35 @@ export default {
           if (response.data.status === 'success' && response.data.data.token) {
             // Store the token and user info in localStorage
             // Redirect based on the user role
-            const user = response.data.data.user; // Correctly access the user object
+            const user = response.data.data.user;
             localStorage.setItem('User', JSON.stringify(user));
-            localStorage.setItem('token', response.data.data.token);  // Use response.data.token
+            localStorage.setItem('token', response.data.data.token);
             if (user.role_code === 'admin') {
               this.$router.push('/admin/dashboard');
             } else {
               this.$router.push('/client/home');
             }
+
+            // Show success alert
+            this.alertMessage = {
+              type: 'success',
+              message: 'Login successful! Redirecting...'
+            };
           } else {
-            alert("Invalid credentials. Please try again.");
+            this.alertMessage = {
+              type: 'error',
+              message: 'Invalid credentials. Please try again.'
+            };
           }
         }
         catch (error) {
-          alert("An error occurred. Please try again later.");
+          this.alertMessage = {
+            type: 'error',
+            message: 'Invalid credentials. Please try again.'
+          };
         } finally {
           this.logging = false; // Re-enable the button after the login process
         }
-
       }
     },
 
@@ -137,7 +160,19 @@ export default {
     validEmail: function (email) {
       const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return re.test(email);
+    },
+
+    // Toggle the visibility of the password
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
     }
   }
 };
 </script>
+<style scoped>
+.validate-error {
+  color: red; /* Add red color to error messages */
+  font-size: 12px;
+  margin-top: 5px;
+}
+</style>

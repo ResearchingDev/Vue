@@ -2482,7 +2482,6 @@ button:focus {
 body {
   font-size: 14px;
   overflow-x: hidden;
-  font-family: Rubik, sans-serif;
   color: #2F2F3B;
 }
 
@@ -4490,7 +4489,7 @@ body.modal-open .select2-container--open .select2-dropdown {
 }
 .card .card-header {
   background-color: #fff;
-  padding: 30px;
+  padding: 20px;
   border-bottom: 1px solid #ecf3fa;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -10568,7 +10567,7 @@ th {
 ==========================**/
 .modal-bookmark .modal-body,
 .modal-bookmark .modal-header {
-  padding: 30px;
+  padding: 20px;
 }
 
 .bookmark-wrap .details-bookmark .row > div + div {

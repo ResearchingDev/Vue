@@ -15,15 +15,15 @@ export var menuItems={
       "active": true,
     },
     {
-      "title": "Manage Users",
+      "title": "Manage Clients",
       "icon": "stroke-user",
       "iconf":"fill-user",
       "type": "sub",
       "active": false,
       "children": [
         {
-          "path": "/users",
-          "title": "Users",
+          "path": "/clients",
+          "title": "Clients",
           "type": "link",
           "active":false
         },
