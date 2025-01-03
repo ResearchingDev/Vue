@@ -63,11 +63,17 @@ export default {
                     }
                 },
                 columns: [
-                    { data: 'id' },
-                    { data: 'first_name' },
-                    { data: 'user_type' },
-                    { data: 'email' },
-                    { data: 'created_at' },
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            // Calculate serial number based on row index (meta.row) and page number
+                            return meta.row + meta.settings._iDisplayStart + 1; // +1 for 1-based index
+                        },
+                    },
+                    { data: 'client_name' },
+                    { data: 'client_email' },
+                    { data: 'phone_number' },
+                    { data: 'user_created_at' },
                     { data: 'status' },
                     {
                         data: null,
