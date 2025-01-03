@@ -7,7 +7,6 @@ import login from "../pages/auth/login.vue";
 
 //User
 import clients from "../pages/clients/index.vue";
-import users from "../pages/users/index.vue";
 import userEdit from "../pages/clients/profile/userEdit.vue";
 
 //Dashboard
@@ -69,20 +68,6 @@ const routes = [
                     title: "Users Edit | Subscription - ERP Software",
                 },
             },
-        ],
-    },
-    {
-        path: "/users",
-        component: Body,
-        children: [
-            {
-                path: "",
-                name: "users",
-                component: users,
-                meta: {
-                    title: "Manage Users | Subscription - ERP Software",
-                },
-            }
         ],
     },
 ];

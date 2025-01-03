@@ -27,12 +27,6 @@ export var menuItems={
           "type": "link",
           "active":false
         },
-        {
-          "path": "/users",
-          "title": "Users",
-          "type": "link",
-          "active":false
-        },
       ]
     },
   ]
