@@ -13,26 +13,46 @@ class UserController extends Controller
      */
     public function list(Request $request)
     {
-        // Get the page number and limit from the request
+        // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
+        $searchValue = $request->input('search.value', '');
+        $orderColumnIndex = $request->input('order.0.column', 0);
+        $orderDirection = $request->input('order.0.dir', 'asc');
 
-        // Get the data from the sub_users table
-        $users = DB::table('sub_users')
-            ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at')
+        // Map column index to actual database columns
+        $columns = ['id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at'];
+        $orderColumn = $columns[$orderColumnIndex] ?? 'id';
+
+        // Query the sub_users table
+        $query = DB::table('sub_users')
+            ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at');
+
+        // Apply search filter
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('first_name', 'like', "%$searchValue%")
+                    ->orWhere('last_name', 'like', "%$searchValue%")
+                    ->orWhere('email', 'like', "%$searchValue%");
+            });
+        }
+
+        // Get the filtered and paginated results
+        $filteredRecords = $query->count();
+        $users = $query->orderBy($orderColumn, $orderDirection)
             ->offset($start)
             ->limit($limit)
             ->get();
 
-        // Count the total number of records in sub_users
+        // Total records count
         $totalRecords = DB::table('sub_users')->count();
 
         // Return a properly structured JSON response
         return response()->json([
-            'draw' => (int) $request->input('draw', 1),      
-            'recordsTotal' => $totalRecords,                
-            'recordsFiltered' => $totalRecords,                 
-            'data' => $users,                                   
+            'draw' => (int) $request->input('draw', 1),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $users,
         ]);
     }
 
@@ -88,6 +108,7 @@ class UserController extends Controller
         ], 201);
     }
 
+    
     /**
      * Display the specified resource.
      */
@@ -103,7 +124,9 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Find the user by ID and return user data for editing
+        $user = User::findOrFail($id);
+        return response()->json($user);
     }
 
     /**
@@ -111,9 +134,41 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:sub_users,email,' . $id,
+            'password' => 'nullable|string|min:6',
+            'secondary_password' => 'nullable|string|min:6', 
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
+            'alter_phone_number' => 'nullable|string|max:15',
+            'status' => 'required|in:Active,Inactive',
+            'user_type' => 'required|in:Super Admin,Client,User',
+            'can_login' => 'required|in:Yes,No',
+        ]);
+
+        // Find the user by ID
         $user = User::findOrFail($id);
-        $user->update($request->all());
-        return response()->json($user);
+
+        // If password is provided, encrypt it
+        if ($request->has('password')) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+        
+        // If secondary password is provided, encrypt it
+        if ($request->has('secondary_password')) {
+            $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);
+        }
+
+        // Update the user data
+        $user->update($validatedData);
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'data' => $user,
+        ], 200);
     }
 
     /**

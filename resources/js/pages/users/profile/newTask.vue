@@ -140,13 +140,13 @@ export default {
             try {
                 // Adjust the URL to match your API route
                 await axios.post('/api/admin/users', formData);
-                alert('User added successfully');
                 this.clearForm();
                 const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
                 modal.hide();
             } catch (error) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                modal.hide();
                 console.error('Error saving user:', error.response?.data || error.message);
-                alert('Failed to save user');
             }
         },
         clearForm() {
