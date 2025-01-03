@@ -7,23 +7,25 @@
                     <clientModals/>
                 </div>
             </div>
-            <div class="table-responsive add-project">
-                <table class="table card-table table-vcenter text-nowrap" id="userTable">
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Created On</th>
-                            <th>Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be populated here by DataTables -->
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <div class="table-responsive add-project">
+                    <table class="table card-table text-center" id="userTable">
+                        <thead>
+                            <tr class="text-center">
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated here by DataTables -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -66,8 +68,8 @@ export default {
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-pencil"></i> Edit</a>
-                                <button class="btn btn-danger sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i> Delete</button>
+                                <a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-pencil"></i></a>
+                                <button class="btn btn-danger btn-sm sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i></button>
                             `;
                         },
                         orderable: false,
