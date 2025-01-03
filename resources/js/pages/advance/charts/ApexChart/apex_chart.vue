@@ -1,5 +1,5 @@
 <template>
-<Breadcrumbs main="Charts" title="ApexChart" />
+<Breadcrumbs main="Home" title="Dashboard" />
 <div class="container-fluid ">
     <div class="row">
         <barChart />

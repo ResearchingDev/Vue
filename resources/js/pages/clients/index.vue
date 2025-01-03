@@ -1,7 +1,7 @@
 <template>
-    <Breadcrumbs title="Users" main="Manage" />
+    <Breadcrumbs title="Clients" main="Manage" />
     <div class="container-fluid ">
-        <div class="users">
+        <div class="clients">
             <div class="row">
                 <tableList />
             </div>
@@ -13,7 +13,7 @@
 import tableList from './tableList.vue';
 
 export default {
-    name: 'users',
+    name: 'clients',
     components: {
         tableList
     },

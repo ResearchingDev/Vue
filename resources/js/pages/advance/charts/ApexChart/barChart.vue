@@ -2,7 +2,7 @@
 <div class="col-sm-12 col-xl-6 box-col-6">
     <div class="card">
         <div class="card-header pb-0">
-            <h3>Bar chart</h3>
+            <h3>Subscription Bar chart</h3>
         </div>
         <div class="card-body">
             <div id="basic-bar">

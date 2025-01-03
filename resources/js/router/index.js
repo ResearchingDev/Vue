@@ -6,8 +6,9 @@ import Body from "../components/body.vue";
 import login from "../pages/auth/login.vue";
 
 //User
-import user from "../pages/users/index.vue";
-import userEdit from "../pages/users/profile/userEdit.vue";
+import clients from "../pages/clients/index.vue";
+import users from "../pages/users/index.vue";
+import userEdit from "../pages/clients/profile/userEdit.vue";
 
 //Dashboard
 import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
@@ -49,15 +50,15 @@ const routes = [
         },
     },
     {
-        path: "/users",
+        path: "/clients",
         component: Body,
         children: [
             {
                 path: "",
-                name: "users",
-                component: user,
+                name: "clients",
+                component: clients,
                 meta: {
-                    title: "Manage Users | Subscription - ERP Software",
+                    title: "Manage Clients | Subscription - ERP Software",
                 },
             },
             {
@@ -68,6 +69,20 @@ const routes = [
                     title: "Users Edit | Subscription - ERP Software",
                 },
             },
+        ],
+    },
+    {
+        path: "/users",
+        component: Body,
+        children: [
+            {
+                path: "",
+                name: "users",
+                component: users,
+                meta: {
+                    title: "Manage Users | Subscription - ERP Software",
+                },
+            }
         ],
     },
 ];
