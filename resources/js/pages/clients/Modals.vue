@@ -1,67 +1,51 @@
 <template>
     <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
-        data-bs-target="#exampleModal">Add
+        data-bs-target="#clientModal">Add
     </button>
-    <div class="modal fade modal-bookmark" id="exampleModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-bookmark" id="clientModal" tabindex="-1" role="dialog"
+        aria-labelledby="clientModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="clientModalLabel">Add Client</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" @click="clearForm"></button>
                 </div>                
-                <form class="form-bookmark needs-validation" id="bookmark-form" novalidate @submit.prevent="submitBookmark">
-                    <div class="modal-body">
+                    <form class="form-bookmark needs-validation" id="client-form" novalidate @submit.prevent="submitClient">
+                        <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <!-- Client Details -->
+                            <h6 class="mb-3">Client Details</h6>
+                            <div class="col-sm-6 col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input v-model="username" class="form-control" type="text" placeholder="Username" required>
+                                    <label class="form-label">Client Name</label>
+                                    <input v-model="client_name" class="form-control" type="text" placeholder="Client Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Email address</label>
-                                    <input v-model="email" class="form-control" type="email" placeholder="Email" required>
+                                    <label class="form-label">Email Address</label>
+                                    <input v-model="email" class="form-control" type="email" placeholder="Client Email" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input v-model="password" class="form-control" type="password" placeholder="Password" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Secondary Password</label>
-                                    <input v-model="secondary_password" class="form-control" type="password" placeholder="Secondary Password" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">First Name</label>
-                                    <input v-model="first_name" class="form-control" type="text" placeholder="First Name" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Last Name</label>
-                                    <input v-model="last_name" class="form-control" type="text" placeholder="Last Name" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone number</label>
+                                    <label class="form-label">Phone Number</label>
                                     <input v-model="phone_number" class="form-control" type="text" placeholder="Phone Number" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Alternate number</label>
-                                    <input v-model="alter_phone_number" class="form-control" type="text" placeholder="Alternate number">
+                                    <label class="form-label">Alternate Phone Number</label>
+                                    <input v-model="alternate_phone_number" class="form-control" type="text" placeholder="Alternate Phone Number">
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <input v-model="address" class="form-control" type="text" placeholder="Client Address">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
                                     <select v-model="status" class="form-control" required>
@@ -71,31 +55,28 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">User Type</label>
-                                    <select v-model="user_type" class="form-control" required>
-                                        <option value="">--Select--</option>
-                                        <option value="Super Admin">Super Admin</option>
-                                        <option value="Client">Client</option>
-                                        <option value="User">User</option>
-                                    </select>
+                        </div>
+
+                        <!-- Login Credentials Section -->
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3">Login Credentials</h6>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        <input v-model="username" class="form-control" type="text" placeholder="Username" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Mobile Login</label>
-                                    <select v-model="can_login" class="form-control" required>
-                                        <option value="">--Select--</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input v-model="password" class="form-control" type="password" placeholder="Password" required>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="submit">Save</button>
+
+                        <button class="btn btn-secondary" type="submit">Save Client</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal" @click="clearForm">Cancel</button>
                     </div>
                 </form>
@@ -110,59 +91,50 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            username: '',
+            client_name: '',
             email: '',
-            password: '',
-            secondary_password:'',
-            first_name: '',
-            last_name: '',
             phone_number: '',
-            alter_phone_number: '',
+            alternate_phone_number: '',
+            address: '',
             status: '',
-            user_type: '',
-            can_login: '',
+            username: '',
+            password: '',
         };
     },
     methods: {
-        async submitBookmark() {
+        async submitClient() {
             const formData = {
-                username: this.username,
+                client_name: this.client_name,
                 email: this.email,
-                password: this.password,
-                secondary_password:this.secondary_password,
-                first_name: this.first_name,
-                last_name: this.last_name,
                 phone_number: this.phone_number,
-                alter_phone_number: this.alter_phone_number,
+                alternate_phone_number: this.alternate_phone_number,
+                address: this.address,
                 status: this.status,
-                user_type: this.user_type,
-                can_login: this.can_login,
+                username: this.username,
+                password: this.password,
             };
 
             try {
                 // Adjust the URL to match your API route
-                await axios.post('/api/admin/users', formData);
-                alert('User added successfully');
+                await axios.post('/api/clients', formData);
+                alert('Client added successfully');
                 this.clearForm();
-                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
                 modal.hide();
             } catch (error) {
-                console.error('Error saving user:', error.response?.data || error.message);
-                alert('Failed to save user');
+                console.error('Error saving client:', error.response?.data || error.message);
+                alert('Failed to save client');
             }
         },
         clearForm() {
-            this.username = '';
+            this.client_name = '';
             this.email = '';
-            this.password = '';
-            this.secondary_password = '';
-            this.first_name = '';
-            this.last_name = '';
             this.phone_number = '';
-            this.alter_phone_number = '';
+            this.alternate_phone_number = '';
+            this.address = '';
             this.status = '';
-            this.user_type = '';
-            this.can_login = '';
+            this.username = '';
+            this.password = '';
         },
     },
 };
