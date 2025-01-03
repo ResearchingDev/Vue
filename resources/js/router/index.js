@@ -11,6 +11,9 @@ import userEdit from "../pages/clients/profile/userEdit.vue";
 
 //Dashboard
 import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
+
+import Roles from "../pages/roles/index.vue";
+import userPermission from "../pages/roles/userPermission.vue";
 const routes = [
     {
         path: "/",
@@ -70,6 +73,28 @@ const routes = [
             },
         ],
     },
+    {
+        path: "/client",
+        component: Body,
+        children: [
+            {
+                path: "",
+                name: "Home",
+                component: Roles,
+                meta: {
+                    title: " Home | Subscription - ERP Software",
+                },
+            },
+            {
+                path: "roles",
+                name: "Roles",
+                component: userPermission,
+                meta: {
+                    title: " Roles | Subscription - ERP Software",
+                },
+            },
+        ],
+    }
 ];
 const router = createRouter({
     history: createWebHistory(),

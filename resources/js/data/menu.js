@@ -29,5 +29,14 @@ export var menuItems={
         },
       ]
     },
+    {
+        "path": "/client",
+        "title": "Roles",
+        "icon": "stroke-home",
+        "iconf":"fill-home",
+        "type": "link",
+        "badgeType": "light-primary",
+        "active": true,
+    },
   ]
 }
