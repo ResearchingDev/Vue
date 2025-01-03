@@ -72,8 +72,8 @@ export default {
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-pencil"></i> Edit</a>
-                                <button class="btn btn-danger sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i> Delete</button>
+                                <a class="btn btn-primary btn-sm" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-pencil"></i></a>
+                                <button class="btn btn-danger btn-sm sweet-11" type="button" v-on:click="advanced_danger_alert"><i class="fa fa-trash"></i></button>
                             `;
                         },
                         orderable: false,

@@ -9,9 +9,9 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientModalLabel">Add Client</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" @click="clearForm"></button>
-                </div>
-                <div class="modal-body">
+                </div>                
                     <form class="form-bookmark needs-validation" id="client-form" novalidate @submit.prevent="submitClient">
+                        <div class="modal-body">
                         <div class="row">
                             <!-- Client Details -->
                             <h6 class="mb-3">Client Details</h6>
@@ -21,7 +21,7 @@
                                     <input v-model="client_name" class="form-control" type="text" placeholder="Client Name" required>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Email Address</label>
                                     <input v-model="email" class="form-control" type="email" placeholder="Client Email" required>
@@ -48,7 +48,7 @@
                             <div class="col-sm-6">
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
-                                    <select v-model="status" class="form-control btn-square" required>
+                                    <select v-model="status" class="form-control" required>
                                         <option value="">--Select--</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
@@ -78,8 +78,8 @@
 
                         <button class="btn btn-secondary" type="submit">Save Client</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal" @click="clearForm">Cancel</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
