@@ -10,7 +10,7 @@
         <ol class="breadcrumb">
     <li class="breadcrumb-item"><router-link :to="{ path: '/dashboard/default' }">
       <svg class="stroke-icon">
-        <use href="@/assets/svg/icon-sprite.svg#stroke-home"></use>
+        <use :xlink:href="`/assets/svg/icon-sprite.svg#stroke-home`"></use>
       </svg>
     </router-link></li>
     <li class="breadcrumb-item" v-if="main">{{main}}</li>
