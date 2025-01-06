@@ -49,7 +49,6 @@
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
                                     <select v-model="status" class="form-control btn-square" required>
-                                        <option value="">--Select--</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
@@ -96,7 +95,7 @@ export default {
             phone_number: '',
             alternate_phone_number: '',
             address: '',
-            status: '',
+            status: 'Active',
             username: '',
             password: '',
         };

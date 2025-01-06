@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Admin\UserController;
 use App\Http\Controllers\API\Admin\ClientController;
+use App\Http\Controllers\Client\UserRolesController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -21,3 +22,5 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('user.store');
 });
 Route::apiResource('clients', ClientController::class);
+
+Route::post('/client/add_role', [UserRolesController::class, 'store']);

@@ -32,14 +32,14 @@
                     <label class="col-form-label">Password</label>
                     <div class="form-input position-relative">
                       <!-- Password input with dynamic type based on showPassword state -->
-                      <input 
-                        class="form-control" 
-                        :type="showPassword ? 'text' : 'password'" 
-                        name="login[password]" 
-                        required="" 
-                        placeholder="*********" 
+                      <input
+                        class="form-control"
+                        :type="showPassword ? 'text' : 'password'"
+                        name="login[password]"
+                        required=""
+                        placeholder="*********"
                         v-model="user.password.value">
-                      
+
                       <span class="validate-error" v-if="user.password.value.length < 7">{{ user.password.errormsg }}</span>
 
                       <!-- Show/Hide password button -->
@@ -130,7 +130,7 @@ export default {
             if (user.role_code === 'admin') {
               this.$router.push('/admin/dashboard');
             } else {
-              this.$router.push('/client/home');
+              this.$router.push('/client');
             }
 
             // Show success alert

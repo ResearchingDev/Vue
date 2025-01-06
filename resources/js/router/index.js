@@ -15,9 +15,11 @@ import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
 
 /* Error Page */
 
-import Error404 from '../pages/error/error404.vue';
+import Error404 from "../pages/error/error404.vue";
 const apiUrl = import.meta.env.VUE_APP_API_BASE_URL;
 
+import Roles from "../pages/roles/index.vue";
+import userPermission from "../pages/roles/userPermission.vue";
 const routes = [
     {
         path: "/",
@@ -78,10 +80,32 @@ const routes = [
         ],
     },
     {
-        path: '/:pathMatch(.*)*', // This will match any undefined path
-        name: 'NotFound',
+        path: "/:pathMatch(.*)*", // This will match any undefined path
+        name: "NotFound",
         component: Error404,
-   }
+    },
+    {
+        path: "/client",
+        component: Body,
+        children: [
+            {
+                path: "",
+                name: "Home",
+                component: Roles,
+                meta: {
+                    title: " Home | Subscription - ERP Software",
+                },
+            },
+            {
+                path: "roles",
+                name: "Roles",
+                component: userPermission,
+                meta: {
+                    title: " Roles | Subscription - ERP Software",
+                },
+            },
+        ],
+    },
 ];
 const router = createRouter({
     history: createWebHistory(),
