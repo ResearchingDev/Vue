@@ -115,7 +115,7 @@
         try {
           // Update the profile data via an API POST request
           const token = localStorage.getItem('token');
-          await axios.put('/api/users/'+this.user.id, this.user, {
+          await axios.post('/api/users/save_users/'+this.user.id, this.user, {
             headers: {
               Authorization: `Bearer ${token}`
             }

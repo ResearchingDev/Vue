@@ -12,6 +12,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 // User routes
 Route::get('/users/list', [UserController::class, 'list']); 
+
+Route::get('/users/{id}', [UserController::class, 'profile']);
+Route::post('/users/save_users/{id}', [UserController::class, 'save_user']);
 Route::get('/clients/list', [ClientController::class, 'list']); 
 
 Route::prefix('admin')->middleware('auth:sanctum')->group(function () {

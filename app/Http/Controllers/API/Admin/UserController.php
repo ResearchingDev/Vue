@@ -112,6 +112,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
+    public function profile(string $id)
+    {
+        //
+        $user = User::findOrFail($id);
+        return response()->json($user);
+    }
+  
     public function show(string $id)
     {
         //
@@ -132,7 +139,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function save_user(Request $request, string $id)
     {
         // Validate the incoming request
         $validatedData = $request->validate([
