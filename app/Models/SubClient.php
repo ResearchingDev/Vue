@@ -21,7 +21,8 @@ class SubClient extends Model
         'status',
         'username',
         'password',
-        'role_id'
+        'role_id',
+        'logo'
     ];
     protected $hidden = ['password'];
     public function user()

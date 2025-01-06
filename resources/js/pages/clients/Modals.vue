@@ -3,7 +3,7 @@
         data-bs-target="#clientModal">Add
     </button>
     <div class="modal fade modal-bookmark" id="clientModal" ref="clientModal" tabindex="-1" role="dialog"
-        aria-labelledby="clientModalLabel" aria-hidden="true">
+        aria-labelledby="clientModalLabel">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,6 +75,17 @@
                             </div>
                         </div>
 
+                        <!-- Profile Picture Section -->
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3">Profile Picture</h6>
+                            <div class="mb-3">
+                                <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture" accept="image/*">
+                            </div>
+                            <div v-if="profilePicPreview" class="mb-3">
+                                <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                            </div>
+                        </div>
+
                         <button class="btn btn-secondary" type="submit">Save Client</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal" @click="clearForm">Cancel</button>
                     </form>
@@ -98,36 +109,61 @@ export default {
             status: 'Active',
             username: '',
             password: '',
+            profilePic: null,
+            profilePicPreview: null,
         };
     },
     methods: {
         async submitClient() {
-            const formData = {
-                client_name: this.client_name,
-                email: this.email,
-                phone_number: this.phone_number,
-                alternate_phone_number: this.alternate_phone_number,
-                address: this.address,
-                status: this.status,
-                username: this.username,
-                password: this.password,
-            };
+            const formData = new FormData();
+            formData.append('client_name', this.client_name);
+            formData.append('email', this.email);
+            formData.append('phone_number', this.phone_number);
+            formData.append('alternate_phone_number', this.alternate_phone_number);
+            formData.append('address', this.address);
+            formData.append('status', this.status);
+            formData.append('username', this.username);
+            formData.append('password', this.password);
+            if (this.profilePic) {
+                formData.append('profile_picture', this.profilePic);
+            }
 
             try {
-                if(this.id){
-                    await axios.put(`/api/clients/${this.id}`, formData);
-                }else{
+                if (this.id) {
+                    await axios.post(`/api/clients/save/${this.id}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                } else {
                     await axios.post('/api/clients', formData);
                 }
-                // Adjust the URL to match your API route
                 alert('Client added successfully');
-                this.clearForm();
-                this.$emit('updateCompleted');
                 const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
                 modal.hide();
+                // Find the modal backdrop element
+                const backdrop = document.querySelector('.modal-backdrop');
+                console.log(backdrop);
+                // Check if the backdrop exists, then remove it
+                if (backdrop) {
+                    backdrop.remove();
+                }
+                this.clearForm();
+                this.$emit('updateCompleted');
             } catch (error) {
                 console.error('Error saving client:', error.response?.data || error.message);
                 alert('Failed to save client');
+            }
+        },
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.profilePic = file;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.profilePicPreview = reader.result;
+                };
+                reader.readAsDataURL(file);
             }
         },
         clearForm() {
@@ -136,24 +172,49 @@ export default {
             this.phone_number = '';
             this.alternate_phone_number = '';
             this.address = '';
-            this.status = '';
+            this.status = 'Active';
             this.username = '';
             this.password = '';
+            this.profilePic = null;
+            this.profilePicPreview = null;
+            this.$refs.profilePicture.value = '';
+            this.id = null;
         },
         openModal(userData) {
-        this.id = userData.id;
-        this.client_name = userData.client_name;
-        this.username = userData.user.username;
-        this.email = userData.email;
-        this.password = "";
-        this.phone_number = userData.phone_number;
-        this.alternate_phone_number = userData.user.alter_phone_number;
-        this.address = userData.address;
-        this.status = userData.status;
-        // Show the modal using Vue ref
-        const modal = new bootstrap.Modal(this.$refs.clientModal);
-        modal.show();
-      },
+            this.id = userData.id;
+            this.client_name = userData.client_name;
+            this.username = userData.user.username;
+            this.email = userData.email;
+            this.password = '';
+            this.phone_number = userData.phone_number;
+            this.alternate_phone_number = userData.user.alter_phone_number;
+            this.address = userData.address;
+            this.status = userData.status;
+            this.profilePic = null;
+            // Assuming userData contains the user object with the profile_picture field
+             this.profilePicPreview = null;  // Default value
+            // Check if profile picture exists in the user data
+            if (userData.user.profile_picture) {
+                // Construct the image URL
+                const imagePath = `${window.location.origin}/storage/${userData.user.profile_picture}`;
+                
+                // Check if the image exists by attempting to load it
+                const img = new Image();
+                img.onload = () => {
+                    // If the image is successfully loaded, set the preview
+                    this.profilePicPreview = imagePath;
+                };
+                img.onerror = () => {
+                    // If image loading fails (file does not exist), set the preview to null
+                    this.profilePicPreview = null;
+                };
+                
+                // Trigger image loading
+                img.src = imagePath;
+            }
+            const modal = new bootstrap.Modal(this.$refs.clientModal);
+            modal.show();
+        },
     },
 };
 </script>

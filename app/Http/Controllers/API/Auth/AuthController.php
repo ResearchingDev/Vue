@@ -44,6 +44,7 @@ class AuthController extends Controller
                         'alter_phone_number' => $user->alter_phone_number,
                         'status' => $user->status,
                         'user_type' => $user->user_type,
+                        'profile_picture' => $user->profile_picture,
                         'can_login' => $user->can_login,
                         'role_name' => $user->role->role_name ?? null,
                         'role_code' => $user->role->role_unique_code ?? null,

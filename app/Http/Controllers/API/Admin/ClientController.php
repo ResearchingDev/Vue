@@ -45,17 +45,14 @@ class ClientController extends Controller
     
         // Return a properly structured JSON response
         return response()->json([
-            'draw' => (int) $request->input('draw', 1),      
-            'recordsTotal' => $totalRecords,                
-            'recordsFiltered' => $totalRecords,                 
-            'data' => $users,                                   
+            'draw' => (int) $request->input('draw', 1),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecords,
+            'data' => $users,
         ]);
     }
-    public function index(Request $request)
-    {
-       
-    }
-    
+    public function index(Request $request) {}
+
     /**
      * Store a newly created resource in storage.
      */
@@ -70,11 +67,14 @@ class ClientController extends Controller
             'status' => 'required|in:Active,Inactive',
             'username' => 'required|string|unique:sub_users,username',
             'password' => 'required|string|min:8',
+            'profile_picture' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
         ]);
 
         DB::beginTransaction();
 
         try {
+            // Store the uploaded image and get the file path
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
             // Insert into `sub_clients` table
             $subClient = SubClient::create([
                 'client_name' => $request->client_name,
@@ -82,6 +82,7 @@ class ClientController extends Controller
                 'phone_number' => $request->phone_number,
                 'address' => $request->address,
                 'status' => $request->status,
+                'logo' => $imagePath
             ]);
             $subClientId = $subClient->id;
             // Insert into `users` table
@@ -96,6 +97,7 @@ class ClientController extends Controller
                 'last_name' => '',
                 'phone_number' => $request->phone_number,
                 'alter_phone_number' => $request->alternate_phone_number,
+                'profile_picture' => $imagePath, // Make sure to update profile_picture for the user as well
             ]);
 
             DB::commit();
@@ -119,63 +121,79 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SubClient $client)
+    public function show($id)
     {
+        // Find the client by ID
+        $client = SubClient::findOrFail($id);
+
+        // Optionally, you can eager load the 'user' relationship if needed
         $client->load('user');
+
+        // Return the client data in JSON format with a 200 status code
         return response()->json($client, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SubClient $client)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        // Validate the incoming data
+        $validated = $request->validate([
             'client_name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:sub_clients,email,' . $client->id,
+            'email' => 'sometimes|required|email|unique:sub_clients,email,' . $id,
             'phone_number' => 'sometimes|required|string|max:15',
             'alternate_phone_number' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:Active,Inactive',
             'username' => 'sometimes|required|string',
             'password' => 'nullable|string|min:8',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
         ]);
 
-        DB::beginTransaction();
+        // Find the client by ID
+        $client = SubClient::findOrFail($id);
 
-        try {
-            // Update `sub_clients` table
-            $client->update([
-                'client_name' => $request->client_name,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'address' => $request->address,
-                'status' => $request->status,
-            ]);
+        // Initialize image path to null in case no image is uploaded
+        $imagePath = $client->logo;  // Default to the current image if no new one is uploaded
 
-            // Update corresponding user
-            $user = User::where('client_id', $client->id)->first();
-            if ($user) {
-                $user->update([
-                    'username' => $request->username,
-                    'email' => $request->email,
-                    'password' => $request->password ? Hash::make($request->password) : $user->password,
-                    'phone_number' => $request->phone_number,
-                    'alter_phone_number' => $request->alternate_phone_number
+        // Update the client with validated data
+        $client->update([
+            'client_name' => $request->client_name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'status' => $request->status,
+        ]);
 
-                ]);
-            }
+        // Handle profile picture upload if it exists
+        if ($request->hasFile('profile_picture')) {
+            // Store the uploaded image and get the file path
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
 
-            DB::commit();
-
-            return response()->json(['message' => 'Client updated successfully', 'data' => $client], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'message' => 'Error updating client and user',
-                'error' => $e->getMessage(),
-            ], 500);
+            // Update the client's logo with the new image path
+            $client->logo = $imagePath;
+            $client->save();
         }
+
+        // Update corresponding user information
+        $user = User::where('client_id', $client->id)->first();
+        if ($user) {
+            $user->update([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => $request->password ? Hash::make($request->password) : $user->password,
+                'phone_number' => $request->phone_number,
+                'alter_phone_number' => $request->alternate_phone_number,
+                'profile_picture' => $imagePath, // Make sure to update profile_picture for the user as well
+            ]);
+        }
+
+        // Return success response
+        return response()->json([
+            'message' => 'Client and user updated successfully',
+            'data' => $client
+        ], 200);
     }
 
     /**

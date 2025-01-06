@@ -22,5 +22,6 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('user.store');
 });
 Route::apiResource('clients', ClientController::class);
+Route::post('/clients/save/{id}', [ClientController::class, 'update']);
 
 Route::post('/client/add_role', [UserRolesController::class, 'store']);
