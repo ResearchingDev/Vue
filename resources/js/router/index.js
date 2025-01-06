@@ -16,7 +16,6 @@ import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
 /* Error Page */
 
 import Error404 from "../pages/error/error404.vue";
-const apiUrl = import.meta.env.VUE_APP_API_BASE_URL;
 
 import Roles from "../pages/roles/index.vue";
 import userPermission from "../pages/roles/userPermission.vue";
