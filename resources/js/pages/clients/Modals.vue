@@ -19,18 +19,21 @@
                                 <div class="mb-3">
                                     <label class="form-label">Client Name</label>
                                     <input v-model="client_name" class="form-control" type="text" placeholder="Client Name" required>
+                                    <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0] }}</span>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Email Address</label>
                                     <input v-model="email" class="form-control" type="email" placeholder="Client Email" required>
+                                    <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone Number</label>
                                     <input v-model="phone_number" class="form-control" type="text" placeholder="Phone Number" required>
+                                    <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0] }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -64,12 +67,14 @@
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
                                         <input v-model="username" class="form-control" type="text" placeholder="Username" required>
+                                        <span v-if="errors.username" class="text-danger">{{ errors.username[0] }}</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
                                         <input v-model="password" class="form-control" type="password" placeholder="Password" required>
+                                        <span v-if="errors.password" class="text-danger">{{ errors.password[0] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,6 +103,7 @@ export default {
             status: 'Active',
             username: '',
             password: '',
+            errors: {},
         };
     },
     methods: {
@@ -114,31 +120,37 @@ export default {
             };
 
             try {
+                this.errors = {};
                 if(this.id){
                     await axios.put(`/api/clients/${this.id}`, formData);
+                    this.$emit('updateCompleted', 'Client updated successfully!');
                 }else{
                     await axios.post('/api/clients', formData);
+                    this.$emit('updateCompleted', 'Client added successfully!');
                 }
                 // Adjust the URL to match your API route
-                alert('Client added successfully');
                 this.clearForm();
-                this.$emit('updateCompleted');
                 const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
                 modal.hide();
             } catch (error) {
-                console.error('Error saving client:', error.response?.data || error.message);
-                alert('Failed to save client');
+                if (error.response && error.response.status === 422) {
+                    this.errors = error.response.data.errors; // Assign validation errors
+                    } else {
+                    console.error('Error saving client:', error.response?.data || error.message);
+                }
             }
         },
         clearForm() {
+            this.id = '';
             this.client_name = '';
             this.email = '';
             this.phone_number = '';
             this.alternate_phone_number = '';
             this.address = '';
-            this.status = '';
+            this.status = 'Active';
             this.username = '';
             this.password = '';
+            this.errors = {};
         },
         openModal(userData) {
         this.id = userData.id;
