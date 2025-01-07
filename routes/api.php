@@ -21,3 +21,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 Route::apiResource('clients', ClientController::class);
 
 Route::post('/client/add_role', [UserRolesController::class, 'store']);
+Route::get('/client', [UserRolesController::class, 'list']);
+
+Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
+Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);
