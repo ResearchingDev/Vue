@@ -2,7 +2,7 @@
     <Breadcrumbs title="User Roles" main="Roles" />
     <div class="card">
         <div class="col-md-12">
-            <router-link class="link btn btn-primary m-4 pull-right" to="/client/add_role"> Add User Roles</router-link>
+            <router-link class="link btn btn-primary m-4 pull-right" to="/client/roles/add_role"> Add User Roles</router-link>
         </div>
         <div class="container-fluid">
             <div class="user-profile">

@@ -2,12 +2,24 @@ import {menuItems} from '../../data/menu.js';
 import BonusUI from '../../data/bonusui';
 
 const state = {
-  data: menuItems.data,
+  data: (() => {
+    const user = localStorage.getItem('User');
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        return menuItems[parsedUser.role_code]?.data || menuItems.client.data;
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+        return menuItems.client.data; // Fallback to admin menu if parsing fails
+      }
+    }
+    return menuItems.admin.data; // Fallback to admin menu if User is not found
+  })(),
   megamenu: BonusUI.data,
   searchData: [],
   togglesidebar: true,
-  activeoverlay : false,
-  searchOpen : false,
+  activeoverlay: false,
+  searchOpen: false,
   customizer: '',
   hideRightArrowRTL: false,
   hideLeftArrowRTL: true,

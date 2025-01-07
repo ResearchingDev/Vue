@@ -60,7 +60,7 @@ const routes = [
         },
     },
     {
-        path: "/clients",
+        path: "/client",
         component: Body,
         children: [
             {
@@ -79,6 +79,34 @@ const routes = [
                     title: "Users Edit | Subscription - ERP Software",
                 },
             },
+            {
+                path: "roles",
+                name: "Role",
+                component: Roles,
+                meta: {
+                    title: " Roles | Subscription - ERP Software",
+                },
+                children: [
+                    {
+                        path: "add_role",
+                        name: "Add Role",
+                        component: userPermission,
+                        meta: {
+                            title: " Roles | Subscription - ERP Software",
+                        }
+                    },
+                    {
+                        path: "roles/edit/:id",
+                        name: "Edit Role",
+                        component: userPermission,
+                        meta: {
+                            title: " Roles | Subscription - ERP Software",
+                        },
+                        props: true
+                    },
+                ]
+            },
+            
         ],
     },
     {
@@ -99,37 +127,6 @@ const routes = [
         path: "/:pathMatch(.*)*", // This will match any undefined path
         name: "NotFound",
         component: Error404,
-    },
-    {
-        path: "/client",
-        component: Body,
-        children: [
-            {
-                path: "",
-                name: "Home",
-                component: Roles,
-                meta: {
-                    title: " Home | Subscription - ERP Software",
-                },
-            },
-            {
-                path: "add_role",
-                name: "Add Role",
-                component: userPermission,
-                meta: {
-                    title: " Roles | Subscription - ERP Software",
-                }
-            },
-            {
-                path: "roles/edit/:id",
-                name: "Edit Role",
-                component: userPermission,
-                meta: {
-                    title: " Roles | Subscription - ERP Software",
-                },
-                props: true
-            },
-        ],
     },
 ];
 const router = createRouter({
