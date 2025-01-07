@@ -36,6 +36,7 @@
   import $ from 'jquery';
   import Swal from 'sweetalert2';
   import axios from 'axios';
+import { toast } from 'vue3-toastify';
   
   export default {
     name: 'clients',
@@ -148,16 +149,8 @@
           }
         });
       },
-      handleUpdateCompleted(message) {
-        this.message = message;
-        const messageSpan = document.getElementById('message');
-        messageSpan.textContent = this.message;
-        messageSpan.classList.add('text-success');
-        setTimeout(() => {
-          messageSpan.textContent = '';
-        }, 3000);
-
-        this.reloadDataTable();
+      handleUpdateCompleted() {
+         this.reloadDataTable();
       },
       reloadDataTable() {
             $('#userTable').DataTable().ajax.reload();
