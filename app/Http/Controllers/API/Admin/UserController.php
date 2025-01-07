@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     /**
@@ -73,20 +75,23 @@ class UserController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:sub_users,email',
             'password' => 'required|string|min:6',
-            'secondary_password' => 'required|string|min:6',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:15',
             'alter_phone_number' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:500',
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
-            'can_login' => 'required|in:Yes,No',
+            'profile_picture' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+
         ]);
 
         // Encrypt passwords
-        $validatedData['password'] = bcrypt($validatedData['password']);
-        $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);
+        $validatedData['password'] = Hash::make($request->password);
+        $validatedData['secondary_password'] = Hash::make($request->password);
 
+        // Store the uploaded image and get the file path
+        $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         // Create the user
         $user = User::create([
             'username' => $validatedData['username'],
@@ -99,7 +104,9 @@ class UserController extends Controller
             'alter_phone_number' => $validatedData['alter_phone_number'],
             'status' => $validatedData['status'],
             'user_type' => $validatedData['user_type'],
-            'can_login' => $validatedData['can_login'],
+            'profile_picture' => $imagePath,
+            'address' => $validatedData['address'],
+            'role_id' => 3,
         ]);
 
         return response()->json([
@@ -118,7 +125,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return response()->json($user);
     }
-  
+
     public function show(string $id)
     {
         //
@@ -139,39 +146,38 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         // Validate the incoming request
         $validatedData = $request->validate([
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:sub_users,email,' . $id,
             'password' => 'nullable|string|min:6',
-            'secondary_password' => 'nullable|string|min:6',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:15',
             'alter_phone_number' => 'nullable|string|max:15',
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
-            'can_login' => 'required|in:Yes,No',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+            'address' => 'nullable|string|max:500',
         ]);
 
         // Find the user by ID
         $user = User::findOrFail($id);
-
+        $imagePath = $user->profile_picture;  // Default to the current image if no new one is uploaded
         // If password is provided, encrypt it
         if ($request->has('password')) {
-            $validatedData['password'] = bcrypt($validatedData['password']);
+            $validatedData['password'] = Hash::make($request->password);
         }
-
-        // If secondary password is provided, encrypt it
-        if ($request->has('secondary_password')) {
-            $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);
+        // Handle profile picture upload if it exists
+        if ($request->hasFile('profile_picture')) {
+            // Store the uploaded image and get the file path
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
-
+        $validatedData['profile_picture'] = $imagePath;
         // Update the user data
         $user->update($validatedData);
-
         return response()->json([
             'message' => 'User updated successfully',
             'data' => $user,
