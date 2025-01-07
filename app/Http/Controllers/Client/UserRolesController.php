@@ -21,7 +21,7 @@ class UserRolesController extends Controller
             'userAccess' => 'required|array|min:1',
             'userAccess.*' => 'string|in:Web Access,Mobile Access',
             'permissions' => 'required|array|min:1',
-            'permissions.*.moduleName' => 'required|string|max:100',
+            'permissions.*.moduleID' => 'integer', // Add this line
             'permissions.*.delete' => 'required|boolean',
             'permissions.*.update' => 'required|boolean',
             'permissions.*.add' => 'required|boolean',
@@ -31,7 +31,6 @@ class UserRolesController extends Controller
             // Determine access types
             $hasWebAccess = in_array('Web Access', $validatedData['userAccess']) ? 'Yes' : 'No';
             $hasMobileAccess = in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No';
-
             // Create the role in the `roles` table
             $role = SubUserRole::create([
                 'role_unique_code' => $validatedData['roleCode'],
@@ -47,10 +46,9 @@ class UserRolesController extends Controller
                 $hasAddAccess = !empty($permission['add']) ? 'Yes' : 'No';
                 $hasViewAccess = !empty($permission['view']) ? 'Yes' : 'No';
                 UserPermission::create([
-                    'role_id' => $role->id,
+                    'role_id' => $role->id, // Use the created role's ID
                     'user_id' => '77',
-                    'menu_id' => '77',
-                    'module_name' => $permission['moduleName'],
+                    'menu_id' => $permission['moduleID'], // Use module_id from request
                     'can_delete' => $hasDeleteAccess,
                     'can_update' => $hasUpdateAccess,
                     'can_add' => $hasAddAccess,
@@ -142,10 +140,35 @@ class UserRolesController extends Controller
     {
           $user_role_id = $request->id;
           // Find the client by ID
-          $userroles = SubUserRole::findOrFail($user_role_id);
+          $userrole = SubUserRole::findOrFail($user_role_id);
           // Optionally, you can eager load the 'user' relationship if needed
-          $userroles->load('user_permission');
-          return response()->json($userroles, 200);
+          $userrole->load('user_permission');
+          return response()->json([
+            'status' => 'success',
+            'data' => $userrole,
+        ], 200);
     }
 
+    public function destroy(Request $request)
+    {
+        try {
+            $user_role_id = $request->id;
+            // Find the role by ID
+            $userRole = SubUserRole::findOrFail($user_role_id);
+            // Delete related user_permission records
+            $userRole->user_permission()->delete();
+            // Delete the role itself
+            $userRole->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Role and associated permissions deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete role. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

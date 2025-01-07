@@ -12,7 +12,7 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 
 
 // User routes
-Route::get('/users/list', [UserController::class, 'list']); 
+Route::get('/users/list', [UserController::class, 'list']);
 
 
 
@@ -25,7 +25,7 @@ Route::post('/users/list', [UserController::class, 'list']);
 
 Route::get('/users/{id}', [UserController::class, 'profile']);
 Route::post('/users/save_users/{id}', [UserController::class, 'update']);
-Route::get('/clients/list', [ClientController::class, 'list']); 
+Route::get('/clients/list', [ClientController::class, 'list']);
 
 // Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 //     Route::post('/users', [UserController::class, 'store'])->name('user.store');
@@ -38,3 +38,4 @@ Route::get('/client', [UserRolesController::class, 'list']);
 
 Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
 Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);
+Route::delete('/client/roles/delete/{id}', [UserRolesController::class, 'destroy']);

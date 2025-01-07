@@ -98,7 +98,7 @@
             deleteRole(roleId) {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: `You won't be able to revert this! Do you want to delete User Role with ID ${roleId}?`,
+                    text: `You won't be able to revert this! Do you want to delete User Role?`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
@@ -109,23 +109,20 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         axios
-                        .delete(`/api/clients/${roleId}`)
-                        .then(() => {
-                            Swal.fire(
-                            'Deleted!',
-                            'User Role has been deleted successfully.',
-                            'success'
-                            );
-                            $('#userRolesTable').DataTable().ajax.reload();
-                        })
-                        .catch((error) => {
-                            Swal.fire(
-                            'Error!',
-                            'There was an error deleting the User Role. Please try again later.',
-                            'error'
-                            );
-                            console.error('Error deleting User Role:', error);
-                        });
+                            .delete(`/api/client/roles/delete/${roleId}`)
+                            .then((response) => {
+                                Swal.fire(
+                                    'Deleted!',
+                                    response.data.message || 'User Role has been deleted successfully.',
+                                    'success'
+                                );
+                                $('#userRolesTable').DataTable().ajax.reload();
+                            })
+                            .catch((error) => {
+                                let errorMessage = error.response?.data?.message || 'There was an error deleting the User Role. Please try again later.';
+                                Swal.fire('Error!', errorMessage, 'error');
+                                console.error('Error deleting User Role:', error);
+                            });
                     }
                 });
             },
