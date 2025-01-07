@@ -25,8 +25,11 @@ class AuthController extends Controller
 
         // Check if user exists and either primary or secondary password matches
         if ($user && $this->checkPassword($request, $user)) {
+
+             // If "Remember Me" is checked, attempt to log in with the remember option
+             $remember = $request->has('remember_me') && $request->remember_me;
             // Proceed to authenticate
-            Auth::login($user);
+            Auth::login($user, $remember);
 
             return response()->json([
                 'status' => 'success',
@@ -79,12 +82,14 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        // Retrieve the authenticated user and revoke all tokens
+        // Get the currently authenticated user
         $user = Auth::user();
-        $user->tokens()->delete();
-
+        // Revoke all tokens (including the one used for this request)
+        $user->tokens->each(function ($token) {
+            $token->delete();
+        });
         return response()->json([
             'status' => 'success',
             'message' => 'User logged out successfully',

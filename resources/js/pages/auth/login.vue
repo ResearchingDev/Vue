@@ -50,8 +50,8 @@
                   </div>
                   <div class="form-group mb-0">
                     <div class="checkbox p-0">
-                      <input id="checkbox1" type="checkbox">
-                      <label class="text-muted" for="checkbox1">Remember password</label>
+                      <input id="rememberMe" type="checkbox" v-model="rememberMe">
+                      <label class="text-muted" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-end mt-3">
                       <button class="btn btn-primary btn-block w-100" type="submit" @click.prevent="login">Sign
@@ -87,7 +87,8 @@ export default {
         }
       },
       alertMessage: null, // Holds the alert message and its type (success or error)
-      showPassword: false // Flag to toggle password visibility
+      showPassword: false, // Flag to toggle password visibility
+      rememberMe: false // Track the "remember me" checkbox state
     };
   },
 
@@ -115,15 +116,15 @@ export default {
         this.logging = true; // Disable button during login process
 
         try {
-          // Send the login request to the backend
+          // Send the login request to the backend, include rememberMe
           const response = await axios.post('http://localhost:8000/api/login', {
             email: this.user.email.value,
-            password: this.user.password.value
+            password: this.user.password.value,
+            remember_me: this.rememberMe // Send the remember me status
           });
           // Handle successful login
           if (response.data.status === 'success' && response.data.data.token) {
             // Store the token and user info in localStorage
-            // Redirect based on the user role
             const user = response.data.data.user;
             localStorage.setItem('User', JSON.stringify(user));
             localStorage.setItem('token', response.data.data.token);

@@ -44,11 +44,9 @@ import bcard from './components/b-card.vue';
 
 // Import additional components and styles
 import Datepicker from 'vue3-datepicker';
-import SimpleTypeahead from 'vue3-simple-typeahead';
 import 'vue3-simple-typeahead/dist/vue3-simple-typeahead.css';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.css';
-import VueNumber from 'vue-number-animation';
 
 // i18n configuration
 import { defaultLocale, localeOptions } from './constants/config';
