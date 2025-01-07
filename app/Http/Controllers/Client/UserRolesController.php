@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class UserRolesController extends Controller
 {
-
+    //Store the User Roles and Permissions
     public function store(Request $request)
     {
         // Validate the form data
@@ -68,6 +68,7 @@ class UserRolesController extends Controller
             ], 500);
         }
     }
+    //List the User Modules
     public function modules_list(Request $request)
     {
         // Get the data by joining sub_clients and sub_users
@@ -82,12 +83,12 @@ class UserRolesController extends Controller
                 'sub_module_menus.status'
             )
             ->get();
-
         return response()->json([
             'status' => 'success',
             'data' => $module_menus,
         ], 200);
     }
+    //List the User Roles in Datatable
     public function list(Request $request)
     {
         // Get pagination, sorting, and search parameters
@@ -96,18 +97,15 @@ class UserRolesController extends Controller
         $searchValue = $request->input('search.value', '');
         $orderColumnIndex = $request->input('order.0.column', 0);
         $orderDirection = $request->input('order.0.dir', 'asc');
-
         // Map column index to actual database columns
         $columns = ['role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status'];
         $orderColumn = $columns[$orderColumnIndex] ?? 'id';
-
         // Query the sub_user_roles table
         $query = DB::table('sub_user_roles')
             ->select('id', 'role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status')
             ->where('role_name', '!=', 'Super Admin')
             ->where('role_name', '!=', 'Client')
             ->where('deleted_at', null);
-
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
@@ -117,17 +115,14 @@ class UserRolesController extends Controller
                     ->orWhere('status', 'like', "%$searchValue%");
             });
         }
-
         // Get the filtered and paginated results
         $filteredRecords = $query->count();
         $users = $query->orderBy($orderColumn, $orderDirection)
             ->offset($start)
             ->limit($limit)
             ->get();
-
         // Total records count
         $totalRecords = DB::table('sub_user_roles')->count();
-
         // Return a properly structured JSON response
         return response()->json([
             'draw' => (int) $request->input('draw', 1),
@@ -136,19 +131,20 @@ class UserRolesController extends Controller
             'data' => $users,
         ]);
     }
+    //List the Particular User Roles and Permisssions
     public function edit(Request $request)
     {
-          $user_role_id = $request->id;
-          // Find the client by ID
-          $userrole = SubUserRole::findOrFail($user_role_id);
-          // Optionally, you can eager load the 'user' relationship if needed
-          $userrole->load('user_permission');
-          return response()->json([
+        $user_role_id = $request->id;
+        // Find the client by ID
+        $userrole = SubUserRole::findOrFail($user_role_id);
+        // Optionally, you can eager load the 'user' relationship if needed
+        $userrole->load('user_permission');
+        return response()->json([
             'status' => 'success',
             'data' => $userrole,
         ], 200);
     }
-
+    //Delete the User Roles and Permisssions
     public function destroy(Request $request)
     {
         try {
@@ -171,7 +167,7 @@ class UserRolesController extends Controller
             ], 500);
         }
     }
-
+    //Update the User Roles and Permissions
     public function update(Request $request, $id)
     {
         // Validate the form data
