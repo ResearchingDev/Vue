@@ -10,6 +10,9 @@ import login from "../pages/auth/login.vue";
 import clients from "../pages/clients/index.vue";
 import userEdit from "../pages/clients/profile/userEdit.vue";
 
+/* User */
+import users from "../pages/users/index.vue";
+
 /* Dashboard */
 import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
 
@@ -74,6 +77,20 @@ const routes = [
                 component: userEdit,
                 meta: {
                     title: "Users Edit | Subscription - ERP Software",
+                },
+            },
+        ],
+    },
+    {
+        path: "/users",
+        component: Body,
+        children: [
+            {
+                path: "",
+                name: "users",
+                component: users,
+                meta: {
+                    title: "Manage Clients | Subscription - ERP Software",
                 },
             },
         ],

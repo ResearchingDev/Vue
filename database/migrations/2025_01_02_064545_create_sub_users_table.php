@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password', 255)->comment('User password (hashed)'); // User password
             $table->string('secondary_password', 255)->comment('User Secondary password (hashed)'); // User password
             $table->string('first_name', 50)->nullable()->comment('First name of the user'); // First name
-            $table->string('last_name', length: 50)->nullable()->comment('Last name of the user'); // Last name
+            $table->string('last_name', 50)->nullable()->comment('Last name of the user'); // Last name
             $table->string('phone_number', 20)->nullable()->comment('Phone number of the user'); // Mobile number
             $table->string('alter_phone_number', 20)->nullable()->comment('Alter phone number of the user'); // Mobile number
             $table->string('city', 70)->nullable()->comment('User city'); // Client city
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('timezone', 70)->nullable()->comment('User timezone'); // Client timezone
             $table->enum('user_type', ['Super Admin', 'Client', 'User'])->default('User')->comment('User type (Super Admin/Client/User)'); // Type of user
             $table->enum('can_login', ['Yes', 'No'])->default('Yes')->comment('Whether the user can log in (Yes/No)'); // Whether the user can login
+            $table->string('profile_picture', 100)->nullable()->comment('profile image'); // Whether the user can login
             $table->rememberToken()->comment('Token for remembering user sessions'); // For remembering user sessions
             $table->enum('status', ['Active', 'Inactive'])->default('Active')->comment('User status (Active/Inactive)'); // User status
             $table->unsignedInteger('created_by')->nullable()->comment('Created by user ID'); // User ID of the creator

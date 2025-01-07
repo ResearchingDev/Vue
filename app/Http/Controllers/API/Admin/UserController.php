@@ -26,8 +26,8 @@ class UserController extends Controller
 
         // Query the sub_users table
         $query = DB::table('sub_users')
-            ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at');
-
+            ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at')
+            ->where('role_id', '!=', '1');
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
@@ -139,7 +139,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function save_user(Request $request, string $id)
+    public function update(Request $request, string $id)
     {
         // Validate the incoming request
         $validatedData = $request->validate([

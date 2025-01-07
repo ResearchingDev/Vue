@@ -30,6 +30,21 @@ export var menuItems={
       ]
     },
     {
+      "title": "Manage Users",
+      "icon": "stroke-user",
+      "iconf":"fill-user",
+      "type": "sub",
+      "active": false,
+      "children": [
+        {
+          "path": "/users",
+          "title": "Users",
+          "type": "link",
+          "active":false
+        },
+      ]
+    },
+    {
         "path": "/client",
         "title": "Roles",
         "icon": "stroke-home",
