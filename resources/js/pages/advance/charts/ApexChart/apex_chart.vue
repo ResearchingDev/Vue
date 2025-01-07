@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import { toast } from 'vue3-toastify';
-toast.success('This is a success toast!');
 import barChart from "./barChart.vue"
 import columnChart from "./columnChart.vue"
 import columnChart2 from "./columnChart2.vue"

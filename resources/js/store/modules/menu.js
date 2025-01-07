@@ -1,20 +1,8 @@
-import {menuItems} from '../../data/menu.js';
+import { menuItems } from '../../data/menu.js';
 import BonusUI from '../../data/bonusui';
 
 const state = {
-  data: (() => {
-    const user = localStorage.getItem('User');
-    if (user) {
-      try {
-        const parsedUser = JSON.parse(user);
-        return menuItems[parsedUser.role_code]?.data || menuItems.client.data;
-      } catch (error) {
-        console.error('Error parsing user data from localStorage:', error);
-        return menuItems.client.data; // Fallback to admin menu if parsing fails
-      }
-    }
-    return menuItems.admin.data; // Fallback to admin menu if User is not found
-  })(),
+  data: [],
   megamenu: BonusUI.data,
   searchData: [],
   togglesidebar: true,
@@ -31,13 +19,24 @@ const state = {
   menuWidth: 0,
 };
 
-
-const getters = {
-
-};
-
-
 const mutations = {
+  setUserData: (state) => {
+    const user = localStorage.getItem('User');
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        // Set the data immediately after fetching from localStorage
+        state.data = menuItems[parsedUser.role_code]?.data || menuItems.client.data;
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        state.data = menuItems.client.data; // Fallback
+      }
+    } else {
+      state.data = menuItems.admin.data; // Fallback if no user in localStorage
+    }
+  },
+
+  // Update Sidebar state
   opensidebar: (state) => {
     state.togglesidebar = !state.togglesidebar;
     if (window.innerWidth < 991) {
@@ -46,6 +45,8 @@ const mutations = {
       state.activeoverlay = false;
     }
   },
+
+  // Resize sidebar on window resize
   resizetoggle: (state) => {
     if (window.innerWidth < 1007) {
       state.togglesidebar = false;
@@ -53,73 +54,81 @@ const mutations = {
       state.togglesidebar = true;
     }
   },
+
+  // Filter data based on search term
   searchTerm: (state, term) => {
     let items = [];
-    var searchval = term.toLowerCase();
-    state.data.filter(menuItems => {
-      
+    const searchval = term.toLowerCase();
+    state.data.forEach(menuItems => {
       if (menuItems.title) {
         if (menuItems.title.toLowerCase().includes(searchval) && menuItems.type === 'link') {
           items.push(menuItems);
         }
-        if (!menuItems.children) return false;
-        menuItems.children.filter(subItems => {
-          if (subItems.title.toLowerCase().includes(searchval) && subItems.type === 'link') {
-            subItems.icon = menuItems.icon;
-            items.push(subItems);
-          }
-          if (!subItems.children) return false;
-          subItems.children.filter(suSubItems => {
-            if (suSubItems.title.toLowerCase().includes(searchval)) {
-              suSubItems.icon = menuItems.icon;
-              items.push(suSubItems);
+        if (menuItems.children) {
+          menuItems.children.forEach(subItems => {
+            if (subItems.title.toLowerCase().includes(searchval) && subItems.type === 'link') {
+              subItems.icon = menuItems.icon;
+              items.push(subItems);
+            }
+            if (subItems.children) {
+              subItems.children.forEach(suSubItems => {
+                if (suSubItems.title.toLowerCase().includes(searchval)) {
+                  suSubItems.icon = menuItems.icon;
+                  items.push(suSubItems);
+                }
+              });
             }
           });
-        });
-        state.searchData = items;
+        }
       }
     });
+    state.searchData = items;
   },
+
+  // Set active state for Bonus Navigation
   setBonusNavActive: (state, item) => {
     if (!item.active) {
       state.megamenu.forEach(a => {
-        if (state.megamenu.includes(item))
-          a.active = false;
-        if (!a.children) return false;
-        a.children.forEach(b => {
-          if (a.children.includes(item)) {
-            b.active = false;
-          }
-        });
+        if (state.megamenu.includes(item)) a.active = false;
+        if (a.children) {
+          a.children.forEach(b => {
+            if (a.children.includes(item)) {
+              b.active = false;
+            }
+          });
+        }
       });
     }
     item.active = !item.active;
   },
+
+  // Set active state for Navigation
   setNavActive: (state, item) => {
     if (!item.active) {
       state.data.forEach(a => {
-        if (state.data.includes(item))
-          a.active = false;
-        if (!a.children) return false;
-        a.children.forEach(b => {
-          if (a.children.includes(item)) {
-            b.active = false;
-          }
-        });
+        if (state.data.includes(item)) a.active = false;
+        if (a.children) {
+          a.children.forEach(b => {
+            if (a.children.includes(item)) {
+              b.active = false;
+            }
+          });
+        }
       });
     }
     item.active = !item.active;
   },
+
+  // Set active route for navigation
   setActiveRoute: (state, item) => {
-    state.data.filter(menuItem => {
-      if (menuItem !== item)
-        menuItem.active = false;
-      if (menuItem.children && menuItem.children.includes(item)){
+    state.data.forEach(menuItem => {
+      if (menuItem !== item) menuItem.active = false;
+      if (menuItem.children && menuItem.children.includes(item)) {
         item.active = true;
         menuItem.active = true;
       }
       if (menuItem.children) {
-        menuItem.children.filter(submenuItems => {
+        menuItem.children.forEach(submenuItems => {
           if (submenuItems.children && submenuItems.children.includes(item)) {
             item.active = true;
             menuItem.active = true;
@@ -132,21 +141,37 @@ const mutations = {
 };
 
 const actions = {
-  opensidebar: (context, term) => {
-    context.commit('opensidebar', term);
+  // Load user data from localStorage immediately after page load
+  loadUserData: (context) => {
+    context.commit('setUserData');
   },
-  resizetoggle: (context, term) => {
-    context.commit('resizetoggle', term);
+
+  // Open/close the sidebar
+  opensidebar: (context) => {
+    context.commit('opensidebar');
   },
+
+  // Handle resize toggle
+  resizetoggle: (context) => {
+    context.commit('resizetoggle');
+  },
+
+  // Set active state for bonus navigation
   setBonusNavActive: (context, term) => {
     context.commit('setBonusNavActive', term);
   },
+
+  // Handle search term filtering
   searchTerm: (context, term) => {
     context.commit('searchTerm', term);
   },
+
+  // Set active state for navigation
   setNavActive: (context, item) => {
     context.commit('setNavActive', item);
   },
+
+  // Set active route for navigation
   setActiveRoute: (context, item) => {
     context.commit('setActiveRoute', item);
   }
@@ -155,7 +180,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
-  getters,
+  getters: {},
   actions,
   mutations
 };

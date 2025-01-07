@@ -8,44 +8,53 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientModalLabel">Add Client</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" @click="clearForm"></button>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+                        @click="clearForm"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-bookmark needs-validation" id="client-form" novalidate @submit.prevent="submitClient">
+                    <form class="form-bookmark needs-validation" id="client-form" novalidate
+                        @submit.prevent="submitClient">
                         <div class="row">
                             <!-- Client Details -->
                             <h6 class="mb-3">Client Details</h6>
                             <div class="col-sm-6 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Client Name</label>
-                                    <input v-model="client_name" class="form-control" type="text" placeholder="Client Name" required>
-                                    <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0] }}</span>
+                                    <input v-model="client_name" class="form-control" type="text"
+                                        placeholder="Client Name" required>
+                                    <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0]
+                                        }}</span>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Email Address</label>
-                                    <input v-model="email" class="form-control" type="email" placeholder="Client Email" required>
+                                    <input v-model="email" class="form-control" type="email" placeholder="Client Email"
+                                        required>
                                     <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone Number</label>
-                                    <input v-model="phone_number" class="form-control" type="text" placeholder="Phone Number" required>
-                                    <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0] }}</span>
+                                    <input v-model="phone_number" class="form-control" type="text"
+                                        placeholder="Phone Number" required>
+                                    <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0]
+                                        }}</span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Alternate Phone Number</label>
-                                    <input v-model="alternate_phone_number" class="form-control" type="text" placeholder="Alternate Phone Number">
+                                    <input v-model="alternate_phone_number" class="form-control" type="text"
+                                        placeholder="Alternate Phone Number">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Address</label>
-                                    <input v-model="address" class="form-control" type="text" placeholder="Client Address">
+                                    <input v-model="address" class="form-control" type="text"
+                                        placeholder="Client Address">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -66,14 +75,16 @@
                                 <div class="col-sm-6">
                                     <div class="mb-3">
                                         <label class="form-label">Username</label>
-                                        <input v-model="username" class="form-control" type="text" placeholder="Username" required>
+                                        <input v-model="username" class="form-control" type="text"
+                                            placeholder="Username" required>
                                         <span v-if="errors.username" class="text-danger">{{ errors.username[0] }}</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
-                                        <input v-model="password" class="form-control" type="password" placeholder="Password" required>
+                                        <input v-model="password" class="form-control" type="password"
+                                            placeholder="Password" required>
                                         <span v-if="errors.password" class="text-danger">{{ errors.password[0] }}</span>
                                     </div>
                                 </div>
@@ -84,15 +95,18 @@
                         <div class="mt-4 pt-3 border-top">
                             <h6 class="mb-3">Profile Picture</h6>
                             <div class="mb-3">
-                                <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture" accept="image/*">
+                                <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture"
+                                    accept="image/*">
                             </div>
                             <div v-if="profilePicPreview" class="mb-3">
-                                <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
+                                    style="max-width: 100px; max-height: 100px;">
                             </div>
                         </div>
 
                         <button class="btn btn-secondary" type="submit">Save Client</button>
-                        <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal" @click="clearForm">Cancel</button>
+                        <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
+                            @click="clearForm">Cancel</button>
                     </form>
                 </div>
             </div>
@@ -102,7 +116,7 @@
 
 <script>
 import axios from 'axios';
-
+import { toast } from 'vue3-toastify';
 export default {
     data() {
         return {
@@ -135,25 +149,30 @@ export default {
             }
 
             try {
+                const alert_message = (this.id) ? 'Client Updated SuccessFully..!' : 'Client Created SuccessFully..!';
                 if (this.id) {
                     await axios.post(`/api/clients/save/${this.id}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    this.$emit('updateCompleted', 'Client updated successfully!');
                 } else {
                     await axios.post('/api/clients', formData);
-                    this.$emit('updateCompleted', 'Client added successfully!');
                 }
+                this.$emit('updateCompleted');
+                toast.success(alert_message);
                 // Adjust the URL to match your API route
-                this.clearForm();
                 const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
                 modal.hide();
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop) => backdrop.remove());
+                }, 1000);
+                this.clearForm();
             } catch (error) {
                 if (error.response && error.response.status === 422) {
                     this.errors = error.response.data.errors; // Assign validation errors
-                    } else {
+                } else {
                     console.error('Error saving client:', error.response?.data || error.message);
                 }
             }
@@ -197,12 +216,12 @@ export default {
             this.status = userData.status;
             this.profilePic = null;
             // Assuming userData contains the user object with the profile_picture field
-             this.profilePicPreview = null;  // Default value
+            this.profilePicPreview = null;  // Default value
             // Check if profile picture exists in the user data
             if (userData.user.profile_picture) {
                 // Construct the image URL
                 const imagePath = `${window.location.origin}/storage/${userData.user.profile_picture}`;
-                
+
                 // Check if the image exists by attempting to load it
                 const img = new Image();
                 img.onload = () => {
@@ -213,7 +232,7 @@ export default {
                     // If image loading fails (file does not exist), set the preview to null
                     this.profilePicPreview = null;
                 };
-                
+
                 // Trigger image loading
                 img.src = imagePath;
             }

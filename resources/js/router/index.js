@@ -64,12 +64,12 @@ const routes = [
         component: Body,
         children: [
             {
-                path: "",
-                name: "Dashboard",
+                path: "dashboard",
+                name: "dashboard",
                 component: apex_chart,
                 meta: {
                     title: " Dashboard | Subscription - ERP Software",
-                },
+                }
             },
             {
                 path: "client",
@@ -86,6 +86,15 @@ const routes = [
         component: Body,
         children: [
             {
+                path: "dashboard",
+                name: "Dashboard",
+                component: apex_chart,
+                meta: {
+                    title: " Dashboard | Subscription - ERP Software",
+                },
+            },
+            {
+                
                 path: "users",
                 name: "users",
                 component: users,

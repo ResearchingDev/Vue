@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('last_name', 50)->nullable()->comment('Last name of the user'); // Last name
             $table->string('phone_number', 20)->nullable()->comment('Phone number of the user'); // Mobile number
             $table->string('alter_phone_number', 20)->nullable()->comment('Alter phone number of the user'); // Mobile number
+            $table->text('address')->nullable()->comment('User Address'); // Client city
             $table->string('city', 70)->nullable()->comment('User city'); // Client city
             $table->string('state', 30)->nullable()->comment('User state'); // Client state
             $table->string('zipcode', 20)->nullable()->comment('User zipcode'); // Client zipcode

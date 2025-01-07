@@ -68,6 +68,7 @@
   <script>
   import axios from 'axios';
   
+  import { toast } from 'vue3-toastify';
   export default {
     name: 'ProfilePage',
     data() {
@@ -120,10 +121,10 @@
               Authorization: `Bearer ${token}`
             }
           });
-          alert('Profile updated successfully!');
+         toast.success('Profile updated successfully!');
         } catch (error) {
           console.error('Error updating profile:', error);
-          alert('An error occurred while updating your profile.');
+          toast.warn('An error occurred while updating your profile');
         }
       }
     }

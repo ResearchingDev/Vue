@@ -114,6 +114,7 @@ export default {
     this.layout.settings.layout = this.$route.query.layout ? this.$route.query.layout : config.settings.layout;
     this.layoutobj = layoutClasses.find((item) => Object.keys(item).pop() === this.layout.settings.layout);
     this.layoutobj = JSON.parse(JSON.stringify(this.layoutobj))[this.layout.settings.layout];
+    this.$store.dispatch('menu/loadUserData');
   },
   methods: {
     sidebar_toggle(value) {
