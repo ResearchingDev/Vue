@@ -202,8 +202,6 @@
             },
             loadRoleForEdit(role) {
                 this.isEditMode = true;
-                console.log("Role Data:", this.role);
-                console.log("Modules Data:", this.modules);
                 this.role = {
                     id: role.role_id, // Updated to match response key
                     roleName: role.role_name, // Updated to match response key
@@ -212,7 +210,6 @@
                     mobileAccess: role.mobile_access, // Added for mobile access
                     status: role.status, // Updated to match response key
                 };
-                // Since no `permissions` array is provided in the response, create permissions object dynamically
                 this.modules = [{
                     name: "Permissions", // Example module name for all permissions
                     permissions: {
@@ -242,10 +239,7 @@
                 axios.get(`/api/client/roles/${roleId}`)
                 .then(response => {
                     if (response.data) {
-                        // this.$on('loadRoleForEdit', response.data); // Call the method directly
-                        // window.location.href = '/client/roles/' + roleId;
-                        this.$emit('loadRoleForEdit', response.data);
-                        console.error('Data received and processed');
+                        this.loadRoleForEdit(response.data);
                     } else {
                         console.error('No data received for the role');
                     }

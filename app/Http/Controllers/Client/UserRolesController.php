@@ -140,29 +140,12 @@ class UserRolesController extends Controller
     }
     public function edit(Request $request)
     {
-        $user_role_id = $request->id;
-        // Get the data by joining sub_user_roles and sub_user_rights
-        $user_roles = DB::table('sub_user_roles as roles')
-            ->join('sub_user_rights as rights', 'rights.role_id', '=', 'roles.id') // Join sub_user_roles with sub_user_rights
-            ->select(
-                'roles.id as role_id',
-                'roles.role_name',
-                'roles.role_unique_code',
-                'roles.web_access',
-                'roles.mobile_access',
-                'roles.status',
-                'rights.can_add',
-                'rights.can_update',
-                'rights.can_view',
-                'rights.can_delete',
-            )
-            ->where('roles.id', $user_role_id)
-            ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $user_roles,
-        ], 200);
+          $user_role_id = $request->id;
+          // Find the client by ID
+          $userroles = SubUserRole::findOrFail($user_role_id);
+          // Optionally, you can eager load the 'user' relationship if needed
+          $userroles->load('user_permission');
+          return response()->json($userroles, 200);
     }
 
 }

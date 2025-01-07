@@ -10,5 +10,9 @@ class SubUserRole extends Model
     use HasFactory;
     protected $table = 'sub_user_roles';
     protected $fillable = ['role_unique_code', 'role_name', 'status', 'web_access', 'mobile_access'];
+    public function user_permission()
+    {
+        return $this->hasMany(UserPermission::class, 'role_id', 'id');
+    }
 
 }

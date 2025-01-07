@@ -24,7 +24,7 @@
         </div>
         <ul class="profile-dropdown onhover-show-div">
           <li>
-            <router-link to="/clients/profile">
+            <router-link to="/client/profile">
               <vue-feather type="user"></vue-feather><span>Account</span>
             </router-link>
           </li>
