@@ -10,6 +10,5 @@
 <body>
     <div id="app"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="path/to/your/vue-or-custom-script.js"></script>
 </body>
 </html>

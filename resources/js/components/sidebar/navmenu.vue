@@ -33,7 +33,7 @@
                    </svg>
                    
                    <svg class="fill-icon">
-                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                       <use v-bind:href="`/assets/svg/icon-sprite.svg#` + menuItem.iconf"></use>
                    </svg>
                    
                    <span class="lan-3">
@@ -54,7 +54,7 @@
                    </svg>
                    
                    <svg class="fill-icon">
-                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                       <use v-bind:href="`/assets/svg/icon-sprite.svg#` + menuItem.iconf"></use>
                    </svg>
                     <span>
                         {{ $t(menuItem.title) }}
@@ -69,7 +69,7 @@
                    </svg>
                    
                    <svg class="fill-icon">
-                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                       <use v-bind:href="`/assets/svg/icon-sprite.svg#` + menuItem.iconf"></use>
                    </svg>
                     <span>
                         {{ (menuItem.title) }}
@@ -84,7 +84,7 @@
                    </svg>
                    
                    <svg class="fill-icon">
-                       <use v-bind:href="'/assets/svg/icon-sprite.svg#' + menuItem.iconf"></use>
+                       <use v-bind:href="`/assets/svg/icon-sprite.svg#` + menuItem.iconf"></use>
                    </svg>
                     <span>
                         {{ (menuItem.title) }}

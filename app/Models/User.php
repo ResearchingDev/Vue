@@ -33,7 +33,8 @@ class User extends Authenticatable
         'can_login',
         'username',
         'role_id',
-        'client_id'
+        'client_id',
+        'profile_picture'
     ];
 
     /**

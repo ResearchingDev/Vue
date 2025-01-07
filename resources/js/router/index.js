@@ -2,15 +2,20 @@
 
 import { createRouter, createWebHistory } from "vue-router";
 import Body from "../components/body.vue";
+
 /* Auth */
 import login from "../pages/auth/login.vue";
 
-//User
+/* Client */
 import clients from "../pages/clients/index.vue";
 import userEdit from "../pages/clients/profile/userEdit.vue";
 
-//Dashboard
+/* Dashboard */
 import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
+
+/* Error Page */
+
+import Error404 from "../pages/error/error404.vue";
 
 import Roles from "../pages/roles/index.vue";
 import userPermission from "../pages/roles/userPermission.vue";
@@ -74,6 +79,11 @@ const routes = [
         ],
     },
     {
+        path: "/:pathMatch(.*)*", // This will match any undefined path
+        name: "NotFound",
+        component: Error404,
+    },
+    {
         path: "/client",
         component: Body,
         children: [
@@ -103,7 +113,7 @@ const routes = [
                 props: true
             },
         ],
-    }
+    },
 ];
 const router = createRouter({
     history: createWebHistory(),
@@ -111,7 +121,7 @@ const router = createRouter({
 });
 router.beforeEach((to, from, next) => {
     if (to.meta.title) document.title = to.meta.title;
-    const path = ["/login", "/auth/register"];
+    const path = ["/login"];
     if (path.includes(to.path) || localStorage.getItem("User")) {
         return next();
     }

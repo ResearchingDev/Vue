@@ -5,8 +5,9 @@
           <h4 class="card-title mb-0">Client List</h4>
           <div class="col-md-1 pull-right" style="margin: -27px 0px 0px 0px;">
             <!-- Client modal component for Add/Edit -->
-            <clientModals ref="clientModal" @updateCompleted="reloadDataTable"/>
+            <clientModals ref="clientModal" @updateCompleted="handleUpdateCompleted"/>
           </div>
+          <span id="message"  class="text-success mt-3 d-block"></span>
         </div>
         <div class="table-responsive add-project">
           <table class="table card-table table-vcenter text-nowrap" id="userTable">
@@ -40,6 +41,11 @@
     name: 'clients',
     components: {
       clientModals,
+    },
+    data() {
+      return {
+        message: '', 
+      };
     },
     mounted() {
       const vueInstance = this;
@@ -141,6 +147,17 @@
               });
           }
         });
+      },
+      handleUpdateCompleted(message) {
+        this.message = message;
+        const messageSpan = document.getElementById('message');
+        messageSpan.textContent = this.message;
+        messageSpan.classList.add('text-success');
+        setTimeout(() => {
+          messageSpan.textContent = '';
+        }, 3000);
+
+        this.reloadDataTable();
       },
       reloadDataTable() {
             $('#userTable').DataTable().ajax.reload();
