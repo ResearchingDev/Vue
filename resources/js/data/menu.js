@@ -23,7 +23,7 @@ export var menuItems = {
                 active: false,
                 children: [
                     {
-                        path: "/client",
+                        path: "/admin/client",
                         title: "Clients",
                         type: "link",
                         active: false,
@@ -56,7 +56,7 @@ export var menuItems = {
                 active: false,
                 children: [
                     {
-                        path: "/users",
+                        path: "client/users",
                         title: "Users",
                         type: "link",
                         active: false,

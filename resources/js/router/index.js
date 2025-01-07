@@ -38,20 +38,6 @@ const routes = [
         ],
     },
     {
-        path: "/admin",
-        component: Body,
-        children: [
-            {
-                path: "dashboard",
-                name: "Dashboard",
-                component: apex_chart,
-                meta: {
-                    title: " Dashboard | Subscription - ERP Software",
-                },
-            },
-        ],
-    },
-    {
         path: "/login",
         name: "Login 1",
         component: login,
@@ -60,23 +46,51 @@ const routes = [
         },
     },
     {
-        path: "/client",
+        path: "/profile",
         component: Body,
         children: [
             {
                 path: "",
+                name: "profile",
+                component: userEdit,
+                meta: {
+                    title: "Users Edit | Subscription - ERP Software",
+                },
+            }
+        ]
+    },
+    {
+        path: "/admin",
+        component: Body,
+        children: [
+            {
+                path: "",
+                name: "Dashboard",
+                component: apex_chart,
+                meta: {
+                    title: " Dashboard | Subscription - ERP Software",
+                },
+            },
+            {
+                path: "client",
                 name: "client",
                 component: clients,
                 meta: {
                     title: "Manage Clients | Subscription - ERP Software",
                 },
             },
+        ],
+    },
+    {
+        path: "/client",
+        component: Body,
+        children: [
             {
-                path: "profile",
-                name: "profile",
-                component: userEdit,
+                path: "users",
+                name: "users",
+                component: users,
                 meta: {
-                    title: "Users Edit | Subscription - ERP Software",
+                    title: "Manage Users | Subscription - ERP Software",
                 },
             },
             {
@@ -103,20 +117,6 @@ const routes = [
                     title: " Roles | Subscription - ERP Software",
                 },
                 props: true
-            },
-        ],
-    },
-    {
-        path: "/users",
-        component: Body,
-        children: [
-            {
-                path: "",
-                name: "users",
-                component: users,
-                meta: {
-                    title: "Manage Clients | Subscription - ERP Software",
-                },
             },
         ],
     },

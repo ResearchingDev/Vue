@@ -131,9 +131,8 @@ export default {
             if (user.role_code === 'admin') {
               this.$router.push('/admin/dashboard');
             } else {
-              this.$router.push('/client');
+              this.$router.push('/client/dashboard');
             }
-
             // Show success alert
             this.alertMessage = {
               type: 'success',

@@ -24,7 +24,7 @@ Route::delete('/admin/users/delete/{id}', [UserController::class, 'destroy'])->n
 Route::post('/users/list', [UserController::class, 'list']);
 
 Route::get('/users/{id}', [UserController::class, 'profile']);
-Route::post('/users/save_users/{id}', [UserController::class, 'save_user']);
+Route::post('/users/save_users/{id}', [UserController::class, 'update']);
 Route::get('/clients/list', [ClientController::class, 'list']); 
 
 // Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
