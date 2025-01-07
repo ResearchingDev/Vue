@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
 });
 Route::get('/users/{id}', [UserController::class, 'profile']);
 Route::post('/users/save_users/{id}', [UserController::class, 'update']);
-Route::get('/clients/list', [ClientController::class, 'list']); 
+Route::get('/clients/list', [ClientController::class, 'list']);
 
 Route::apiResource('clients', ClientController::class);
 Route::post('/clients/save/{id}', [ClientController::class, 'update']);
@@ -33,3 +33,5 @@ Route::get('/client', [UserRolesController::class, 'list']);
 
 Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
 Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);
+Route::delete('/client/roles/delete/{id}', [UserRolesController::class, 'destroy']);
+Route::post('/client/roles/update/{id}', [UserRolesController::class, 'update']);

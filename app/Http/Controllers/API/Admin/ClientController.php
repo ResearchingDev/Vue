@@ -16,39 +16,52 @@ class ClientController extends Controller
      */
     public function list(Request $request)
     {
-        // Get the page number and limit from the request
         $limit = $request->input('length', 10);
-        $start = $request->input('start', 0);
-    
-        // Get the data by joining sub_clients and sub_users
-        $users = DB::table('sub_clients')
-            ->join('sub_users', 'sub_clients.id', '=', 'sub_users.client_id') // Join sub_clients with sub_users on client_id
+        $start = $request->input('start', 0); 
+        $search = $request->input('search.value', ''); 
+        $orderColumnIndex = $request->input('order.0.column', 0); // Column index for ordering
+        $orderDirection = $request->input('order.0.dir', 'asc'); // Order direction ('asc' or 'desc')
+        $columns = [
+            'sub_clients.id',
+            'sub_clients.client_name',
+            'sub_clients.email',
+            'sub_users.phone_number',
+            'sub_users.created_at',
+            'sub_users.status'
+        ];
+        $orderColumn = $columns[$orderColumnIndex] ?? 'sub_clients.id';
+
+        // Base query
+        $query = DB::table('sub_clients')
+            ->join('sub_users', 'sub_clients.id', '=', 'sub_users.client_id')
             ->select(
                 'sub_clients.id as client_id',
                 'sub_clients.client_name',
                 'sub_clients.email as client_email',
                 'sub_users.id as user_id',
-                'sub_users.first_name',
-                'sub_users.last_name',
                 'sub_users.phone_number',
-                'sub_users.user_type',
-                'sub_users.email as user_email',
-                'sub_users.status',
-                'sub_users.created_at as user_created_at'
-            )
-            ->offset($start)
-            ->limit($limit)
-            ->get();
-    
-        // Count the total number of records in sub_clients
-        $totalRecords = DB::table('sub_clients')->count();
-    
-        // Return a properly structured JSON response
+                'sub_users.created_at as user_created_at',
+                'sub_users.status'
+            );
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('sub_clients.client_name', 'LIKE', "%$search%")
+                ->orWhere('sub_clients.email', 'LIKE', "%$search%")
+                ->orWhere('sub_users.phone_number', 'LIKE', "%$search%")
+                ->orWhere('sub_users.status', 'LIKE', "%$search%");
+            });
+        }
+        $filteredQuery = clone $query;
+        $query->orderBy($orderColumn, $orderDirection);
+        $data = $query->offset($start)->limit($limit)->get();
+        $totalRecords = DB::table('sub_clients')->count(); 
+        $totalFiltered = $filteredQuery->count();       
+
         return response()->json([
             'draw' => (int) $request->input('draw', 1),
             'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $totalRecords,
-            'data' => $users,
+            'recordsFiltered' => $totalFiltered,
+            'data' => $data,
         ]);
     }
     public function index(Request $request) {}

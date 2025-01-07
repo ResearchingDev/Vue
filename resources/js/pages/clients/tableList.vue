@@ -58,20 +58,21 @@ import { toast } from 'vue3-toastify';
           processing: true,
           serverSide: true,
           ajax: {
-            url: '/api/clients/list/', // Adjusted URL to match the route
+            url: '/api/clients/list/',
             type: 'GET',
             data: function (d) {
-              // Pass necessary parameters for pagination, sorting, etc.
+              // Pass additional parameters for sorting and searching
               d.draw = d.draw;
               d.start = d.start;
               d.length = d.length;
-            }
+              d.search = d.search;
+              d.order = d.order;
+            },
           },
           columns: [
             {
               data: null,
               render: function (data, type, row, meta) {
-                // Calculate serial number based on row index (meta.row) and page number
                 return meta.row + meta.settings._iDisplayStart + 1; // +1 for 1-based index
               },
             },
@@ -92,8 +93,9 @@ import { toast } from 'vue3-toastify';
               },
               orderable: false,
               searchable: false,
-            }
-          ]
+            },
+          ],
+          order: [[1, 'asc']], // Default sort by the second column (Client Name)
         });
   
         window.deleteUser = (clientId) => {

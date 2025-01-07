@@ -21,23 +21,11 @@
                             <div class="form-group col-md-6 mb-4">
                                 <label class="fw-bold">User Access</label>
                                 <div class="form-check">
-                                    <input
-                                        id="webAccess"
-                                        v-model="role.userAccess"
-                                        value="Web Access"
-                                        type="checkbox"
-                                        class="form-check-input"
-                                    />
+                                    <input id="webAccess" v-model="role.userAccess" value="Web Access" type="checkbox" class="form-check-input" />
                                     <label for="webAccess">Web Access</label>
                                 </div>
                                 <div class="form-check">
-                                    <input
-                                        id="mobileAccess"
-                                        v-model="role.userAccess"
-                                        value="Mobile Access"
-                                        type="checkbox"
-                                        class="form-check-input"
-                                    />
+                                    <input id="mobileAccess" v-model="role.userAccess" value="Mobile Access" type="checkbox" class="form-check-input" />
                                     <label for="mobileAccess">Mobile Access</label>
                                 </div>
                                 <span class="validate-error text-danger mt-4" v-if="errors.userAccess">{{ errors.userAccess }}</span>
@@ -65,7 +53,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(module, index) in modules" :key="index">
+                                    <tr v-for="module in modules" :key="module.module_id">
+                                        <input type="hidden" v-model="module.module_id" />
                                         <td>{{ module.name }}</td>
                                         <td><input type="checkbox" v-model="module.permissions.delete" /></td>
                                         <td><input type="checkbox" v-model="module.permissions.update" /></td>
@@ -93,6 +82,7 @@
         data() {
             return {
                 isEditMode: false,
+                loading: false,
                 role: {
                     id: null,
                     roleName: '',
@@ -112,10 +102,11 @@
         methods: {
             async fetchModules() {
                 try {
-                    const response = await axios.get('/api/modules_list');
-                    if (response.data && response.data.status === 'success') {
+                    const response = await axios.get("/api/modules_list");
+                    if (response.data?.status === "success") {
                         this.modules = response.data.data.map(module => ({
-                            name: module.name,
+                            module_id: module.id,
+                            name: module.module_name || module.name || "Unnamed Module",
                             permissions: {
                                 delete: false,
                                 update: false,
@@ -130,134 +121,113 @@
                     console.error('Error fetching modules:', error.message);
                 }
             },
-            async saveRole() {
+            validateForm() {
                 this.errors = {
                     roleName: '',
                     roleCode: '',
                     userAccess: '',
                     permissions: '',
                 };
-                // Validate Role Name
-                if (!this.role.roleName) {
-                    this.errors.roleName = 'Role name is required.';
+                if (!this.role.roleName) this.errors.roleName = "Role name is required.";
+                if (!this.role.roleCode) this.errors.roleCode = "Role code is required.";
+                if (!this.role.userAccess.length) this.errors.userAccess = "At least one User Access option must be selected.";
+                if (!this.modules.some(module => Object.values(module.permissions).includes(true))) {
+                    this.errors.permissions = "At least one permission must be selected.";
                 }
-                // Validate Role Code
-                if (!this.role.roleCode) {
-                    this.errors.roleCode = 'Role code is required.';
-                }
-                // Validate User Access
-                if (!this.role.userAccess.length) {
-                    this.errors.userAccess = 'At least one User Access option must be selected.';
-                }
-                // Validate Permissions
-                let hasPermission = false;
-                for (const module of this.modules) {
-                    if (module.permissions.delete || module.permissions.update || module.permissions.add || module.permissions.view) {
-                        hasPermission = true;
-                        break;
-                    }
-                }
-                if (!hasPermission) {
-                    this.errors.permissions = 'At least one permission must be selected for each module.';
-                }
-                // If validation fails, stop here
-                if (this.errors.roleName || this.errors.roleCode || this.errors.userAccess || this.errors.permissions) {
-                    return;
-                }
-                // Validation Logic
+                return !Object.values(this.errors).some(error => error);
+            },
+            async saveRole() {
+                if (!this.validateForm()) return;
                 const formData = {
                     roleName: this.role.roleName,
                     roleCode: this.role.roleCode,
                     userAccess: this.role.userAccess,
                     status: this.role.status,
                     permissions: this.modules.map(module => ({
-                        moduleName: module.name,
-                        delete: module.permissions.delete,
-                        update: module.permissions.update,
-                        add: module.permissions.add,
-                        view: module.permissions.view,
+                        moduleID: module.module_id,
+                        ...module.permissions,
                     })),
                 };
                 try {
-                    let response;
-                    if (this.isEditMode) {
-                        response = await axios.put(`/api/client/update_role/${this.role.id}`, formData);
-                    } else {
-                        response = await axios.post('/api/client/add_role', formData);
-                    }
-
-                    if (response.data && response.data.status === 'success') {
+                    this.loading = true;
+                    const apiUrl = this.isEditMode
+                        ? `/api/client/roles/update/${this.role.id}`
+                        : "/api/client/add_role";
+                    const response = await axios.post(apiUrl, formData);
+                    if (response.data?.status === "success") {
                         this.clearForm();
-                        window.location.href = '/client';
+                        window.location.href = '/client/roles';
                     } else {
-                        alert('Failed to save role');
+                        alert(response.data.message || "Failed to save role.");
                     }
                 } catch (error) {
-                    if (error.response && error.response.data.errors) {
+                    if (error.response?.data.errors) {
                         this.errors = { ...this.errors, ...error.response.data.errors };
                     } else {
-                        console.error('Error saving role:', error.message);
+                        console.error("Error saving role:", error.message);
                     }
+                } finally {
+                    this.loading = false;
                 }
-            },
-            loadRoleForEdit(role) {
-                this.isEditMode = true;
-                this.role = {
-                    id: role.role_id, // Updated to match response key
-                    roleName: role.role_name, // Updated to match response key
-                    roleCode: role.role_unique_code, // Updated to match response key
-                    webAccess: role.web_access, // Added for web access
-                    mobileAccess: role.mobile_access, // Added for mobile access
-                    status: role.status, // Updated to match response key
-                };
-                this.modules = [{
-                    name: "Permissions", // Example module name for all permissions
-                    permissions: {
-                        add: role.can_add === "Yes", // Convert "Yes" to boolean
-                        update: role.can_update === "Yes",
-                        view: role.can_view === "Yes",
-                        delete: role.can_delete === "Yes",
-                    },
-                }];
             },
             cancelEdit() {
                 this.isEditMode = false;
                 this.clearForm();
-                window.location.href = '/client';
+                window.location.href = '/client/roles';
             },
             clearForm() {
-                this.role = {
-                    id: null,
-                    roleName: '',
-                    roleCode: '',
-                    userAccess: [],
-                    status: 'Active',
-                };
+                this.role = { id: null, roleName: "", roleCode: "", userAccess: [], status: "Active" };
                 this.modules = [];
             },
-            editRole(roleId) {
-                axios.get(`/api/client/roles/${roleId}`)
-                .then(response => {
-                    if (response.data) {
-                        this.loadRoleForEdit(response.data);
+            async loadRoleForEdit(roleId) {
+                this.isEditMode = true;
+                try {
+                    const response = await axios.get(`/api/client/roles/${roleId}`);
+                    if (response.data?.status === "success") {
+                        const role = response.data.data;
+                        this.role = {
+                            id: role.id,
+                            roleName: role.role_name,
+                            roleCode: role.role_unique_code,
+                            userAccess: [],
+                            status: role.status,
+                        };
+                        if (role.web_access === "Yes") {
+                            this.role.userAccess.push("Web Access");
+                        }
+                        if (role.mobile_access === "Yes") {
+                            this.role.userAccess.push("Mobile Access");
+                        }
+                        this.modules = role.user_permission.map(permission => ({
+                            id: permission.menu_id || permission.id,
+                            name: permission.menu_name || permission.module_name || "Unnamed Module",
+                            module_id: permission.menu_id || permission.id,
+                            permissions: {
+                                add: permission.can_add === "Yes",
+                                update: permission.can_update === "Yes",
+                                view: permission.can_view === "Yes",
+                                delete: permission.can_delete === "Yes",
+                            },
+                        }));
                     } else {
-                        console.error('No data received for the role');
+                        const errorMessage = response.data?.message || "Failed to load role data. Please try again later.";
+                        console.error("Failed to load role data:", errorMessage);
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching role details:', error.message);
-                    alert('Failed to load role details. Please try again.');
-                });
+                } catch (error) {
+                    console.error("Error loading role for edit:", error.response?.data?.message || error.message || "Unknown error");
+                }
             },
         },
         mounted() {
-            this.fetchModules();
-            let url_roleId = this.$route.params.id;
-            this.editRole(url_roleId)
+            this.fetchModules()
+                .then(() => {
+                    const roleId = this.$route.params.id;
+                    if (roleId) return this.loadRoleForEdit(roleId);
+                })
+                .catch(error => console.error("Initialization error:", error.message));
         },
     };
 </script>
-
 <style>
     .add-user-roles {
         padding: 20px;

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class UserRolesController extends Controller
 {
-
+    //Store the User Roles and Permissions
     public function store(Request $request)
     {
         // Validate the form data
@@ -21,7 +21,7 @@ class UserRolesController extends Controller
             'userAccess' => 'required|array|min:1',
             'userAccess.*' => 'string|in:Web Access,Mobile Access',
             'permissions' => 'required|array|min:1',
-            'permissions.*.moduleName' => 'required|string|max:100',
+            'permissions.*.moduleID' => 'integer', // Add this line
             'permissions.*.delete' => 'required|boolean',
             'permissions.*.update' => 'required|boolean',
             'permissions.*.add' => 'required|boolean',
@@ -31,7 +31,6 @@ class UserRolesController extends Controller
             // Determine access types
             $hasWebAccess = in_array('Web Access', $validatedData['userAccess']) ? 'Yes' : 'No';
             $hasMobileAccess = in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No';
-
             // Create the role in the `roles` table
             $role = SubUserRole::create([
                 'role_unique_code' => $validatedData['roleCode'],
@@ -47,10 +46,9 @@ class UserRolesController extends Controller
                 $hasAddAccess = !empty($permission['add']) ? 'Yes' : 'No';
                 $hasViewAccess = !empty($permission['view']) ? 'Yes' : 'No';
                 UserPermission::create([
-                    'role_id' => $role->id,
+                    'role_id' => $role->id, // Use the created role's ID
                     'user_id' => '77',
-                    'menu_id' => '77',
-                    'module_name' => $permission['moduleName'],
+                    'menu_id' => $permission['moduleID'], // Use module_id from request
                     'can_delete' => $hasDeleteAccess,
                     'can_update' => $hasUpdateAccess,
                     'can_add' => $hasAddAccess,
@@ -70,6 +68,7 @@ class UserRolesController extends Controller
             ], 500);
         }
     }
+    //List the User Modules
     public function modules_list(Request $request)
     {
         // Get the data by joining sub_clients and sub_users
@@ -84,12 +83,12 @@ class UserRolesController extends Controller
                 'sub_module_menus.status'
             )
             ->get();
-
         return response()->json([
             'status' => 'success',
             'data' => $module_menus,
         ], 200);
     }
+    //List the User Roles in Datatable
     public function list(Request $request)
     {
         // Get pagination, sorting, and search parameters
@@ -98,18 +97,15 @@ class UserRolesController extends Controller
         $searchValue = $request->input('search.value', '');
         $orderColumnIndex = $request->input('order.0.column', 0);
         $orderDirection = $request->input('order.0.dir', 'asc');
-
         // Map column index to actual database columns
         $columns = ['role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status'];
         $orderColumn = $columns[$orderColumnIndex] ?? 'id';
-
         // Query the sub_user_roles table
         $query = DB::table('sub_user_roles')
             ->select('id', 'role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status')
             ->where('role_name', '!=', 'Super Admin')
             ->where('role_name', '!=', 'Client')
             ->where('deleted_at', null);
-
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
@@ -119,17 +115,14 @@ class UserRolesController extends Controller
                     ->orWhere('status', 'like', "%$searchValue%");
             });
         }
-
         // Get the filtered and paginated results
         $filteredRecords = $query->count();
         $users = $query->orderBy($orderColumn, $orderDirection)
             ->offset($start)
             ->limit($limit)
             ->get();
-
         // Total records count
         $totalRecords = DB::table('sub_user_roles')->count();
-
         // Return a properly structured JSON response
         return response()->json([
             'draw' => (int) $request->input('draw', 1),
@@ -138,14 +131,106 @@ class UserRolesController extends Controller
             'data' => $users,
         ]);
     }
+    //List the Particular User Roles and Permisssions
     public function edit(Request $request)
     {
-          $user_role_id = $request->id;
-          // Find the client by ID
-          $userroles = SubUserRole::findOrFail($user_role_id);
-          // Optionally, you can eager load the 'user' relationship if needed
-          $userroles->load('user_permission');
-          return response()->json($userroles, 200);
+        $user_role_id = $request->id;
+        // Find the client by ID
+        $userrole = SubUserRole::findOrFail($user_role_id);
+        // Optionally, you can eager load the 'user' relationship if needed
+        $userrole->load('user_permission');
+        return response()->json([
+            'status' => 'success',
+            'data' => $userrole,
+        ], 200);
     }
-
+    //Delete the User Roles and Permisssions
+    public function destroy(Request $request)
+    {
+        try {
+            $user_role_id = $request->id;
+            // Find the role by ID
+            $userRole = SubUserRole::findOrFail($user_role_id);
+            // Delete related user_permission records
+            $userRole->user_permission()->delete();
+            // Delete the role itself
+            $userRole->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Role and associated permissions deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete role. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    //Update the User Roles and Permissions
+    public function update(Request $request, $id)
+    {
+        // Validate the form data
+        $validatedData = $request->validate([
+            'roleCode' => "required|string|max:50|unique:sub_user_roles,role_unique_code,{$id}",
+            'roleName' => "required|string|max:100|unique:sub_user_roles,role_name,{$id}",
+            'status' => 'required|in:Active,Inactive',
+            'userAccess' => 'required|array|min:1',
+            'userAccess.*' => 'string|in:Web Access,Mobile Access',
+            'permissions' => 'required|array|min:1',
+            'permissions.*.moduleID' => 'integer',
+            'permissions.*.delete' => 'required|boolean',
+            'permissions.*.update' => 'required|boolean',
+            'permissions.*.add' => 'required|boolean',
+            'permissions.*.view' => 'required|boolean',
+        ]);
+        try {
+            // Find the role and update its details
+            $role = SubUserRole::findOrFail($id);
+            $role->update([
+                'role_unique_code' => $validatedData['roleCode'],
+                'role_name' => $validatedData['roleName'],
+                'status' => $validatedData['status'],
+                'web_access' => in_array('Web Access', $validatedData['userAccess']) ? 'Yes' : 'No',
+                'mobile_access' => in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No',
+            ]);
+            // Prepare updated permissions
+            $permissionsData = collect($validatedData['permissions'])->map(function ($permission) use ($role) {
+                return [
+                    'role_id' => $role->id,
+                    'user_id' => '77',
+                    'menu_id' => $permission['moduleID'],
+                    'can_delete' => $permission['delete'] ? 'Yes' : 'No',
+                    'can_update' => $permission['update'] ? 'Yes' : 'No',
+                    'can_add' => $permission['add'] ? 'Yes' : 'No',
+                    'can_view' => $permission['view'] ? 'Yes' : 'No',
+                ];
+            });
+            // Sync permissions: update existing, add new, and delete removed
+            $existingPermissions = UserPermission::where('role_id', $id)->get()->keyBy('menu_id');
+            $newPermissions = $permissionsData->keyBy('menu_id');
+            // Update or create permissions
+            $newPermissions->each(function ($data, $menuID) use ($existingPermissions) {
+                if ($existingPermissions->has($menuID)) {
+                    $existingPermissions[$menuID]->update($data);
+                } else {
+                    UserPermission::create($data);
+                }
+            });
+            // Delete removed permissions
+            $removedMenuIDs = $existingPermissions->keys()->diff($newPermissions->keys());
+            UserPermission::whereIn('menu_id', $removedMenuIDs)->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Role and permissions updated successfully',
+                'data' => $role,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update role and permissions',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
