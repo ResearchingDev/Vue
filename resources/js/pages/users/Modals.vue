@@ -22,6 +22,9 @@
                                     <label class="form-label">First Name</label>
                                     <input v-model="first_name" class="form-control" type="text"
                                         placeholder="First Name" required>
+                                    <div v-if="validationErrors.first_name" class="text-danger">
+                                        {{ validationErrors.first_name[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -31,6 +34,9 @@
                                     <label class="form-label">Last Name</label>
                                     <input v-model="last_name" class="form-control" type="text" placeholder="Last Name"
                                         required>
+                                    <div v-if="validationErrors.last_name" class="text-danger">
+                                        {{ validationErrors.last_name[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -40,6 +46,9 @@
                                     <label class="form-label">Email address</label>
                                     <input v-model="email" class="form-control" type="email" placeholder="Email"
                                         required>
+                                    <div v-if="validationErrors.email" class="text-danger">
+                                        {{ validationErrors.email[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -49,6 +58,9 @@
                                     <label class="form-label">Username</label>
                                     <input v-model="username" class="form-control" type="text" placeholder="Username"
                                         required>
+                                    <div v-if="validationErrors.username" class="text-danger">
+                                        {{ validationErrors.username[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -58,6 +70,9 @@
                                     <label class="form-label">Password</label>
                                     <input v-model="password" class="form-control" type="password"
                                         placeholder="Password" required>
+                                    <div v-if="validationErrors.password" class="text-danger">
+                                        {{ validationErrors.password[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -67,6 +82,9 @@
                                     <label class="form-label">Phone number</label>
                                     <input v-model="phone_number" class="form-control" type="text"
                                         placeholder="Phone Number" required>
+                                    <div v-if="validationErrors.phone_number" class="text-danger">
+                                        {{ validationErrors.phone_number[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -151,7 +169,8 @@ export default {
             address: '',
             profilePic: null,
             profilePicPreview: null,
-            id : ''
+            id : '',
+            validationErrors: {},
         };
     },
     methods: {
@@ -188,8 +207,12 @@ export default {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
                 modal.hide();
             } catch (error) {
-                console.error('Error saving user:', error.response?.data || error.message);
-                toast.warn('Failed to save user');
+                if (error.response?.data?.errors) {
+                    this.validationErrors = error.response.data.errors;
+                } else {
+                    console.error('Error saving user:', error.response?.data || error.message);
+                    toast.warn('Failed to save user');
+                }
             }
         },
         handleFileChange(event) {
