@@ -39,3 +39,4 @@ Route::get('/client', [UserRolesController::class, 'list']);
 Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
 Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);
 Route::delete('/client/roles/delete/{id}', [UserRolesController::class, 'destroy']);
+Route::post('/client/roles/update/{id}', [UserRolesController::class, 'update']);

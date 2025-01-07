@@ -151,7 +151,7 @@
                 try {
                     this.loading = true;
                     const apiUrl = this.isEditMode
-                        ? `/api/client/update_role/${this.role.id}`
+                        ? `/api/client/roles/update/${this.role.id}`
                         : "/api/client/add_role";
                     const response = await axios.post(apiUrl, formData);
                     if (response.data?.status === "success") {
@@ -180,6 +180,7 @@
                 this.modules = [];
             },
             async loadRoleForEdit(roleId) {
+                this.isEditMode = true;
                 try {
                     const response = await axios.get(`/api/client/roles/${roleId}`);
                     if (response.data?.status === "success") {
