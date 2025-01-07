@@ -73,7 +73,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:sub_users,email',
             'password' => 'required|string|min:6',
-            'secondary_password' => 'required|string|min:6', 
+            'secondary_password' => 'required|string|min:6',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:15',
@@ -85,7 +85,7 @@ class UserController extends Controller
 
         // Encrypt passwords
         $validatedData['password'] = bcrypt($validatedData['password']);
-        $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);  
+        $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);
 
         // Create the user
         $user = User::create([
@@ -108,7 +108,7 @@ class UserController extends Controller
         ], 201);
     }
 
-    
+
     /**
      * Display the specified resource.
      */
@@ -146,7 +146,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|email|unique:sub_users,email,' . $id,
             'password' => 'nullable|string|min:6',
-            'secondary_password' => 'nullable|string|min:6', 
+            'secondary_password' => 'nullable|string|min:6',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:15',
@@ -163,7 +163,7 @@ class UserController extends Controller
         if ($request->has('password')) {
             $validatedData['password'] = bcrypt($validatedData['password']);
         }
-        
+
         // If secondary password is provided, encrypt it
         if ($request->has('secondary_password')) {
             $validatedData['secondary_password'] = bcrypt($validatedData['secondary_password']);
