@@ -101,9 +101,7 @@ export default {
                 .catch(error => console.error('Error fetching client data:', error));
         },
         handleUpdateCompleted() {
-            setTimeout(() => {
                 this.reloadDataTable();
-            }, 3000);
           },
         deleteUser(userId) {
             Swal.fire({

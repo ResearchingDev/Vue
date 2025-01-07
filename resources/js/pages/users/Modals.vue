@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation" id="bookmark-form" novalidate
-                        @submit.prevent="submitBookmark">
+                        @submit.prevent="submitUser">
                         <div class="row">
                             <!-- First Name -->
                             <div class="col-sm-6 col-md-6">
@@ -174,7 +174,7 @@ export default {
         };
     },
     methods: {
-        async submitBookmark() {
+        async submitUser() {
             const formData = new FormData();
 
             formData.append('username', this.username);
@@ -206,6 +206,10 @@ export default {
                 this.clearForm();
                 const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
                 modal.hide();
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach((backdrop) => backdrop.remove());
+                }, 1000);
             } catch (error) {
                 if (error.response?.data?.errors) {
                     this.validationErrors = error.response.data.errors;
@@ -274,8 +278,8 @@ export default {
             this.last_name = '';
             this.phone_number = '';
             this.alter_phone_number = '';
-            this.status = '';
-            this.user_type = '';
+            this.status = 'Active';
+            this.user_type = 'User';
             this.address = '';
             this.profilePic = null;
             this.profilePicPreview = null;
