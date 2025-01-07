@@ -90,9 +90,6 @@
             });
         },
         methods: {
-            redirectToRoles() {
-                this.$router.replace({ name: 'Roles' });  // Redirect without adding to history
-            },
             // Function to delete the User Role
             editRole(roleId) {
                 window.location.href = '/client/roles/edit/' + roleId;

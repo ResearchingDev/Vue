@@ -64,7 +64,7 @@ export var menuItems = {
                 ],
             },
             {
-                path: "/client",
+                path: "/client/roles",
                 title: "Roles",
                 icon: "stroke-home",
                 iconf: "fill-home",

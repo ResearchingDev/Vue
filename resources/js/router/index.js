@@ -65,7 +65,7 @@ const routes = [
         children: [
             {
                 path: "",
-                name: "clients",
+                name: "client",
                 component: clients,
                 meta: {
                     title: "Manage Clients | Subscription - ERP Software",
@@ -86,27 +86,24 @@ const routes = [
                 meta: {
                     title: " Roles | Subscription - ERP Software",
                 },
-                children: [
-                    {
-                        path: "add_role",
-                        name: "Add Role",
-                        component: userPermission,
-                        meta: {
-                            title: " Roles | Subscription - ERP Software",
-                        }
-                    },
-                    {
-                        path: "roles/edit/:id",
-                        name: "Edit Role",
-                        component: userPermission,
-                        meta: {
-                            title: " Roles | Subscription - ERP Software",
-                        },
-                        props: true
-                    },
-                ]
             },
-            
+            {
+                path: "roles/add_role",
+                name: "Add Role",
+                component: userPermission,
+                meta: {
+                    title: " Roles | Subscription - ERP Software",
+                }
+            },
+            {
+                path: "roles/edit/:id",
+                name: "Edit Role",
+                component: userPermission,
+                meta: {
+                    title: " Roles | Subscription - ERP Software",
+                },
+                props: true
+            },
         ],
     },
     {
