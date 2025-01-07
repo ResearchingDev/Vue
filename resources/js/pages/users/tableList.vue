@@ -5,7 +5,7 @@
                 <h4 class="card-title mb-0">Users List</h4>
                 <div class="col-md-1 pull-right" style="margin: -27px 0px 0px 0px;">
                     <Modals ref="UserModal" @updateCompleted="handleUpdateCompleted" />
-                   
+
                 </div>
             </div>
             <div class="table-responsive add-project">
@@ -46,12 +46,16 @@ export default {
         const vueInstance = this;
         window.vueInstance = vueInstance;
         $(document).ready(() => {
+            const token = localStorage.getItem('token'); // Get the token from localStorage
             const table = $('#userTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/api/users/list',
+                    url: '/api/client/users/list',
                     type: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,  // Include the token in the request headers
+                    },
                     data: function (d) {
                         d.draw = d.draw;
                         d.start = d.start;
@@ -94,15 +98,22 @@ export default {
     methods: {
         // Function to open the edit modal and load the user data
         openEditModal(userId) {
-            axios.get(`/api/admin/users/edit/${userId}`)
+            const token = localStorage.getItem('token');  // Retrieve the stored token
+            axios.get(`/api/client/users/edit/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`  // Pass the token in the Authorization header
+                }
+            })
                 .then(response => {
-                    this.$refs.UserModal.openModal(response.data); // Pass the client data to the modal
+                    this.$refs.UserModal.openModal(response.data);  // Open modal with fetched data
                 })
-                .catch(error => console.error('Error fetching client data:', error));
+                .catch(error => {
+                    console.error('Error fetching client data:', error.response?.data || error.message);
+                });
         },
         handleUpdateCompleted() {
-                this.reloadDataTable();
-          },
+            this.reloadDataTable();
+        },
         deleteUser(userId) {
             Swal.fire({
                 title: 'Are you sure?',

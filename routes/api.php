@@ -10,26 +10,21 @@ use App\Http\Controllers\Client\UserRolesController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
-
 // User routes
-Route::get('/users/list', [UserController::class, 'list']); 
+Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
+    Route::prefix('users')->name('user.')->group(function () {
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+    });
+    Route::post('/users/list', [UserController::class, 'list']);
 
-
-
-Route::post('/admin/users', [UserController::class, 'store'])->name('user.store');
-Route::get('/admin/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-Route::post('/admin/users/update/{id}', [UserController::class, 'update'])->name('user.update');
-Route::delete('/admin/users/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
-
-Route::post('/users/list', [UserController::class, 'list']);
-
+});
 Route::get('/users/{id}', [UserController::class, 'profile']);
 Route::post('/users/save_users/{id}', [UserController::class, 'update']);
 Route::get('/clients/list', [ClientController::class, 'list']); 
 
-// Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
-//     Route::post('/users', [UserController::class, 'store'])->name('user.store');
-// });
 Route::apiResource('clients', ClientController::class);
 Route::post('/clients/save/{id}', [ClientController::class, 'update']);
 

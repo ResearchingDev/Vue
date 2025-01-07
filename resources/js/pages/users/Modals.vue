@@ -193,12 +193,14 @@ export default {
                 formData.append('profile_picture', this.profilePic);
             }
             try {
-                const user_ajax_url = (this.id) ? ' /api/admin/users/update/'+this.id : '/api/admin/users' ;
+                const user_ajax_url = (this.id) ? ' /api/client/users/update/'+this.id : '/api/client/users' ;
                 const alert_message = (this.id) ? 'User Updated SuccessFully..!' : 'User Created SuccessFully..!' ;
+                const token = localStorage.getItem('token'); // Retrieve the token from localStorage
                 // Adjust the URL to match your API route
                 await axios.post(user_ajax_url, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data', // Important to set this when uploading files
+                        'Authorization': `Bearer ${token}`  
                     },
                 });
                 toast.success(alert_message);
