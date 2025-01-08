@@ -33,6 +33,7 @@ class UserRolesController extends Controller
             $hasMobileAccess = in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No';
             // Create the role in the `roles` table
             $role = SubUserRole::create([
+                'client_id' => $request->client_id,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],
@@ -89,7 +90,7 @@ class UserRolesController extends Controller
         ], 200);
     }
     //List the User Roles in Datatable
-    public function list(Request $request)
+    public function list(Request $request, $id)
     {
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
@@ -104,7 +105,7 @@ class UserRolesController extends Controller
         $query = DB::table('sub_user_roles')
             ->select('id', 'role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status')
             ->where('role_name', '!=', 'Super Admin')
-            ->where('role_name', '!=', 'Client')
+            ->where('client_id', '=', $id)
             ->where('deleted_at', null);
         // Apply search filter
         if (!empty($searchValue)) {
@@ -188,6 +189,7 @@ class UserRolesController extends Controller
             // Find the role and update its details
             $role = SubUserRole::findOrFail($id);
             $role->update([
+                'client_id' => $request->client_id,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],

@@ -117,6 +117,9 @@
                                             {{ role.role_name }}
                                         </option>
                                     </select>
+                                    <div v-if="validationErrors.role_id" class="text-danger">
+                                        {{ validationErrors.role_id[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -135,6 +138,9 @@
                                 <div class="mb-3">
                                     <input type="file" class="form-control" @change="handleFileChange"
                                         ref="profilePicture" accept="image/*">
+                                </div>
+                                <div v-if="validationErrors.profile_picture" class="text-danger">
+                                    {{ validationErrors.profile_picture[0] }}
                                 </div>
                                 <div v-if="profilePicPreview" class="mb-3">
                                     <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
@@ -327,6 +333,8 @@ export default {
             this.profilePicPreview = null;
             this.$refs.profilePicture.value = '';
             this.role_id = '';
+            this.errors = {};
+            this.validationErrors = {};
         },
     },
 };

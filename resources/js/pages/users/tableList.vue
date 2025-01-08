@@ -78,7 +78,7 @@ export default {
                 columns: [
                     { data: 'id' },
                     { data: 'first_name' },
-                    { data: 'user_type' },
+                    { data: 'role_name' },
                     { data: 'email' },
                     { data: 'created_at' },
                     { data: 'status' },

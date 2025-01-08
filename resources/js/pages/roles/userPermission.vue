@@ -138,11 +138,15 @@
             },
             async saveRole() {
                 if (!this.validateForm()) return;
+                const user = localStorage.getItem('User');
+                const parsedUser = JSON.parse(user);
+                const clientId = parsedUser.client_id;
                 const formData = {
                     roleName: this.role.roleName,
                     roleCode: this.role.roleCode,
                     userAccess: this.role.userAccess,
                     status: this.role.status,
+                    client_id: clientId,
                     permissions: this.modules.map(module => ({
                         moduleID: module.module_id,
                         ...module.permissions,
@@ -200,7 +204,7 @@
                         }
                         this.modules = role.user_permission.map(permission => ({
                             id: permission.menu_id || permission.id,
-                            name: permission.menu_name || permission.module_name || "Unnamed Module",
+                            name: permission.module_menu.module_name || permission.module_menu.module_name || "Unnamed Module",
                             module_id: permission.menu_id || permission.id,
                             permissions: {
                                 add: permission.can_add === "Yes",
