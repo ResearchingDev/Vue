@@ -101,6 +101,7 @@
                                         <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture"
                                             accept="image/*">
                                     </div>
+                                    <span v-if="errors.profile_picture" class="text-danger">{{ errors.profile_picture[0] }}</span>
                                     <div v-if="profilePicPreview">
                                         <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
                                             style="max-width: 100px; max-height: 100px;">

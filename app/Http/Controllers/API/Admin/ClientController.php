@@ -81,7 +81,7 @@ class ClientController extends Controller
             'status' => 'required|in:Active,Inactive',
             'username' => 'required|string|unique:sub_users,username',
             'password' => 'required|string|min:8',
-            'profile_picture' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
         ]);
 
         DB::beginTransaction();
