@@ -53,7 +53,7 @@
               <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture" accept="image/*">
             </div>
             <div v-if="user.profilePicPreview" class="mb-3">
-              <img :src="user.profilePicPreview || '/path/to/default-image.jpg'" alt="Profile Preview" class="img-fluid"
+              <img :src="user.profilePicPreview || '/assets/images/dashboard/profile.png'" alt="Profile Preview" class="img-fluid"
                 style="max-width: 100px; max-height: 100px;">
             </div>
           </div>
@@ -98,37 +98,34 @@ export default {
   methods: {
     async fetchUserDetails() {
       try {
-        // Get the token or user ID from localStorage (adjust according to your needs)
-        const token = localStorage.getItem('token');
         const userDetails = JSON.parse(localStorage.getItem('User'));
         const userId = userDetails.id;
+        this.$axios.get(`/client/users/${userId}`)
+          .then(response => {
+            // Update the user object with the data returned from the API
+            this.user = response;
+            this.user.profilePic = null; // Reset profile picture selection
+            this.user.profilePicPreview = null; // Reset profile picture preview
+            // Check if profile picture exists in the user data
+            if (response.profile_picture) {
+              const imagePath = `${window.location.origin}/storage/${response.profile_picture}`;
+              const img = new Image();
 
-        const response = await axios.get(`/api/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+              img.onload = () => {
+                this.user.profilePicPreview = imagePath;
+              };
 
-        // Update the user object with the data returned from the API
-        this.user = response.data;
-        this.user.profilePic = null; // Reset profile picture selection
-        this.user.profilePicPreview = null; // Reset profile picture preview
+              img.onerror = () => { 
+                this.user.profilePicPreview = '/assets/images/dashboard/profile.png'; // Fallback image
+              };
 
-        // Check if profile picture exists in the user data
-        if (response.data.profile_picture) {
-          const imagePath = `${window.location.origin}/storage/${response.data.profile_picture}`;
-          const img = new Image();
+              img.src = imagePath;
+            }
 
-          img.onload = () => {
-            this.user.profilePicPreview = imagePath;
-          };
-
-          img.onerror = () => {
-            this.user.profilePicPreview = '/path/to/default-image.jpg'; // Fallback image
-          };
-
-          img.src = imagePath;
-        }
+          })
+          .catch(error => {
+            console.error('Error fetching User data:', error);
+          });
 
         // Set isLoading to false once data is fetched
         this.isLoading = false;
@@ -152,22 +149,15 @@ export default {
         formData.append('city', this.user.city);
         formData.append('zipcode', this.user.zipcode);
         formData.append('status', 'Active');
-        formData.append('user_type',  this.user.user_type);
+        formData.append('user_type', this.user.user_type);
 
-        formData.append('role_id',  this.user.role_id);
+        formData.append('role_id', this.user.role_id);
         // Append profile picture if selected
         if (this.user.profilePic) {
           formData.append('profile_picture', this.user.profilePic);
         }
-
         // Update the profile data via an API POST request
-        const token = localStorage.getItem('token');
-        await axios.post(`/api/users/save_users/${this.user.id}`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        await this.$axios.post(`/users/save_users/${this.user.id}`,formData);
         toast.success('Profile updated successfully!');
       } catch (error) {
         console.error('Error updating profile:', error);

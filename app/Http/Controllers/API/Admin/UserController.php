@@ -125,8 +125,7 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function roles(Request $request){
-        $clientId = $request->query('client_id');
+    public function roles(Request $request, $clientId) {
         $roles = SubUserRole::select('id', 'role_name','status')
         ->where('status', 'Active') 
         ->when($clientId, function ($query, $clientId) {

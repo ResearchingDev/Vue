@@ -191,18 +191,14 @@ export default {
         },
         fetchRolesAndOpenModal() {
             console.log('Fetching roles and opening modal...');
-            this.fetchRoles();
+            this.fetchUserRoles();
         },
-        async fetchRoles() {
+        async fetchUserRoles() {
             try {
-                const token = localStorage.getItem('token');
                 const user = JSON.parse(localStorage.getItem('User')); // Parse the stored JSON string
                 const client_id = user?.client_id; 
-                const response = await axios.get('/api/client/users/roles', {
-                    headers: { Authorization: `Bearer ${token}` },
-                    params: { client_id }, 
-                });
-                this.roles = response.data.data; 
+                const response = await this.$axios.get(`/client/users/user_roles/${client_id}`);
+                this.roles = response.data; 
                 console.log('Roles fetched:', this.roles);
             } catch (error) {
                 console.error('Error fetching roles:', error);
@@ -274,7 +270,7 @@ export default {
         },
         openModal(userData) {
             // Update fields to match the new form structure
-            this.fetchRoles().then(() => {
+            this.fetchUserRoles().then(() => {
                 this.id = userData.id;
                 this.first_name = userData.first_name;  // Updated
                 this.last_name = userData.last_name;    // Updated
