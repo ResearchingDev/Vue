@@ -30,7 +30,7 @@ Route::apiResource('clients', ClientController::class);
 Route::post('/clients/save/{id}', [ClientController::class, 'update']);
 
 Route::post('/client/add_role', [UserRolesController::class, 'store']);
-Route::get('/client', [UserRolesController::class, 'list']);
+Route::get('/client/{id}', [UserRolesController::class, 'list']);
 
 Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
 Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);

@@ -90,7 +90,7 @@ class UserRolesController extends Controller
         ], 200);
     }
     //List the User Roles in Datatable
-    public function list(Request $request)
+    public function list(Request $request, $id)
     {
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
@@ -105,7 +105,7 @@ class UserRolesController extends Controller
         $query = DB::table('sub_user_roles')
             ->select('id', 'role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status')
             ->where('role_name', '!=', 'Super Admin')
-            ->where('role_name', '!=', 'Client')
+            ->where('client_id', '=', $id)
             ->where('deleted_at', null);
         // Apply search filter
         if (!empty($searchValue)) {
