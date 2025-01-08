@@ -5,21 +5,21 @@
             <div class="row">
                 <div class="add-user-roles">
                     <div class="container">
-                        <h3 class="mb-4">{{ isEditMode ? "Update User Roles and Permissions" : "Add User Roles and Permissions" }}</h3>
+                        <!-- <h3 class="mb-4">{{ isEditMode ? "Update User Roles and Permissions" : "Add User Roles and Permissions" }}</h3> -->
                         <!-- Role Details Section -->
                         <div class="role-details row">
                             <div class="form-group col-md-6 mb-4">
-                                <label for="roleName" class="fw-bold">Role Name</label>
+                                <label for="roleName" class="">Role Name</label>
                                 <input id="roleName" v-model="role.roleName" type="text" class="form-control" placeholder="Enter Role Name" />
-                                <span class="validate-error text-danger mt-4" v-if="errors.roleName">{{ errors.roleName }}</span>
+                                <span class="validate-error text-danger err mt-4" v-if="errors.roleName">{{ errors.roleName }}</span>
                             </div>
                             <div class="form-group col-md-6 mb-4">
-                                <label for="roleCode" class="fw-bold">Role Code</label>
+                                <label for="roleCode" class="">Role Code</label>
                                 <input id="roleCode" v-model="role.roleCode" type="text" class="form-control" placeholder="Enter Role Code" />
-                                <span class="validate-error text-danger mt-4" v-if="errors.roleCode">{{ errors.roleCode }}</span>
+                                <span class="validate-error text-danger err mt-4" v-if="errors.roleCode">{{ errors.roleCode }}</span>
                             </div>
                             <div class="form-group col-md-6 mb-4">
-                                <label class="fw-bold">User Access</label>
+                                <label class="">User Access</label>
                                 <div class="form-check">
                                     <input id="webAccess" v-model="role.userAccess" value="Web Access" type="checkbox" class="form-check-input" />
                                     <label for="webAccess">Web Access</label>
@@ -28,10 +28,10 @@
                                     <input id="mobileAccess" v-model="role.userAccess" value="Mobile Access" type="checkbox" class="form-check-input" />
                                     <label for="mobileAccess">Mobile Access</label>
                                 </div>
-                                <span class="validate-error text-danger mt-4" v-if="errors.userAccess">{{ errors.userAccess }}</span>
+                                <span class="validate-error text-danger err mt-4" v-if="errors.userAccess">{{ errors.userAccess }}</span>
                             </div>
                             <div class="form-group col-md-6 mb-4">
-                                <label for="status" class="fw-bold">Status</label>
+                                <label for="status" class="">Status</label>
                                 <select id="status" v-model="role.status" class="form-control">
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
@@ -41,15 +41,15 @@
                         <!-- Permissions Section -->
                         <div class="permissions">
                             <h3>Select Modules</h3>
-                            <span class="validate-error text-danger mt-4" v-if="errors.permissions">{{ errors.permissions }}</span>
+                            <span class="validate-error text-danger err mt-4" v-if="errors.permissions">{{ errors.permissions }}</span>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="fw-bold">Module</th>
-                                        <th class="fw-bold">Delete</th>
-                                        <th class="fw-bold">Update</th>
-                                        <th class="fw-bold">Add</th>
-                                        <th class="fw-bold">View</th>
+                                        <th class="">Module</th>
+                                        <th class="">Delete</th>
+                                        <th class="">Update</th>
+                                        <th class="">Add</th>
+                                        <th class="">View</th>
                                     </tr>
                                 </thead>
                                 <tbody>

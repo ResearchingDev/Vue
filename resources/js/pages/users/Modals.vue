@@ -1,95 +1,95 @@
 <template>
     <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
-        data-bs-target="#exampleModal" id="add_user" @click="handleAddUser">Add
+        data-bs-target="#exampleModal" id="add_user" @click="handleAddUser">Add User
     </button>
 
     <div class="modal fade modal-bookmark" id="exampleModal" ref="UserModal" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
                         @click="clearForm"></button>
                 </div>
-                <div class="modal-body">
-                    <form class="form-bookmark needs-validation" id="bookmark-form" novalidate
-                        @submit.prevent="submitUser">
+                <form class="form-bookmark needs-validation" id="bookmark-form" novalidate
+                    @submit.prevent="submitUser">
+                    <div class="modal-body">
                         <div class="row">
                             <!-- First Name -->
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">First Name</label>
                                     <input v-model="first_name" class="form-control" type="text"
                                         placeholder="First Name" required>
-                                    <div v-if="validationErrors.first_name" class="text-danger">
+                                    <div v-if="validationErrors.first_name" class="text-danger err">
                                         {{ validationErrors.first_name[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Last Name -->
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Last Name</label>
                                     <input v-model="last_name" class="form-control" type="text" placeholder="Last Name"
                                         required>
-                                    <div v-if="validationErrors.last_name" class="text-danger">
+                                    <div v-if="validationErrors.last_name" class="text-danger err">
                                         {{ validationErrors.last_name[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Email Address -->
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Email address</label>
                                     <input v-model="email" class="form-control" type="email" placeholder="Email"
                                         required>
-                                    <div v-if="validationErrors.email" class="text-danger">
+                                    <div v-if="validationErrors.email" class="text-danger err">
                                         {{ validationErrors.email[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Username -->
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
                                     <input v-model="username" class="form-control" type="text" placeholder="Username"
                                         required>
-                                    <div v-if="validationErrors.username" class="text-danger">
+                                    <div v-if="validationErrors.username" class="text-danger err">
                                         {{ validationErrors.username[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Password -->
-                            <div class="col-sm-6 col-md-6">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Password</label>
                                     <input v-model="password" class="form-control" type="password"
                                         placeholder="Password" required>
-                                    <div v-if="validationErrors.password" class="text-danger">
+                                    <div v-if="validationErrors.password" class="text-danger err">
                                         {{ validationErrors.password[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Phone Number -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Phone number</label>
                                     <input v-model="phone_number" class="form-control" type="text"
                                         placeholder="Phone Number" required>
-                                    <div v-if="validationErrors.phone_number" class="text-danger">
+                                    <div v-if="validationErrors.phone_number" class="text-danger err">
                                         {{ validationErrors.phone_number[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Alternate Number -->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Alternate number</label>
                                     <input v-model="alter_phone_number" class="form-control" type="text"
@@ -101,7 +101,7 @@
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
-                                    <select v-model="status" class="form-control btn-square" required>
+                                    <select v-model="status" class="form-control " required>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
@@ -109,22 +109,22 @@
                             </div>
 
                             <!-- User Type -->
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">User Type</label>
-                                    <select v-model="user_role" class="form-control btn-square" required>
+                                    <select v-model="user_role" class="form-control " required>
                                         <option v-for="role in roles" :key="role.id" :value="role.id">
                                             {{ role.role_name }}
                                         </option>
                                     </select>
-                                    <div v-if="validationErrors.role_id" class="text-danger">
+                                    <div v-if="validationErrors.role_id" class="text-danger err">
                                         {{ validationErrors.role_id[0] }}
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Address -->
-                            <div class="col-md-5">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Address</label>
                                     <textarea v-model="address" class="form-control" placeholder="Enter your address"
@@ -133,13 +133,13 @@
                             </div>
 
                             <!-- Profile Picture Section -->
-                            <div class="mt-4 pt-3 border-top">
+                            <div class="col-md-12">
                                 <h6 class="mb-3">Profile Picture</h6>
                                 <div class="mb-3">
                                     <input type="file" class="form-control" @change="handleFileChange"
                                         ref="profilePicture" accept="image/*">
                                 </div>
-                                <div v-if="validationErrors.profile_picture" class="text-danger">
+                                <div v-if="validationErrors.profile_picture" class="text-danger err">
                                     {{ validationErrors.profile_picture[0] }}
                                 </div>
                                 <div v-if="profilePicPreview" class="mb-3">
@@ -149,11 +149,13 @@
                             </div>
 
                         </div>
+                    </div>
+                    <div class="modal-footer">
                         <button class="btn btn-secondary" type="submit">Save</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
                             @click="clearForm">Cancel</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -334,6 +336,7 @@ export default {
             this.$refs.profilePicture.value = '';
             this.role_id = '';
             this.errors = {};
+            this.validationErrors = {};
         },
     },
 };
