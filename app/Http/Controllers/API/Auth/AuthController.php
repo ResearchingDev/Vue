@@ -10,27 +10,22 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
+use App\Models\SubUserLogHistory;
+
 class AuthController extends Controller
 {
     /**
      * Handle user login
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function login(LoginRequest $request)
     {
-        // Get user by email with the 'role' relationship
         $user = User::with('role')->where('email', $request->email)->first();
 
-        // Check if user exists and either primary or secondary password matches
         if ($user && $this->checkPassword($request, $user)) {
-
-             // If "Remember Me" is checked, attempt to log in with the remember option
-             $remember = $request->has('remember_me') && $request->remember_me;
-            // Proceed to authenticate
+            $remember = $request->has('remember_me') && $request->remember_me;
             Auth::login($user, $remember);
-
+            // Log user login
+            $this->storeLogHistory($user, $request, 'login');
             return response()->json([
                 'status' => 'success',
                 'message' => 'Login successful',
@@ -57,7 +52,6 @@ class AuthController extends Controller
             ], 200);
         }
 
-        // If user doesn't exist or passwords don't match
         return response()->json([
             'status' => 'error',
             'message' => 'Invalid credentials',
@@ -66,27 +60,14 @@ class AuthController extends Controller
     }
 
     /**
-     * Check if either primary or secondary password matches.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return bool
-     */
-    protected function checkPassword(Request $request, $user)
-    {
-        return Hash::check($request->password, $user->password) || Hash::check($request->secondary_password, $user->secondary_password);
-    }
-
-    /**
      * Handle user logout
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
     {
-        // Get the currently authenticated user
         $user = Auth::user();
-        // Revoke all tokens (including the one used for this request)
+        // Log user logout
+        $this->storeLogHistory($user, $request, 'logout');
+        // Revoke all tokens
         $user->tokens->each(function ($token) {
             $token->delete();
         });
@@ -95,5 +76,52 @@ class AuthController extends Controller
             'message' => 'User logged out successfully',
             'data' => null,
         ], 200);
+    }
+
+    /**
+     * Store or update log history for a user.
+     */
+    private function storeLogHistory(User $user, Request $request, $action)
+    {
+        $logId = $user->log_id;
+        $logData = [
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+            'user_type' => $user->user_type,
+            'browser_details' => $request->header('User-Agent'),
+            'status' => $action === 'login' ? 'Active' : 'Inactive',
+            'updated_by' => $user->id,
+        ];
+
+        if ($action === 'login') {
+            $logData['login_at'] = now();
+            $logData['login_source'] = 'Web';
+        } else if ($action === 'logout') {
+            $logData['logout_at'] = now();
+            $logData['logout_source'] = 'Web';
+        }
+
+        if ($logId) {
+            $log = SubUserLogHistory::find($logId);
+            if ($log) {
+                $log->update($logData);
+            } else {
+                $log = SubUserLogHistory::create($logData);
+                $logId = $log->id;
+            }
+        } else {
+            $log = SubUserLogHistory::create($logData);
+            $logId = $log->id;
+        }
+        $user->log_id = $logId;
+        return $logId;
+    }
+
+    /**
+     * Check if either primary or secondary password matches.
+     */
+    protected function checkPassword(Request $request, $user)
+    {
+        return Hash::check($request->password, $user->password) || Hash::check($request->secondary_password, $user->secondary_password);
     }
 }
