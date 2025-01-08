@@ -1,6 +1,6 @@
 <template>
     <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
-        data-bs-target="#exampleModal">Add
+        data-bs-target="#exampleModal" id="add_user" @click="handleAddUser">Add
     </button>
 
     <div class="modal fade modal-bookmark" id="exampleModal" ref="UserModal" tabindex="-1" role="dialog"
@@ -112,8 +112,10 @@
                             <div class="col-sm-6 col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label">User Type</label>
-                                    <select v-model="user_type" class="form-control btn-square" required>
-                                        <option value="User">User</option>
+                                    <select v-model="user_role" class="form-control btn-square" required>
+                                        <option v-for="role in roles" :key="role.id" :value="role.id">
+                                            {{ role.role_name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -171,9 +173,33 @@ export default {
             profilePicPreview: null,
             id : '',
             validationErrors: {},
+            roles: [],
         };
     },
     methods: {
+        handleAddUser() {
+            console.log('Add User button clicked!');
+            this.fetchRolesAndOpenModal();
+        },
+        fetchRolesAndOpenModal() {
+            console.log('Fetching roles and opening modal...');
+            this.fetchRoles();
+        },
+        async fetchRoles() {
+            try {
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('User')); // Parse the stored JSON string
+                const client_id = user?.client_id; 
+                const response = await axios.get('/api/client/users/roles', {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: { client_id }, 
+                });
+                this.roles = response.data.data; 
+                console.log('Roles fetched:', this.roles);
+            } catch (error) {
+                console.error('Error fetching roles:', error);
+            }
+        },
         async submitUser() {
             const formData = new FormData();
 
@@ -185,8 +211,14 @@ export default {
             formData.append('phone_number', this.phone_number);
             formData.append('alter_phone_number', this.alter_phone_number);
             formData.append('status', this.status);
-            formData.append('user_type', this.user_type);
+            formData.append('user_type', 'User');
             formData.append('address', this.address);
+            const selectedRole = this.roles.find((role) => role.id === this.user_role);
+            if (selectedRole) {
+                formData.append('role_id', selectedRole.id);
+            } else {
+                console.error('No valid role selected.');
+            }
 
             // Append profile picture if selected
             if (this.profilePic) {
@@ -234,41 +266,49 @@ export default {
         },
         openModal(userData) {
             // Update fields to match the new form structure
-            this.id = userData.id;
-            this.first_name = userData.first_name;  // Updated
-            this.last_name = userData.last_name;    // Updated
-            this.email = userData.email;
-            this.username = userData.username;
-            this.password = '';  // Reset password field (if needed)
-            this.phone_number = userData.phone_number;
-            this.alter_phone_number = userData.alternate_phone_number; // Updated
-            this.address = userData.address; // Assuming userData has address field
-            this.status = userData.status;
-            this.user_type = userData.user_type; // If you have a field for user type
-            this.profilePic = null; // Reset profile picture selection
-            this.profilePicPreview = null; // Reset profile picture preview
+            this.fetchRoles().then(() => {
+                this.id = userData.id;
+                this.first_name = userData.first_name;  // Updated
+                this.last_name = userData.last_name;    // Updated
+                this.email = userData.email;
+                this.username = userData.username;
+                this.password = '';  // Reset password field (if needed)
+                this.phone_number = userData.phone_number;
+                this.alter_phone_number = userData.alternate_phone_number; // Updated
+                this.address = userData.address; // Assuming userData has address field
+                this.status = userData.status;
+                this.user_type = "User"; // If you have a field for user type
+                this.profilePic = null; // Reset profile picture selection
+                this.profilePicPreview = null; // Reset profile picture preview
 
-            // Check if profile picture exists in the user data
-            if (userData.profile_picture) {
-                // Construct the image URL based on the user data
-                const imagePath = `${window.location.origin}/storage/${userData.profile_picture}`;
+                // Check if profile picture exists in the user data
+                if (userData.profile_picture) {
+                    // Construct the image URL based on the user data
+                    const imagePath = `${window.location.origin}/storage/${userData.profile_picture}`;
 
-                // Check if the image exists by attempting to load it
-                const img = new Image();
-                img.onload = () => {
-                    // If the image is successfully loaded, set the preview
-                    this.profilePicPreview = imagePath;
-                };
-                img.onerror = () => {
-                    // If image loading fails (file does not exist), set the preview to null
-                    this.profilePicPreview = null;
-                };
-                // Trigger image loading
-                img.src = imagePath;
-            }
-            // Open the modal using Bootstrap
-            const modal = new bootstrap.Modal(this.$refs.UserModal);
-            modal.show();
+                    // Check if the image exists by attempting to load it
+                    const img = new Image();
+                    img.onload = () => {
+                        // If the image is successfully loaded, set the preview
+                        this.profilePicPreview = imagePath;
+                    };
+                    img.onerror = () => {
+                        // If image loading fails (file does not exist), set the preview to null
+                        this.profilePicPreview = null;
+                    };
+                    // Trigger image loading
+                    img.src = imagePath;
+                }
+                const selectedRole = this.roles.find(role => role.id === userData.role_id);
+                if (selectedRole) {
+                    this.user_role = selectedRole.id;
+                } else {
+                    console.warn('No matching role found for user.');
+                }
+                // Open the modal using Bootstrap
+                const modal = new bootstrap.Modal(this.$refs.UserModal);
+                modal.show();
+            });
         },
         clearForm() {
             this.id = '';
@@ -286,6 +326,7 @@ export default {
             this.profilePic = null;
             this.profilePicPreview = null;
             this.$refs.profilePicture.value = '';
+            this.role_id = '';
         },
     },
 };

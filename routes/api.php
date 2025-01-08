@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
     });
     Route::post('/users/list', [UserController::class, 'list']);
+    Route::get('/users/roles', [UserController::class, 'roles'])->name('roles');
 
 });
 Route::get('/users/{id}', [UserController::class, 'profile']);
