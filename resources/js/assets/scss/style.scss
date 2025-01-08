@@ -166,3 +166,14 @@ body[class='dark-only'] {
 @import "layout/sidebar";
 @import "layout/rtl";
 @import "layout/box-layout";
+
+// Custom CSS
+.dt-length label {
+    padding-left: 10px;
+}
+table.dataTable th.dt-type-numeric, table.dataTable th.dt-type-date, table.dataTable td.dt-type-numeric, table.dataTable td.dt-type-date {
+    text-align: center !important;
+}
+table.dataTable > tbody > tr > th, table.dataTable > tbody > tr > td {
+    vertical-align: middle;
+}

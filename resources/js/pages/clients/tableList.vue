@@ -7,25 +7,27 @@
             <!-- Client modal component for Add/Edit -->
             <clientModals ref="clientModal" @updateCompleted="handleUpdateCompleted"/>
           </div>
-          <span id="message"  class="text-success mt-3 d-block"></span>
+          <span id="message"  class="text-success d-block"></span>
         </div>
-        <div class="table-responsive add-project">
-          <table class="table card-table table-vcenter text-nowrap" id="userTable">
-            <thead>
-              <tr>
-                <th>S.No</th>
-                <th>Client Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Created On</th>
-                <th>Status</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Data will be populated here by DataTables -->
-            </tbody>
-          </table>
+        <div class="card-body">
+          <div class="table-responsive add-project">
+            <table class="table card-table table-center text-nowrap" id="userTable">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Client Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Created On</th>
+                  <th>Status</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Data will be populated here by DataTables -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -85,9 +87,9 @@ import { toast } from 'vue3-toastify';
               data: null,
               render: function (data, type, row) {
                 return `
-                  <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="window.vueInstance.openEditModal(${row.client_id})"><i class="fa fa-pencil"></i> Edit</a>
-                  <button class="btn btn-danger sweet-11" type="button" data-id="${row.client_id}" onclick="deleteUser(${row.client_id})">
-                    <i class="fa fa-trash"></i> Delete
+                  <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="window.vueInstance.openEditModal(${row.client_id})"><i class="fa fa-pencil"></i></a>
+                  <button class="btn btn-danger btn-sm sweet-11" type="button" data-id="${row.client_id}" onclick="deleteUser(${row.client_id})">
+                    <i class="fa fa-trash"></i>
                   </button>
                 `;
               },
