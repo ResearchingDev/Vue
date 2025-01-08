@@ -18,6 +18,7 @@ class UserController extends Controller
     public function list(Request $request)
     {
         $clientId = Auth::user()->client_id;
+        
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
@@ -26,20 +27,23 @@ class UserController extends Controller
         $orderDirection = $request->input('order.0.dir', 'asc');
 
         // Map column index to actual database columns
-        $columns = ['id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at'];
-        $orderColumn = $columns[$orderColumnIndex] ?? 'id';
+        $columns = ['sub_users.id', 'sub_users.first_name', 'sub_users.last_name', 'sub_users.phone_number', 'sub_users.user_type', 'sub_user_roles.role_name', 'sub_users.email', 'sub_users.status', 'sub_users.created_at'];
+        $orderColumn = $columns[$orderColumnIndex] ?? 'sub_users.id';
 
-        // Query the sub_users table
+        // Query the sub_users table and join with sub_user_roles
         $query = DB::table('sub_users')
-            ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at')
-            ->where('user_type', '=', 'User')
-            ->where('client_id', '=', $clientId);
+            ->join('sub_user_roles', 'sub_users.role_id', '=', 'sub_user_roles.id')
+            ->select('sub_users.id', 'sub_users.first_name', 'sub_users.last_name', 'sub_users.phone_number', 'sub_users.user_type', 'sub_user_roles.role_name', 'sub_users.email', 'sub_users.status', 'sub_users.created_at')
+            ->where('sub_users.user_type', '=', 'User')
+            ->where('sub_users.client_id', '=', $clientId);
+        
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
-                $q->where('first_name', 'like', "%$searchValue%")
-                    ->orWhere('last_name', 'like', "%$searchValue%")
-                    ->orWhere('email', 'like', "%$searchValue%");
+                $q->where('sub_users.first_name', 'like', "%$searchValue%")
+                    ->orWhere('sub_users.last_name', 'like', "%$searchValue%")
+                    ->orWhere('sub_users.email', 'like', "%$searchValue%")
+                    ->orWhere('sub_user_roles.role_name', 'like', "%$searchValue%"); // Include role_name in the search
             });
         }
 
@@ -180,7 +184,7 @@ class UserController extends Controller
             'alter_phone_number' => 'nullable|string|max:15',
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
-            'profile_picture' => 'required|nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
             'address' => 'nullable|string|max:500',
             'role_id' => 'required',
         ]);

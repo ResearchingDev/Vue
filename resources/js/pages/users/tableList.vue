@@ -78,7 +78,7 @@ export default {
                 columns: [
                     { data: 'id' },
                     { data: 'first_name' },
-                    { data: 'user_type' },
+                    { data: 'role_name' },
                     { data: 'email' },
                     { data: 'created_at' },
                     { data: 'status' },
@@ -109,7 +109,7 @@ export default {
     methods: {
         // Function to open the edit modal and load the user data
         openEditModal(userId) {
-            this.$axios.get(`/client/users/edit/${userId}`)
+            this.$axios.get(`/api/client/users/edit/${userId}`)
               .then(response => {
                 this.$refs.UserModal.openModal(response);  // Open modal with fetched data
               })
