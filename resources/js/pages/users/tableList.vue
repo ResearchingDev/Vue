@@ -62,6 +62,17 @@ export default {
                         d.length = d.length;
                         d.search = d.search.value;
                         d.order = d.order;
+                    },
+                    error: function (xhr, error, thrown) {
+                        // You can also handle specific error codes here
+                        if (xhr.status === 401) {
+                            // Handle Unauthorized (e.g., user session expired)
+                            // Redirect to login page or perform other actions
+                            window.location.href = '/login';
+                        } else if (xhr.status === 500) {
+                            // Handle server errors
+                            alert('Internal Server Error. Please try again later.');
+                        }
                     }
                 },
                 columns: [
@@ -98,18 +109,13 @@ export default {
     methods: {
         // Function to open the edit modal and load the user data
         openEditModal(userId) {
-            const token = localStorage.getItem('token');  // Retrieve the stored token
-            axios.get(`/api/client/users/edit/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`  // Pass the token in the Authorization header
-                }
-            })
-                .then(response => {
-                    this.$refs.UserModal.openModal(response.data);  // Open modal with fetched data
-                })
-                .catch(error => {
-                    console.error('Error fetching client data:', error.response?.data || error.message);
-                });
+            this.$axios.get(`/client/users/edit/${userId}`)
+              .then(response => {
+                this.$refs.UserModal.openModal(response);  // Open modal with fetched data
+              })
+              .catch(error => {
+                console.error('Error fetching User data:', error);
+              });
         },
         handleUpdateCompleted() {
             this.reloadDataTable();
@@ -117,7 +123,7 @@ export default {
         deleteUser(userId) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: `You won't be able to revert this! Do you want to delete user with ID ${userId}?`,
+                text: `You won't be able to revert this! Do you want to delete user?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -127,8 +133,7 @@ export default {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .delete(`/api/admin/users/delete/${userId}`)
+                    this.$axios.delete(`/client/users/delete/${userId}`)
                         .then(() => {
                             Swal.fire(
                                 'Deleted!',

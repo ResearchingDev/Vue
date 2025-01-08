@@ -34,6 +34,7 @@ class ClientController extends Controller
         // Base query
         $query = DB::table('sub_clients')
             ->join('sub_users', 'sub_clients.id', '=', 'sub_users.client_id')
+            ->where('sub_users.user_type', '=', 'Client')
             ->select(
                 'sub_clients.id as client_id',
                 'sub_clients.client_name',
