@@ -4,111 +4,117 @@
     </button>
     <div class="modal fade modal-bookmark" id="clientModal" ref="clientModal" tabindex="-1" role="dialog"
         aria-labelledby="clientModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientModalLabel">Add Client</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
                         @click="clearForm"></button>
                 </div>
-                <div class="modal-body">
-                    <form class="form-bookmark needs-validation" id="client-form" novalidate
-                        @submit.prevent="submitClient">
+                <form class="form-bookmark needs-validation" id="client-form" novalidate
+                    @submit.prevent="submitClient">
+                    <div class="modal-body">
                         <div class="row">
-                            <!-- Client Details -->
-                            <h6 class="mb-3">Client Details</h6>
-                            <div class="col-sm-6 col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Client Name</label>
-                                    <input v-model="client_name" class="form-control" type="text"
-                                        placeholder="Client Name" required>
-                                    <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0]
-                                        }}</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input v-model="email" class="form-control" type="email" placeholder="Client Email"
-                                        required>
-                                    <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone Number</label>
-                                    <input v-model="phone_number" class="form-control" type="text"
-                                        placeholder="Phone Number" required>
-                                    <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0]
-                                        }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Alternate Phone Number</label>
-                                    <input v-model="alternate_phone_number" class="form-control" type="text"
-                                        placeholder="Alternate Phone Number">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Address</label>
-                                    <input v-model="address" class="form-control" type="text"
-                                        placeholder="Client Address">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Status</label>
-                                    <select v-model="status" class="form-control btn-square" required>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Login Credentials Section -->
-                        <div class="mt-4 pt-3 border-top">
-                            <h6 class="mb-3">Login Credentials</h6>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Username</label>
-                                        <input v-model="username" class="form-control" type="text"
-                                            placeholder="Username" required>
-                                        <span v-if="errors.username" class="text-danger">{{ errors.username[0] }}</span>
+                            <div class="col-md-12">
+                                <h6 class="mb-2 pb-2 border-bottom">Client Details</h6>
+                                <div class="row">
+                                    <!-- Client Details -->
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Client Name</label>
+                                            <input v-model="client_name" class="form-control" type="text"
+                                                placeholder="Client Name" required>
+                                            <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0]
+                                                }}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input v-model="password" class="form-control" type="password"
-                                            placeholder="Password" required>
-                                        <span v-if="errors.password" class="text-danger">{{ errors.password[0] }}</span>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email Address</label>
+                                            <input v-model="email" class="form-control" type="email" placeholder="Client Email"
+                                                required>
+                                            <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone Number</label>
+                                            <input v-model="phone_number" class="form-control" type="text"
+                                                placeholder="Phone Number" required>
+                                            <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0]
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Alternate Phone Number</label>
+                                            <input v-model="alternate_phone_number" class="form-control" type="text"
+                                                placeholder="Alternate Phone Number">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Address</label>
+                                            <input v-model="address" class="form-control" type="text"
+                                                placeholder="Client Address">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select v-model="status" class="form-control btn-square" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-md-12">
+                                <!-- Login Credentials Section -->
+                                <div>
+                                    <h6 class="mb-2 pb-2 border-bottom">Login Credentials</h6>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Username</label>
+                                                <input v-model="username" class="form-control" type="text"
+                                                    placeholder="Username" required>
+                                                <span v-if="errors.username" class="text-danger">{{ errors.username[0] }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Password</label>
+                                                <input v-model="password" class="form-control" type="password"
+                                                    placeholder="Password" required>
+                                                <span v-if="errors.password" class="text-danger">{{ errors.password[0] }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <!-- Profile Picture Section -->
-                        <div class="mt-4 pt-3 border-top">
-                            <h6 class="mb-3">Profile Picture</h6>
-                            <div class="mb-3">
-                                <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture"
-                                    accept="image/*">
-                            </div>
-                            <div v-if="profilePicPreview" class="mb-3">
-                                <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
-                                    style="max-width: 100px; max-height: 100px;">
+                                <!-- Profile Picture Section -->
+                                <div>
+                                    <h6 class="mb-2 pb-2 border-bottom">Profile Picture</h6>
+                                    <div class="mb-3">
+                                        <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture"
+                                            accept="image/*">
+                                    </div>
+                                    <div v-if="profilePicPreview">
+                                        <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
+                                            style="max-width: 100px; max-height: 100px;">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
+                     </div>
+                    <div class="modal-footer">
                         <button class="btn btn-secondary" type="submit">Save Client</button>
                         <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
                             @click="clearForm">Cancel</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
