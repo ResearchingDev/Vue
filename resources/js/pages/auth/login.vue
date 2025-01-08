@@ -117,17 +117,17 @@ export default {
 
         try {
           // Send the login request to the backend, include rememberMe
-          const response = await axios.post('http://localhost:8000/api/login', {
+          const response = await  this.$axios.post(`/login`,{
             email: this.user.email.value,
             password: this.user.password.value,
             remember_me: this.rememberMe // Send the remember me status
           });
           // Handle successful login
-          if (response.data.status === 'success' && response.data.data.token) {
+          if (response.status === 'success' && response.data.token) {
             // Store the token and user info in localStorage
-            const user = response.data.data.user;
+            const user = response.data.user;
             localStorage.setItem('User', JSON.stringify(user));
-            localStorage.setItem('token', response.data.data.token);
+            localStorage.setItem('token', response.data.token);
             if (user.role_code === 'admin') {
               this.$router.push('/admin/dashboard');
             } else {

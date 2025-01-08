@@ -3,7 +3,6 @@ import axios from 'axios';
 import router from '../router'; // Import Vue Router for redirecting
 
 const apiUrl = import.meta.env.VITE_APP_API_BASE_URL;
-console.log(import.meta.env.VITE_APP_API_BASE_URL);
 
 const axiosInstance = axios.create({
   baseURL: apiUrl,

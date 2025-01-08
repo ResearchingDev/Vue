@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
-        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');  
     });
     Route::get('users/{id}', [UserController::class, 'profile']);
     Route::post('users/list', [UserController::class, 'list']);

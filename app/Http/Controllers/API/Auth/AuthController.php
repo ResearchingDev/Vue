@@ -25,37 +25,31 @@ class AuthController extends Controller
             Auth::login($user, $remember);
             // Log user login
             $this->storeLogHistory($user, $request, 'login');
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Login successful',
-                'data' => [
-                    'user' => [
-                        'id' => $user->id,
-                        'client_id' => $user->client_id,
-                        'role_id' => $user->role_id,
-                        'username' => $user->username,
-                        'email' => $user->email,
-                        'first_name' => $user->first_name,
-                        'last_name' => $user->last_name,
-                        'phone_number' => $user->phone_number,
-                        'alter_phone_number' => $user->alter_phone_number,
-                        'status' => $user->status,
-                        'user_type' => $user->user_type,
-                        'profile_picture' => $user->profile_picture,
-                        'can_login' => $user->can_login,
-                        'role_name' => $user->role->role_name ?? null,
-                        'role_code' => $user->role->role_unique_code ?? null,
-                    ],
-                    'token' => $user->createToken('api_token')->plainTextToken,
+    
+            // Return success response using global format
+            return response()->apiResponse('success', 'Login successful', [
+                'user' => [
+                    'id' => $user->id,
+                    'client_id' => $user->client_id,
+                    'role_id' => $user->role_id,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'phone_number' => $user->phone_number,
+                    'alter_phone_number' => $user->alter_phone_number,
+                    'status' => $user->status,
+                    'user_type' => $user->user_type,
+                    'profile_picture' => $user->profile_picture,
+                    'can_login' => $user->can_login,
+                    'role_name' => $user->role->role_name ?? null,
+                    'role_code' => $user->role->role_unique_code ?? null,
                 ],
+                'token' => $user->createToken('api_token')->plainTextToken,
             ], 200);
         }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid credentials',
-            'data' => [],
-        ], 401);
+        // Return error response using global format
+        return response()->apiResponse('error', 'Invalid credentials', [], 401);
     }
 
     /**
@@ -70,11 +64,8 @@ class AuthController extends Controller
         $user->tokens->each(function ($token) {
             $token->delete();
         });
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User logged out successfully',
-            'data' => null,
-        ], 200);
+        // Return error response using global format
+        return response()->apiResponse('success', 'User logged out successfully', [], 200);
     }
 
     /**

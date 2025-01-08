@@ -58,13 +58,14 @@ class LoginRequest extends FormRequest
         // Get the validation error messages
         $errors = $validator->errors();
 
-        // Throw a custom response with the validation errors
+        // Throw a custom response with the validation errors in the global format
         throw new HttpResponseException(
-            response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'data' => $errors->toArray() // Send errors as an array
-            ], 422)
+            response()->apiResponse(
+                'error',
+                'Validation failed',
+                $errors->toArray(), // Send errors as an array
+                422
+            )
         );
     }
 }

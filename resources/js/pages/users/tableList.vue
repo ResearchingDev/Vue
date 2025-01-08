@@ -36,7 +36,6 @@
 import Modals from './Modals.vue';
 import $ from 'jquery';
 import 'datatables.net-vue3';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default {
