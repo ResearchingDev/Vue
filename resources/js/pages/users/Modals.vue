@@ -333,6 +333,7 @@ export default {
             this.profilePicPreview = null;
             this.$refs.profilePicture.value = '';
             this.role_id = '';
+            this.errors = {};
         },
     },
 };

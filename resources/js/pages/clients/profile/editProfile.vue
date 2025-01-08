@@ -165,6 +165,7 @@ export default {
         formData.append('status', 'Active');
         formData.append('user_type',  this.user.user_type);
 
+        formData.append('role_id',  this.user.role_id);
         // Append profile picture if selected
         if (this.user.profilePic) {
           formData.append('profile_picture', this.user.profilePic);

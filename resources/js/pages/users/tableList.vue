@@ -109,7 +109,7 @@ export default {
     methods: {
         // Function to open the edit modal and load the user data
         openEditModal(userId) {
-            this.$axios.get(`/api/client/users/edit/${userId}`)
+            this.$axios.get(`/client/users/edit/${userId}`)
               .then(response => {
                 this.$refs.UserModal.openModal(response);  // Open modal with fetched data
               })
