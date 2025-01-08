@@ -2,29 +2,31 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Users List</h4>
-                <div class="col-md-1 pull-right" style="margin: -27px 0px 0px 0px;">
+                <h4 class="card-title mb-0 pull-left">Manage Users</h4>
+                <div class="pull-right">
                     <Modals ref="UserModal" @updateCompleted="handleUpdateCompleted" />
 
                 </div>
             </div>
-            <div class="table-responsive add-project">
-                <table class="table card-table table-vcenter text-nowrap" id="userTable">
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Name</th>
-                            <th>Usertype</th>
-                            <th>Email</th>
-                            <th>Created On</th>
-                            <th>Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be populated here by DataTables -->
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <div class="table-responsive add-project">
+                    <table class="table card-table text-center text-nowrap" id="userTable">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Usertype</th>
+                                <th>Email</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated here by DataTables -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -86,9 +88,9 @@ export default {
                         data: null,
                         render: (data, type, row) => {
                             return `
-                              <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="window.vueInstance.openEditModal(${row.id})"><i class="fa fa-pencil"></i> Edit</a>
-                              <button class="btn btn-danger sweet-11" type="button" data-id="${row.id}" onclick="deleteUser(${row.id})">
-                                  <i class="fa fa-trash"></i> Delete
+                              <a class="btn btn-primary btn-sm" href="javascript:void(0)" onclick="window.vueInstance.openEditModal(${row.id})"><i class="fa fa-pencil"></i></a>
+                              <button class="btn btn-danger btn-sm sweet-11" type="button" data-id="${row.id}" onclick="deleteUser(${row.id})">
+                                  <i class="fa fa-trash"></i> 
                               </button>
                           `;
                         },

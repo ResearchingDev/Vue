@@ -1,19 +1,22 @@
 <template>
     <Breadcrumbs title="User Roles" main="Roles" />
     <div class="card">
-        <div class="col-md-12">
-            <router-link class="link btn btn-primary m-4 pull-right" to="/client/roles/add_role"> Add User Roles</router-link>
+        <div class="card-header">
+            <h4 class="card-title mb-0 pull-left">Manage User Roles</h4>
+            <div class="pull-right">
+                <router-link class="link btn btn-success btn-sm" to="/client/roles/add_role"> Add User Role</router-link>
+            </div>
         </div>
         <div class="container-fluid">
             <div class="user-profile">
                 <div class="row">
-                    <table class="table card-table table-vcenter text-nowrap" id="userRolesTable">
+                    <table class="table card-table text-center text-nowrap" id="userRolesTable">
                         <thead>
                             <tr>
-                                <th>S.No</th>
-                                <th>Role Name</th>
-                                <th>Access</th>
-                                <th>Status</th>
+                                <th class="text-center">S.No</th>
+                                <th class="text-center">Role Name</th>
+                                <th class="text-center">Access</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -81,8 +84,8 @@
                             data: null,
                             render: function (data, type, row) {
                                 return `
-                                    <button class="btn btn-primary btn-sm" onclick="window.vueInstance.editRole(${row.id})"><i class="fa fa-pencil"></i> Edit</button>
-                                    <button class="btn btn-danger sweet-11" type="button" onclick="window.vueInstance.deleteRole(${row.id})"><i class="fa fa-trash"></i> Delete </button>
+                                    <button class="btn btn-primary btn-sm" onclick="window.vueInstance.editRole(${row.id})"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-danger btn-sm sweet-11" type="button" onclick="window.vueInstance.deleteRole(${row.id})"><i class="fa fa-trash"></i></button>
                                 `;
                             },
                             orderable: false,

@@ -10,49 +10,49 @@
               <div class="modal-body">
                   <form class="form-bookmark needs-validation" id="edit-bookmark-form" novalidate @submit.prevent="submitEdituser" >
                       <div class="row">
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Username</label>
                                   <input v-model="username" class="form-control" type="text" placeholder="Username" required>
                               </div>
                           </div>
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Email address</label>
                                   <input v-model="email" class="form-control" type="email" placeholder="Email" required>
                               </div>
                           </div>
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Password</label>
                                   <input v-model="password" class="form-control" type="password" placeholder="Password" required>
                               </div>
                           </div>
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Secondary Password</label>
                                   <input v-model="secondary_password" class="form-control" type="password" placeholder="Secondary Password" required>
                               </div>
                           </div>
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">First Name</label>
                                   <input v-model="first_name" class="form-control" type="text" placeholder="First Name" required>
                               </div>
                           </div>
-                          <div class="col-sm-6 col-md-6">
+                          <div class="col-sm-6 col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Last Name</label>
                                   <input v-model="last_name" class="form-control" type="text" placeholder="Last Name" required>
                               </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Phone number</label>
                                   <input v-model="phone_number" class="form-control" type="text" placeholder="Phone Number" required>
                               </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                               <div class="mb-3">
                                   <label class="form-label">Alternate number</label>
                                   <input v-model="alter_phone_number" class="form-control" type="text" placeholder="Alternate number">
