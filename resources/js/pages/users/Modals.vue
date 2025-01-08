@@ -334,6 +334,7 @@ export default {
             this.$refs.profilePicture.value = '';
             this.role_id = '';
             this.errors = {};
+            this.validationErrors = {};
         },
     },
 };
