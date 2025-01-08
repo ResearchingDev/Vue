@@ -33,6 +33,7 @@ class UserRolesController extends Controller
             $hasMobileAccess = in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No';
             // Create the role in the `roles` table
             $role = SubUserRole::create([
+                'client_id' => $request->client_id,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],
@@ -188,6 +189,7 @@ class UserRolesController extends Controller
             // Find the role and update its details
             $role = SubUserRole::findOrFail($id);
             $role->update([
+                'client_id' => $request->client_id,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],
