@@ -68,23 +68,16 @@ export default {
      * Log out the user and clear session data.
      */
     logout() {
-      // Call the API to log out on the server side
-      axios.post(`/api/logout`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}` // If using token-based auth
-        }
-      })
-        .then(response => {
-          // On success, clear the user details from localStorage
+      this.$axios.post('/logout', {})
+        .then(() => {
           localStorage.removeItem('User');
           localStorage.removeItem('token');
           // Redirect to login page
           this.$router.push('/login');
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Logout failed:', error);
-
-          // Optionally, handle error if logout API fails
+          this.$router.push('/login');
         });
     }
   }

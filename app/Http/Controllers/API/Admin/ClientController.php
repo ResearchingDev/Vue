@@ -34,6 +34,7 @@ class ClientController extends Controller
         // Base query
         $query = DB::table('sub_clients')
             ->join('sub_users', 'sub_clients.id', '=', 'sub_users.client_id')
+            ->where('sub_users.user_type', '=', 'Client')
             ->select(
                 'sub_clients.id as client_id',
                 'sub_clients.client_name',
@@ -111,6 +112,7 @@ class ClientController extends Controller
                 'phone_number' => $request->phone_number,
                 'alter_phone_number' => $request->alternate_phone_number,
                 'profile_picture' => $imagePath, // Make sure to update profile_picture for the user as well
+                'user_type' => 'Client'
             ]);
 
             DB::commit();

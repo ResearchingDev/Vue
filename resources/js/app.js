@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import '@/assets/scss/app.scss';
 
+import axiosInstance  from  '../js/service/api';
 // Import third-party plugins
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
@@ -69,7 +70,7 @@ const i18n = createI18n({
 
 // Create and configure the Vue app
 const app = createApp(App);
-
+app.config.globalProperties.$axios = axiosInstance;
 app
   .use(router)
   .use(store)
