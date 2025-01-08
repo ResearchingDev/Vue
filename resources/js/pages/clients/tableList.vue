@@ -120,7 +120,7 @@ import { toast } from 'vue3-toastify';
       deleteUser(clientId) {
         Swal.fire({
           title: 'Are you sure?',
-          text: `You won't be able to revert this! Do you want to delete client with ID ${clientId}?`,
+          text: `You won't be able to revert this! Do you want to delete client?`,
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Yes, delete it!',

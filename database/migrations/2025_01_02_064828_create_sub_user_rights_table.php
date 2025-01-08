@@ -15,7 +15,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index()->comment('Client ID'); // Client ID
             $table->unsignedBigInteger('role_id')->index()->comment('Role ID'); // Role ID
             $table->unsignedBigInteger('menu_id')->index()->comment('Menu ID'); // Menu ID (changed to unsignedBigInteger)
-            $table->enum('can_list', ['Yes', 'No', 'Hidden'])->default('Yes')->comment('List permission');
             $table->enum('can_add', ['Yes', 'No', 'Hidden'])->default('Yes')->comment('Add permission');
             $table->enum('can_delete', ['Yes', 'No', 'Hidden'])->default('No')->comment('Delete permission');
             $table->enum('can_update', ['Yes', 'No', 'Hidden'])->default('Yes')->comment('Update permission');
