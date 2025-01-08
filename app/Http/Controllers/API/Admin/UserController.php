@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,6 +16,7 @@ class UserController extends Controller
      */
     public function list(Request $request)
     {
+        $clientId = Auth::user()->client_id;
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
@@ -29,7 +31,8 @@ class UserController extends Controller
         // Query the sub_users table
         $query = DB::table('sub_users')
             ->select('id', 'first_name', 'last_name', 'phone_number', 'user_type', 'email', 'status', 'created_at')
-            ->where('role_id', '!=', '1');
+            ->where('user_type', '=', 'User')
+            ->where('client_id', '=', $clientId);
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
@@ -86,6 +89,7 @@ class UserController extends Controller
 
         ]);
 
+        $clientId = Auth::user()->client_id;
         // Encrypt passwords
         $validatedData['password'] = Hash::make($request->password);
         $validatedData['secondary_password'] = Hash::make($request->password);
@@ -107,6 +111,7 @@ class UserController extends Controller
             'profile_picture' => $imagePath,
             'address' => $validatedData['address'],
             'role_id' => 3,
+            'client_id' => $clientId
         ]);
 
         return response()->json([

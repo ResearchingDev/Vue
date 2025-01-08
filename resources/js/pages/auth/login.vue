@@ -49,7 +49,7 @@
                     </div>
                   </div>
                   <div class="form-group mb-0">
-                    <div class="checkbox p-0">
+                    <div class="checkbox p-0" style="display: none;">
                       <input id="rememberMe" type="checkbox" v-model="rememberMe">
                       <label class="text-muted" for="rememberMe">Remember me</label>
                     </div>
