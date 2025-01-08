@@ -128,7 +128,7 @@ export default {
             const user = response.data.user;
             localStorage.setItem('User', JSON.stringify(user));
             localStorage.setItem('token', response.data.token);
-            if (user.role_code === 'admin') {
+            if (user.role_code === 'super_admin') {
               this.$router.push('/admin/dashboard');
             } else {
               this.$router.push('/client/dashboard');

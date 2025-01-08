@@ -32,7 +32,7 @@ const mutations = {
         state.data = menuItems.client.data; // Fallback
       }
     } else {
-      state.data = menuItems.admin.data; // Fallback if no user in localStorage
+      state.data = menuItems.super_admin.data; // Fallback if no user in localStorage
     }
   },
 

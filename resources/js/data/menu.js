@@ -1,5 +1,5 @@
 export var menuItems = {
-    admin: {
+    super_admin: {
         data: [
             {
                 headTitle1: "",
