@@ -86,7 +86,7 @@ class UserController extends Controller
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
-            'profile_picture' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
             'role_id' => 'required',
         ]);
 
@@ -180,7 +180,7 @@ class UserController extends Controller
             'alter_phone_number' => 'nullable|string|max:15',
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
+            'profile_picture' => 'required|nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
             'address' => 'nullable|string|max:500',
             'role_id' => 'required',
         ]);
