@@ -42,11 +42,14 @@
 
             // Initialize DataTable after the component is mounted
             $(document).ready(function () {
+                const user = localStorage.getItem('User');
+                const parsedUser = JSON.parse(user);
+                const clientId = parsedUser.client_id;
                 $('#userRolesTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '/api/client', // Adjusted URL to match the route
+                        url: '/api/client/'+clientId, // Adjusted URL to match the route
                         type: 'GET',
                         data: function (d) {
                         // Pass necessary parameters for pagination, sorting, etc.
