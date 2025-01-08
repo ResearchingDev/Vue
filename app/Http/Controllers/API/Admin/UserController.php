@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\SubUserRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -86,7 +87,7 @@ class UserController extends Controller
             'status' => 'required|in:Active,Inactive',
             'user_type' => 'required|in:Super Admin,Client,User',
             'profile_picture' => 'image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
-
+            'role_id' => 'required',
         ]);
 
         $clientId = Auth::user()->client_id;
@@ -110,7 +111,7 @@ class UserController extends Controller
             'user_type' => $validatedData['user_type'],
             'profile_picture' => $imagePath,
             'address' => $validatedData['address'],
-            'role_id' => 3,
+            'role_id' => $validatedData['role_id'],
             'client_id' => $clientId
         ]);
 
@@ -120,6 +121,21 @@ class UserController extends Controller
         ], 201);
     }
 
+    public function roles(Request $request){
+        $clientId = $request->query('client_id');
+        $roles = SubUserRole::select('id', 'role_name','status')
+        ->where('status', 'Active') 
+        ->when($clientId, function ($query, $clientId) {
+            $query->where('client_id', $clientId);
+        })
+        ->get();
+
+        // Return the roles as a JSON response
+        return response()->json([
+            'message' => 'Roles retrieved successfully',
+            'data' => $roles,
+        ], 200);
+    }
 
     /**
      * Display the specified resource.
@@ -166,6 +182,7 @@ class UserController extends Controller
             'user_type' => 'required|in:Super Admin,Client,User',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
             'address' => 'nullable|string|max:500',
+            'role_id' => 'required',
         ]);
 
         // Find the user by ID
