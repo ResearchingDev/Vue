@@ -66,8 +66,8 @@ export var menuItems = {
             {
                 path: "/client/roles",
                 title: "Roles",
-                icon: "stroke-home",
-                iconf: "fill-home",
+                icon: "stroke-social",
+                iconf:"fill-social",
                 type: "link",
                 badgeType: "light-primary",
                 active: true,

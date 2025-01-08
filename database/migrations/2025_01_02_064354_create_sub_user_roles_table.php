@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id'); // Auto-incrementing ID
             $table->unsignedInteger('client_id')->nullable()->index()->comment('Client ID'); // Client ID
             $table->string('role_name', 50)->comment('Role name'); // Role name
-            $table->string('role_unique_code', 50)->nullable()->unique()->comment('Unique code for the role'); // Unique code for the role
+            $table->string('role_unique_code', 50)->nullable()->comment('Unique code for the role'); // Unique code for the role
             $table->enum('web_access', ['Yes', 'No'])->default('Yes')->comment('Web access permission'); // Web access permission
             $table->enum('mobile_access', ['Yes', 'No'])->default('Yes')->comment('Mobile access permission'); // Mobile access permission
             $table->enum('primary_access', ['Yes', 'No'])->default('No')->comment('Primary access for the role'); // Whether the role has primary access

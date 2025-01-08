@@ -138,7 +138,7 @@ class UserRolesController extends Controller
         // Find the client by ID
         $userrole = SubUserRole::findOrFail($user_role_id);
         // Optionally, you can eager load the 'user' relationship if needed
-        $userrole->load('user_permission');
+        $userrole->load('user_permission.moduleMenu');
         return response()->json([
             'status' => 'success',
             'data' => $userrole,

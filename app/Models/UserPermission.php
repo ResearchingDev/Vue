@@ -8,4 +8,9 @@ class UserPermission extends Model
 {
     protected $table = 'sub_user_rights'; // Ensure this matches your DB table name
     protected $fillable = ['user_id', 'role_id', 'menu_id', 'can_delete', 'can_update', 'can_add', 'can_view'];
+    public function moduleMenu()
+    {
+        // Assuming 'module_menus' is the table that holds the module-menu relationship
+        return $this->hasOne(SubModuleMenu::class, 'id', 'menu_id');
+    }
 }
