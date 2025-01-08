@@ -111,6 +111,7 @@ class ClientController extends Controller
                 'phone_number' => $request->phone_number,
                 'alter_phone_number' => $request->alternate_phone_number,
                 'profile_picture' => $imagePath, // Make sure to update profile_picture for the user as well
+                'user_type' => 'Client'
             ]);
 
             DB::commit();
