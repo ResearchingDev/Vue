@@ -15,7 +15,7 @@
                             </div>
                             <div class="form-group col-md-6 mb-4">
                                 <label for="roleCode" class="">Role Code</label>
-                                <input id="roleCode" v-model="role.roleCode" type="text" class="form-control" placeholder="Enter Role Code" />
+                                <input id="roleCode" v-model="role.roleCode"  :readonly="isEditMode"   type="text" class="form-control" placeholder="Enter Role Code" />
                                 <span class="validate-error text-danger err mt-4" v-if="errors.roleCode">{{ errors.roleCode }}</span>
                             </div>
                             <div class="form-group col-md-6 mb-4">
