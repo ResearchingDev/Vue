@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserPermission;
 use App\Models\SubUserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserRolesController extends Controller
@@ -31,9 +32,10 @@ class UserRolesController extends Controller
             // Determine access types
             $hasWebAccess = in_array('Web Access', $validatedData['userAccess']) ? 'Yes' : 'No';
             $hasMobileAccess = in_array('Mobile Access', $validatedData['userAccess']) ? 'Yes' : 'No';
+            $clientId = Auth::user()->client_id;
             // Create the role in the `roles` table
             $role = SubUserRole::create([
-                'client_id' => $request->client_id,
+                'client_id' => $clientId,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],
@@ -48,7 +50,7 @@ class UserRolesController extends Controller
                 $hasViewAccess = !empty($permission['view']) ? 'Yes' : 'No';
                 UserPermission::create([
                     'role_id' => $role->id, // Use the created role's ID
-                    'user_id' => '77',
+                    'client_id' => $clientId,
                     'menu_id' => $permission['moduleID'], // Use module_id from request
                     'can_delete' => $hasDeleteAccess,
                     'can_update' => $hasUpdateAccess,
@@ -70,7 +72,7 @@ class UserRolesController extends Controller
         }
     }
     //List the User Modules
-    public function modules_list(Request $request)
+    public function modules_list()
     {
         // Get the data by joining sub_clients and sub_users
         $module_menus = DB::table('sub_module_menus')
@@ -90,8 +92,9 @@ class UserRolesController extends Controller
         ], 200);
     }
     //List the User Roles in Datatable
-    public function list(Request $request, $id)
+    public function list(Request $request)
     {
+        $clientId = Auth::user()->client_id;
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
@@ -104,8 +107,8 @@ class UserRolesController extends Controller
         // Query the sub_user_roles table
         $query = DB::table('sub_user_roles')
             ->select('id', 'role_name', 'role_unique_code', 'web_access', 'mobile_access', 'status')
-            ->where('role_name', '!=', 'Super Admin')
-            ->where('client_id', '=', $id)
+            ->where('role_unique_code', '!=', 'client')
+            ->where('client_id', '=', $clientId)
             ->where('deleted_at', null);
         // Apply search filter
         if (!empty($searchValue)) {
