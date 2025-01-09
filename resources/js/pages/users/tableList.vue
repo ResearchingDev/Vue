@@ -110,7 +110,7 @@ export default {
     methods: {
         // Function to open the edit modal and load the user data
         openEditModal(userId) {
-            this.$axios.get(`/client/users/edit/${userId}`)
+            this.$axios.get(`/client/users/${userId}`)
               .then(response => {
                 this.$refs.UserModal.openModal(response);  // Open modal with fetched data
               })
@@ -134,7 +134,7 @@ export default {
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$axios.delete(`/client/users/delete/${userId}`)
+                    this.$axios.delete(`/client/users/${userId}`)
                         .then(() => {
                             Swal.fire(
                                 'Deleted!',

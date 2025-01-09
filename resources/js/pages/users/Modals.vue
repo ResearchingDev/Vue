@@ -229,7 +229,7 @@ export default {
                 formData.append('profile_picture', this.profilePic);
             }
             try {
-                const user_ajax_url = (this.id) ? ' /api/client/users/update/'+this.id : '/api/client/users' ;
+                const user_ajax_url = (this.id) ? `/api/client/users/${this.id}/update` : '/api/client/users' ;
                 const alert_message = (this.id) ? 'User Updated SuccessFully..!' : 'User Created SuccessFully..!' ;
                 const token = localStorage.getItem('token'); // Retrieve the token from localStorage
                 // Adjust the URL to match your API route

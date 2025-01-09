@@ -143,26 +143,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function profile(string $id)
-    {
-        //
-        $user = User::findOrFail($id);
-        return response()->json($user);
-    }
-
     public function show(string $id)
     {
         //
-        $user = User::findOrFail($id);
-        return response()->json($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        // Find the user by ID and return user data for editing
         $user = User::findOrFail($id);
         return response()->json($user);
     }

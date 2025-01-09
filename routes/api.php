@@ -21,15 +21,13 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 });
 // Client routes
 Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
-    Route::prefix(prefix: 'users')->name('user.')->group(function () {
-        Route::post('/', [UserController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
-        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');  
-    });
-    Route::get('users/{id}', [UserController::class, 'profile']);
-    Route::post('users/list', [UserController::class, 'list']);
-    Route::get('users/user_roles/{id}', [UserController::class, 'roles']);
+    // Non-RESTful route
+    Route::get('users/user_roles/{id}', [UserController::class, 'roles'])->name('user.roles');
+    // RESTful resource routes
+    Route::resource('users', UserController::class);
+    // Additional custom routes for users
+    Route::post('users/{id}/update', [UserController::class, 'update'])->name('user.update');
+    Route::post('users/list', [UserController::class, 'list'])->name('user.list');
 });
 // Role Routes
 Route::post('/client/add_role', [UserRolesController::class, 'store']);
