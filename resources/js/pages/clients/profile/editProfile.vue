@@ -29,23 +29,10 @@
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="mb-3">
-              <label class="form-label">State</label>
-              <input class="form-control" type="text" v-model="user.state" placeholder="State" />
+              <label class="form-label">Address</label>
+              <input class="form-control" type="text" v-model="user.address" placeholder="Address" />
             </div>
           </div>
-          <div class="col-sm-6 col-md-4">
-            <div class="mb-3">
-              <label class="form-label">City</label>
-              <input class="form-control" type="text" v-model="user.city" placeholder="City" />
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-4">
-            <div class="mb-3">
-              <label class="form-label">Postal Code</label>
-              <input class="form-control" type="number" v-model="user.zipcode" placeholder="ZIP Code" />
-            </div>
-          </div>
-
           <!-- Profile Picture Section -->
           <div class="mt-4 pt-3 border-top">
             <h6 class="mb-3">Profile Picture</h6>
@@ -82,9 +69,6 @@ export default {
         first_name: '',
         last_name: '',
         address: '',
-        city: '',
-        state: '',
-        zipcode: '',
         phone_number: '',
         profilePic: null,
         profilePicPreview: null,
@@ -145,9 +129,7 @@ export default {
         formData.append('first_name', this.user.first_name);
         formData.append('last_name', this.user.last_name);
         formData.append('phone_number', this.user.phone_number);
-        formData.append('state', this.user.state);
-        formData.append('city', this.user.city);
-        formData.append('zipcode', this.user.zipcode);
+        formData.append('address', this.user.address);
         formData.append('status', 'Active');
         formData.append('user_type', this.user.user_type);
 
@@ -157,7 +139,12 @@ export default {
           formData.append('profile_picture', this.user.profilePic);
         }
         // Update the profile data via an API POST request
-        await this.$axios.post(`/users/save_users/${this.user.id}`,formData);
+        await this.$axios.post(`/users/save_users/${this.user.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+        );
         toast.success('Profile updated successfully!');
       } catch (error) {
         console.error('Error updating profile:', error);

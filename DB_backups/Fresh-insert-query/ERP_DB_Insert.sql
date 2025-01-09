@@ -14,7 +14,7 @@ INSERT  INTO `sub_user_roles`(`id`,`client_id`,`role_name`,`role_unique_code`,`w
 VALUES (1,NULL,'Super Admin','super_admin','Yes','Yes','No','Active',NULL,NULL,NULL,NULL,NULL);
 
 INSERT  INTO `sub_user_roles`(`id`,`client_id`,`role_name`,`role_unique_code`,`web_access`,`mobile_access`,`primary_access`,`status`,`created_by`,`updated_by`,`deleted_at`,`created_at`,`updated_at`) 
-VALUES (2,NULL,'Client','client','Yes','Yes','No','Active',NULL,NULL,NULL,NULL,NULL);
+VALUES (2,NULL,'Client','client','Yes','Yes','Yes','Active',NULL,NULL,NULL,NULL,NULL);
 
 INSERT  INTO `sub_user_roles`(`id`,`client_id`,`role_name`,`role_unique_code`,`web_access`,`mobile_access`,`primary_access`,`status`,`created_by`,`updated_by`,`deleted_at`,`created_at`,`updated_at`) 
 VALUES (3,NULL,'Admin','admin','Yes','Yes','No','Active',NULL,NULL,NULL,NULL,NULL);
