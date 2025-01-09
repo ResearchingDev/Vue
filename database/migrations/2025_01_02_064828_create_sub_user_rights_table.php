@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('sub_user_rights', function (Blueprint $table) {
             $table->id(); // Auto-incrementing ID (uses unsignedBigInteger by default)
-            $table->unsignedBigInteger('user_id')->index()->comment('Client ID'); // Client ID
+            $table->unsignedBigInteger('client_id')->index()->comment('Client ID'); // Client ID
             $table->unsignedBigInteger('role_id')->index()->comment('Role ID'); // Role ID
             $table->unsignedBigInteger('menu_id')->index()->comment('Menu ID'); // Menu ID (changed to unsignedBigInteger)
             $table->enum('can_add', ['Yes', 'No', 'Hidden'])->default('Yes')->comment('Add permission');

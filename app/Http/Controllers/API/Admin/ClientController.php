@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SubClient;
+use App\Models\SubUserRole;
 use App\Models\User;
+use App\Models\UserPermission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,8 +19,8 @@ class ClientController extends Controller
     public function list(Request $request)
     {
         $limit = $request->input('length', 10);
-        $start = $request->input('start', 0); 
-        $search = $request->input('search.value', ''); 
+        $start = $request->input('start', 0);
+        $search = $request->input('search.value', '');
         $orderColumnIndex = $request->input('order.0.column', 0); // Column index for ordering
         $orderDirection = $request->input('order.0.dir', 'asc'); // Order direction ('asc' or 'desc')
         $columns = [
@@ -55,8 +57,8 @@ class ClientController extends Controller
         $filteredQuery = clone $query;
         $query->orderBy($orderColumn, $orderDirection);
         $data = $query->offset($start)->limit($limit)->get();
-        $totalRecords = DB::table('sub_clients')->count(); 
-        $totalFiltered = $filteredQuery->count();       
+        $totalRecords = DB::table('sub_clients')->count();
+        $totalFiltered = $filteredQuery->count();
 
         return response()->json([
             'draw' => (int) $request->input('draw', 1),
@@ -83,47 +85,94 @@ class ClientController extends Controller
             'password' => 'required|string|min:8',
             'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image upload
         ]);
-
         DB::beginTransaction();
-
         try {
-            // Store the uploaded image and get the file path
+            // Store the uploaded image
             $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-            // Insert into `sub_clients` table
+            // Create SubClient
             $subClient = SubClient::create([
                 'client_name' => $request->client_name,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'address' => $request->address,
                 'status' => $request->status,
-                'logo' => $imagePath
+                'logo' => $imagePath,
             ]);
-            $subClientId = $subClient->id;
-            // Insert into `users` table
-            $user = User::create(attributes: [
-                'client_id' => $subClientId,
-                'role_id' => 2, // Replace with your role logic
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'secondary_password' => Hash::make($request->password),
-                'first_name' => $request->client_name,
-                'last_name' => '',
-                'phone_number' => $request->phone_number,
-                'alter_phone_number' => $request->alternate_phone_number,
-                'profile_picture' => $imagePath, // Make sure to update profile_picture for the user as well
-                'user_type' => 'Client'
-            ]);
+            // Fetch roles and map them for insertion
+            $roles = SubUserRole::whereNull('client_id')
+                ->where('role_unique_code', '!=', 'super_admin')
+                ->get();
+            $rolesToInsert = $roles->map(function ($role) use ($subClient) {
+                return [
+                    'client_id' => $subClient->id,
+                    'role_name' => $role->role_name,
+                    'role_unique_code' => $role->role_unique_code,
+                    'web_access' => $role->web_access,
+                    'mobile_access' => $role->mobile_access,
+                    'status' => $role->status,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            })->toArray();
+            SubUserRole::insert($rolesToInsert);
+            // Fetch the newly inserted 'client' role ID
+            $clientRole = SubUserRole::where('client_id', $subClient->id)
+                ->where('role_unique_code', 'client')
+                ->first();
+            if ($clientRole) {
+                $role_id = $clientRole->id;
+                // Create User
+                $user = User::create([
+                    'client_id' => $subClient->id,
+                    'role_id' => $role_id,
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'secondary_password' => Hash::make($request->password),
+                    'first_name' => $request->client_name,
+                    'last_name' => '',
+                    'phone_number' => $request->phone_number,
+                    'alter_phone_number' => $request->alternate_phone_number,
+                    'profile_picture' => $imagePath,
+                    'user_type' => 'Client',
+                ]);
+            }
+            // Map inserted roles to their IDs
+            $insertedRoles = SubUserRole::where('client_id', $subClient->id)->get()->keyBy('role_unique_code');
+            // Fetch user rights
+            $userRights = UserPermission::where('client_id', 0)->get();
+            // Map user rights for insertion
+            $rightsToInsert = [];
+            foreach ($userRights as $right) {
+                foreach ($insertedRoles as $roleCode => $role) {
+                    if (($roleCode == 'client' && $right->role_id == 2) || ($roleCode == 'admin' && $right->role_id == 3) || ($roleCode == 'supervisor' && $right->role_id == 4)) {
+                        $rightsToInsert[] = [
+                            'client_id' => $subClient->id,
+                            'role_id' => $role->id,
+                            'menu_id' => $right->menu_id,
+                            'can_add' => $right->can_add,
+                            'can_delete' => $right->can_delete,
+                            'can_update' => $right->can_update,
+                            'can_view' => $right->can_view,
+                            'status' => $right->status,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            }
+            // Batch insert rights
+            if (!empty($rightsToInsert))
+                UserPermission::insert($rightsToInsert);
 
             DB::commit();
-
             return response()->json([
                 'message' => 'Client and User created successfully',
                 'data' => [
                     'sub_client' => $subClient,
                     'user' => $user,
                 ]
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
