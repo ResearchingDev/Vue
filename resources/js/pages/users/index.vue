@@ -1,12 +1,12 @@
 <template>
-    <Breadcrumbs title="Clients" main="Manage" />
+    <Breadcrumbs title="Users" main="Manage" />
     <div class="container-fluid ">
-        <div class="clients">
+        <div class="users">
             <div class="row">
                 <div class="col-md-12">
                       <div class="card">
                         <div class="card-header">
-                          <h4 class="card-title mb-0">Client List</h4>
+                          <h4 class="card-title mb-0">User List</h4>
                           <div class="col-md-1 pull-right" style="margin: -27px 0px 0px 0px;">
                             <userModals ref="UserModal" @reloadTable="reloadDataTable"/>
                           </div>

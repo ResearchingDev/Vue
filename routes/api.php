@@ -22,7 +22,7 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 // Client routes
 Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
     // Non-RESTful route
-    Route::get('users/user_roles/{id}', [UserController::class, 'roles'])->name('user.roles');
+    Route::get('users/user_roles', [UserController::class, 'roles'])->name('user.roles');
     // RESTful resource routes
     Route::resource('users', UserController::class);
     // Additional custom routes for users

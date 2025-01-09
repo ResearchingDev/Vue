@@ -8,7 +8,7 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="UserModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="UserModalLabel"> {{this.isEdit ? "Edit User" : "Add User" }}</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
                         @click="clearForm"></button>
                 </div>
@@ -179,24 +179,23 @@ export default {
             profilePic: null,
             profilePicPreview: null,
             id : '',
+            isEdit:false,
             validationErrors: {},
             roles: [],
         };
     },
     methods: {
         handleAddUser() {
-            console.log('Add User button clicked!');
             this.fetchRolesAndOpenModal();
         },
         fetchRolesAndOpenModal() {
-            console.log('Fetching roles and opening modal...');
             this.fetchUserRoles();
         },
         async fetchUserRoles() {
             try {
                 const user = JSON.parse(localStorage.getItem('User')); // Parse the stored JSON string
                 const client_id = user?.client_id; 
-                const response = await this.$axios.get(`/client/users/user_roles/${client_id}`);
+                const response = await this.$axios.get(`/client/users/user_roles`);
                 this.roles = response.data; 
                 console.log('Roles fetched:', this.roles);
             } catch (error) {
@@ -246,10 +245,10 @@ export default {
                     backdrops.forEach((backdrop) => backdrop.remove());
                 }, 1000);
             } catch (error) {
-                if (error.response?.data?.errors) {
-                    this.validationErrors = error.response.data.errors;
+                if (error?.data?.errors) {
+                    this.validationErrors = error.data.errors;
                 } else {
-                    console.error('Error saving user:', error.response?.data || error.message);
+                    console.error('Error saving user:', error?.data || error.message);
                     toast.warn('Failed to save user');
                 }
             }
@@ -281,6 +280,7 @@ export default {
                 this.user_type = "User"; // If you have a field for user type
                 this.profilePic = null; // Reset profile picture selection
                 this.profilePicPreview = null; // Reset profile picture preview
+                this.isEdit = true; // Reset profile picture preview
 
                 // Check if profile picture exists in the user data
                 if (userData.profile_picture) {
@@ -328,6 +328,7 @@ export default {
             this.profilePicPreview = null;
             this.$refs.profilePicture.value = '';
             this.role_id = '';
+            this.isEdit = false;
             this.errors = {};
             this.validationErrors = {};
         },
