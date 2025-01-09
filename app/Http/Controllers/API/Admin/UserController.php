@@ -18,11 +18,10 @@ class UserController extends Controller
     public function list(Request $request)
     {
         $clientId = Auth::user()->client_id;
-        
-        // Get pagination, sorting, and search parameters
+
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
-        $searchValue = $request->input('search.value', '');
+        $searchValue = $request->input('search');
         $orderColumnIndex = $request->input('order.0.column', 0);
         $orderDirection = $request->input('order.0.dir', 'asc');
 
@@ -36,14 +35,14 @@ class UserController extends Controller
             ->select('sub_users.id', 'sub_users.first_name', 'sub_users.last_name', 'sub_users.phone_number', 'sub_users.user_type', 'sub_user_roles.role_name', 'sub_users.email', 'sub_users.status', 'sub_users.created_at')
             ->where('sub_users.user_type', '=', 'User')
             ->where('sub_users.client_id', '=', $clientId);
-        
+
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
                 $q->where('sub_users.first_name', 'like', "%$searchValue%")
-                    ->orWhere('sub_users.last_name', 'like', "%$searchValue%")
-                    ->orWhere('sub_users.email', 'like', "%$searchValue%")
-                    ->orWhere('sub_user_roles.role_name', 'like', "%$searchValue%"); // Include role_name in the search
+                ->orWhere('sub_users.email', 'like', "%$searchValue%")
+                ->orWhere('sub_users.phone_number', 'like', "%$searchValue%")
+                ->orWhere('sub_user_roles.role_name', 'like', "%$searchValue%");
             });
         }
 
