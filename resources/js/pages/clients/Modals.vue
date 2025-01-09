@@ -155,7 +155,7 @@ export default {
             }
 
             try {
-                const alert_message = (this.id) ? 'Client Updated SuccessFully..!' : 'Client Created SuccessFully..!';
+                const alert_message = (this.id) ? 'Client Updated Successfully..!' : 'Client Created Successfully..!';
                 const client_ajax_url = (this.id) ? `/admin/client/${this.id}` : '/admin/client';
                 await this.$axios.post(client_ajax_url, formData, {
                     headers: {

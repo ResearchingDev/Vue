@@ -44,21 +44,21 @@ export default {
       return {
         // Define column headers and the data to be displayed in the table
         columns: [
-          { label: 'Client Name', field: 'client_name' },
-          { label: 'Email', field: 'client_email' },
-          { label: 'Phone', field: 'phone_number' },
-          { label: 'Created On', field: 'user_created_at' },
-          { label: 'Status', field: 'status' },
-          { label: 'Action', field: 'action', 
-          customRender: (row) => {
-            return `
-                <button class="btn btn-primary btn-sm edit-btn" data-edit-id="${row.client_id}">
-                  <i class="fa fa-pencil"></i>
-                </button>
-                <button class="btn btn-danger btn-sm delete-btn" data-delete-id="${row.client_id}">
-                  <i class="fa fa-trash"></i>
-                </button>`;
-          }},
+            { label: 'Client Name', field: 'client_name' },
+            { label: 'Email', field: 'client_email' },
+            { label: 'Phone', field: 'phone_number' },
+            { label: 'Created On', field: 'user_created_at' },
+            { label: 'Status', field: 'status' },
+            { label: 'Action', field: 'action',
+            customRender: (row) => {
+                return `
+                    <button class="btn btn-primary btn-sm edit-btn" data-edit-id="${row.client_id}">
+                    <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm delete-btn" data-delete-id="${row.client_id}">
+                    <i class="fa fa-trash"></i>
+                    </button>`;
+            }},
         ],
         users: []
       };
@@ -72,7 +72,7 @@ export default {
           })
           .catch(error => console.error('Error fetching client data:', error));
       },
-  
+
       // Function to delete the client
       deleteUser(clientId) {
         Swal.fire({
@@ -112,7 +112,7 @@ export default {
         this.$refs.dataTableComponent.reloadDataTable();
       },
     }
-   
+
 
 }
 </script>

@@ -28,11 +28,11 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
     // Additional custom routes for users
     Route::post('users/{id}/update', [UserController::class, 'update'])->name('user.update');
     Route::post('users/list', [UserController::class, 'list'])->name('user.list');
+    // Role Routes
+    Route::post('/roles', [UserRolesController::class, 'list']);
+    Route::get('/roles/menus', [UserRolesController::class, 'modules_list']);
+    Route::get('/roles/{id}', [UserRolesController::class, 'edit']);
+    Route::post('/roles/add', [UserRolesController::class, 'store']);
+    Route::delete('/roles/delete/{id}', [UserRolesController::class, 'destroy']);
+    Route::post('/roles/update/{id}', [UserRolesController::class, 'update']);
 });
-// Role Routes
-Route::post('/client/add_role', [UserRolesController::class, 'store']);
-// Route::get('/client/{id}', [UserRolesController::class, 'list']);
-Route::get('/modules_list', [UserRolesController::class, 'modules_list']);
-Route::get('/client/roles/{id}', [UserRolesController::class, 'edit']);
-Route::delete('/client/roles/delete/{id}', [UserRolesController::class, 'destroy']);
-Route::post('/client/roles/update/{id}', [UserRolesController::class, 'update']);

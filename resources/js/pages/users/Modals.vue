@@ -195,9 +195,9 @@ export default {
         async fetchUserRoles() {
             try {
                 const user = JSON.parse(localStorage.getItem('User')); // Parse the stored JSON string
-                const client_id = user?.client_id; 
+                const client_id = user?.client_id;
                 const response = await this.$axios.get(`/client/users/user_roles/${client_id}`);
-                this.roles = response.data; 
+                this.roles = response.data;
                 console.log('Roles fetched:', this.roles);
             } catch (error) {
                 console.error('Error fetching roles:', error);
@@ -229,7 +229,7 @@ export default {
             }
             try {
                 const user_ajax_url = (this.id) ? `/client/users/${this.id}/update`: '/client/users' ;
-                const alert_message = (this.id) ? 'User Updated SuccessFully..!' : 'User Created SuccessFully..!' ;
+                const alert_message = (this.id) ? 'User Updated Successfully..!' : 'User Created Successfully..!' ;
                 // Adjust the URL to match your API route
                 await this.$axios.post(user_ajax_url, formData, {
                     headers: {

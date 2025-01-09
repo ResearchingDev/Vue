@@ -94,7 +94,7 @@ const routes = [
                 },
             },
             {
-                
+
                 path: "users",
                 name: "users",
                 component: users,
@@ -109,23 +109,6 @@ const routes = [
                 meta: {
                     title: " Roles | Subscription - ERP Software",
                 },
-            },
-            {
-                path: "roles/add_role",
-                name: "Add Role",
-                component: userPermission,
-                meta: {
-                    title: " Roles | Subscription - ERP Software",
-                }
-            },
-            {
-                path: "roles/edit/:id",
-                name: "Edit Role",
-                component: userPermission,
-                meta: {
-                    title: " Roles | Subscription - ERP Software",
-                },
-                props: true
             },
         ],
     },

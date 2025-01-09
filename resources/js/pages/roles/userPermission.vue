@@ -1,4 +1,5 @@
 <template>
+    <div id="addRoleForm" style="display: none;">
     <Breadcrumbs :title="isEditMode ? 'Edit User Roles' : 'Add User Roles'" main="Roles" />
     <div class="container-fluid">
         <div class="card">
@@ -67,16 +68,16 @@
                         <!-- Actions -->
                         <div class="actions">
                             <button class="btn btn-primary" @click="saveRole">{{ isEditMode ? "Update" : "Save" }}</button>
-                            <button class="btn btn-secondary" @click="cancelEdit">Cancel</button>
+                            <button class="btn btn-secondary cancelEdit" @click="cancelEdit">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </template>
 <script>
-    import axios from 'axios';
     export default {
         props: ['id'],
         data() {
@@ -102,9 +103,9 @@
         methods: {
             async fetchModules() {
                 try {
-                    const response = await axios.get("/api/modules_list");
-                    if (response.data?.status === "success") {
-                        this.modules = response.data.data.map(module => ({
+                    const response = await this.$axios.get(`/client/roles/menus`);
+                    if (response?.status === "success") {
+                        this.modules = response.data.map(module => ({
                             module_id: module.id,
                             name: module.module_name || module.name || "Unnamed Module",
                             permissions: {
@@ -115,10 +116,12 @@
                             },
                         }));
                     } else {
-                        console.error('Failed to fetch modules:', response.data.message);
+                        console.error('Failed to fetch modules:', response.message);
+                        this.modules = [];
                     }
                 } catch (error) {
                     console.error('Error fetching modules:', error.message);
+                    this.modules = [];
                 }
             },
             validateForm() {
@@ -155,18 +158,18 @@
                 try {
                     this.loading = true;
                     const apiUrl = this.isEditMode
-                        ? `/api/client/roles/update/${this.role.id}`
-                        : "/api/client/add_role";
-                    const response = await axios.post(apiUrl, formData);
-                    if (response.data?.status === "success") {
+                        ? `/client/roles/update/${this.role.id}`
+                        : "/client/roles/add";
+                    const response = await this.$axios.post(apiUrl, formData);
+                    if (response?.status === "success") {
                         this.clearForm();
                         window.location.href = '/client/roles';
                     } else {
-                        alert(response.data.message || "Failed to save role.");
+                        alert(response.message || "Failed to save role.");
                     }
                 } catch (error) {
-                    if (error.response?.data.errors) {
-                        this.errors = { ...this.errors, ...error.response.data.errors };
+                    if (error.response?.errors) {
+                        this.errors = { ...this.errors, ...error.response.errors };
                     } else {
                         console.error("Error saving role:", error.message);
                     }
@@ -177,56 +180,16 @@
             cancelEdit() {
                 this.isEditMode = false;
                 this.clearForm();
-                window.location.href = '/client/roles';
             },
             clearForm() {
                 this.role = { id: null, roleName: "", roleCode: "", userAccess: [], status: "Active" };
                 this.modules = [];
-            },
-            async loadRoleForEdit(roleId) {
-                this.isEditMode = true;
-                try {
-                    const response = await axios.get(`/api/client/roles/${roleId}`);
-                    if (response.data?.status === "success") {
-                        const role = response.data.data;
-                        this.role = {
-                            id: role.id,
-                            roleName: role.role_name,
-                            roleCode: role.role_unique_code,
-                            userAccess: [],
-                            status: role.status,
-                        };
-                        if (role.web_access === "Yes") {
-                            this.role.userAccess.push("Web Access");
-                        }
-                        if (role.mobile_access === "Yes") {
-                            this.role.userAccess.push("Mobile Access");
-                        }
-                        this.modules = role.user_permission.map(permission => ({
-                            id: permission.menu_id || permission.id,
-                            name: permission.module_menu.module_name || permission.module_menu.module_name || "Unnamed Module",
-                            module_id: permission.menu_id || permission.id,
-                            permissions: {
-                                add: permission.can_add === "Yes",
-                                update: permission.can_update === "Yes",
-                                view: permission.can_view === "Yes",
-                                delete: permission.can_delete === "Yes",
-                            },
-                        }));
-                    } else {
-                        const errorMessage = response.data?.message || "Failed to load role data. Please try again later.";
-                        console.error("Failed to load role data:", errorMessage);
-                    }
-                } catch (error) {
-                    console.error("Error loading role for edit:", error.response?.data?.message || error.message || "Unknown error");
-                }
             },
         },
         mounted() {
             this.fetchModules()
                 .then(() => {
                     const roleId = this.$route.params.id;
-                    if (roleId) return this.loadRoleForEdit(roleId);
                 })
                 .catch(error => console.error("Initialization error:", error.message));
         },
