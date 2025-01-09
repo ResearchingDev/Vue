@@ -18,7 +18,7 @@ class ClientController extends Controller
     {
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0); 
-        $search = $request->input('search.value', ''); 
+        $search = $request->input('search', ''); 
         $orderColumnIndex = $request->input('order.0.column', 0); // Column index for ordering
         $orderDirection = $request->input('order.0.dir', 'asc'); // Order direction ('asc' or 'desc')
         $columns = [
