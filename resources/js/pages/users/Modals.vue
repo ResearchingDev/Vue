@@ -1,14 +1,14 @@
 <template>
     <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
-        data-bs-target="#exampleModal" id="add_user" @click="handleAddUser">Add User
+        data-bs-target="#UserModal" id="add_user" @click="handleAddUser">Add
     </button>
 
-    <div class="modal fade modal-bookmark" id="exampleModal" ref="UserModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade modal-bookmark" id="UserModal" ref="UserModal" tabindex="-1" role="dialog"
+        aria-labelledby="UserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <h5 class="modal-title" id="UserModalLabel">Add User</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
                         @click="clearForm"></button>
                 </div>
@@ -162,7 +162,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { toast } from 'vue3-toastify';
 export default {
     data() {
@@ -229,20 +228,18 @@ export default {
                 formData.append('profile_picture', this.profilePic);
             }
             try {
-                const user_ajax_url = (this.id) ? `/api/client/users/${this.id}/update` : '/api/client/users' ;
+                const user_ajax_url = (this.id) ? `/client/users/${this.id}/update`: '/client/users' ;
                 const alert_message = (this.id) ? 'User Updated SuccessFully..!' : 'User Created SuccessFully..!' ;
-                const token = localStorage.getItem('token'); // Retrieve the token from localStorage
                 // Adjust the URL to match your API route
-                await axios.post(user_ajax_url, formData, {
+                await this.$axios.post(user_ajax_url, formData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data', // Important to set this when uploading files
-                        'Authorization': `Bearer ${token}`  
-                    },
+                        'Content-Type': 'multipart/form-data'
+                    }
                 });
                 toast.success(alert_message);
-                this.$emit('updateCompleted');
+                this.$emit('reloadTable');
                 this.clearForm();
-                const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById('UserModal'));
                 modal.hide();
                 setTimeout(() => {
                     const backdrops = document.querySelectorAll('.modal-backdrop');

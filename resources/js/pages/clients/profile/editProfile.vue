@@ -7,24 +7,28 @@
             <div class="mb-3">
               <label class="form-label">Email address</label>
               <input class="form-control" type="email" v-model="user.email" placeholder="Company" />
+              <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
             </div>
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="mb-3">
               <label class="form-label">First Name</label>
               <input class="form-control" type="text" v-model="user.first_name" placeholder="First Name" />
+              <span v-if="errors.first_name" class="text-danger">{{ errors.first_name[0] }}</span>
             </div>
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="mb-3">
               <label class="form-label">Last Name</label>
               <input class="form-control" type="text" v-model="user.last_name" placeholder="Last Name" />
+              <span v-if="errors.last_name" class="text-danger">{{ errors.last_name[0] }}</span>
             </div>
           </div>
           <div class="col-sm-6 col-md-4">
             <div class="mb-3">
               <label class="form-label">Phone</label>
               <input class="form-control" type="text" v-model="user.phone_number" placeholder="Enter Phone Number" />
+              <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0] }}</span>
             </div>
           </div>
           <div class="col-sm-6 col-md-4">
@@ -39,6 +43,7 @@
             <div class="mb-3">
               <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture" accept="image/*">
             </div>
+            <span v-if="errors.profile_picture" class="text-danger">{{ errors.profile_picture[0] }}</span>
             <div v-if="user.profilePicPreview" class="mb-3">
               <img :src="user.profilePicPreview || '/assets/images/dashboard/profile.png'" alt="Profile Preview" class="img-fluid"
                 style="max-width: 100px; max-height: 100px;">
@@ -73,6 +78,7 @@ export default {
         profilePic: null,
         profilePicPreview: null,
       },
+      errors: {},
       isLoading: true, // Flag to show loading state
     };
   },
@@ -147,8 +153,12 @@ export default {
         );
         toast.success('Profile updated successfully!');
       } catch (error) {
-        console.error('Error updating profile:', error);
-        toast.warn('An error occurred while updating your profile');
+        console.log(error);
+        if (error && error.status_code === 422) {
+            this.errors = error.data.errors; 
+        } else {
+            console.error('Error saving client:', error?.data || error.message);
+        }
       }
     },
 
