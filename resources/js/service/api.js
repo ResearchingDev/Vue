@@ -51,8 +51,11 @@ axiosInstance.interceptors.response.use(
       // For errors that don't have a response (network issues, timeout, etc.)
       console.error('Error without Response:', error.message);
     }
-
-    return Promise.reject(error.response?.data || { message: error.message });
+    return Promise.reject({
+      data: error.response?.data,
+      message: error.response?.data?.message || error.message,
+      status_code: error.response?.status || 500 // Default to 500 if no status
+    });
   }
 );
 

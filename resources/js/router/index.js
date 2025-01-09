@@ -142,7 +142,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.title) document.title = to.meta.title;
     const path = ["/login"];
-    if (path.includes(to.path) || localStorage.getItem("User")) {
+    if (path.includes(to.path) || localStorage.getItem("token")) {
         return next();
     }
     next("/login");

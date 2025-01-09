@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { toast } from 'vue3-toastify';
 export default {
     data() {
@@ -157,16 +156,13 @@ export default {
 
             try {
                 const alert_message = (this.id) ? 'Client Updated SuccessFully..!' : 'Client Created SuccessFully..!';
-                if (this.id) {
-                    await axios.post(`/api/clients/save/${this.id}`, formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    });
-                } else {
-                    await axios.post('/api/clients', formData);
-                }
-                this.$emit('updateCompleted');
+                const client_ajax_url = (this.id) ? `/admin/client/${this.id}` : '/admin/client';
+                await this.$axios.post(client_ajax_url, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                this.$emit('reloadTable');
                 toast.success(alert_message);
                 // Adjust the URL to match your API route
                 const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
@@ -177,10 +173,11 @@ export default {
                 }, 1000);
                 this.clearForm();
             } catch (error) {
-                if (error.response && error.response.status === 422) {
-                    this.errors = error.response.data.errors; // Assign validation errors
+                console.log(error);
+                if (error && error.status_code === 422) {
+                    this.errors = error.data.errors; // Assign validation errors
                 } else {
-                    console.error('Error saving client:', error.response?.data || error.message);
+                    console.error('Error saving client:', error?.data || error.message);
                 }
             }
         },
