@@ -98,7 +98,7 @@ class UserRolesController extends Controller
         // Get pagination, sorting, and search parameters
         $limit = $request->input('length', 10);
         $start = $request->input('start', 0);
-        $searchValue = $request->input('search.value', '');
+        $searchValue = $request->input('search', '');
         $orderColumnIndex = $request->input('order.0.column', 0);
         $orderDirection = $request->input('order.0.dir', 'asc');
         // Map column index to actual database columns
@@ -187,10 +187,11 @@ class UserRolesController extends Controller
             'permissions.*.view' => 'required|boolean',
         ]);
         try {
+            $clientId = Auth::user()->client_id;
             // Find the role and update its details
             $role = SubUserRole::findOrFail($id);
             $role->update([
-                'client_id' => $request->client_id,
+                'client_id' => $clientId,
                 'role_unique_code' => $validatedData['roleCode'],
                 'role_name' => $validatedData['roleName'],
                 'status' => $validatedData['status'],
