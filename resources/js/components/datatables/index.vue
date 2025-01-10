@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import router from '../../router'; // Import Vue Router for redirecting
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
@@ -57,7 +58,7 @@ export default {
                         if (xhr.status === 401) {
                             // Handle Unauthorized (e.g., user session expired)
                             // Redirect to login page or perform other actions
-                            window.location.href = '/login';
+                            router.push('/login');
                         } else if (xhr.status === 500) {
                             // Handle server errors
                             alert('Internal Server Error. Please try again later.');

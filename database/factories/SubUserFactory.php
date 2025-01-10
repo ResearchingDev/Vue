@@ -7,7 +7,7 @@ use App\Models\SubUserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class UserFactory extends Factory
+class SubUserFactory extends Factory
 {
     protected $model = User::class;
 

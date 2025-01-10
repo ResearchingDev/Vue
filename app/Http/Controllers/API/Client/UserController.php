@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Admin;
+namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -128,9 +128,8 @@ class UserController extends Controller
         $clientId = Auth::user()->client_id;
         $roles = SubUserRole::select('id', 'role_name','status')
         ->where('status', 'Active') 
-        ->when($clientId, function ($query, $clientId) {
-            $query->where('client_id', $clientId);
-        })
+        ->where('client_id', $clientId) 
+        ->where('role_unique_code', '!=', 'client')
         ->get();
 
         // Return the roles as a JSON response

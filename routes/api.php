@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
-use App\Http\Controllers\API\Admin\UserController;
 use App\Http\Controllers\API\Admin\ClientController;
-use App\Http\Controllers\Client\UserRolesController;
+use App\Http\Controllers\API\Client\UserController;
+use App\Http\Controllers\API\Client\UserRolesController;
 
 // Auth Routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -24,15 +24,12 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
     // Non-RESTful route
     Route::get('users/user_roles', [UserController::class, 'roles'])->name('user.roles');
     // RESTful resource routes
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class); // Resource Controller
     // Additional custom routes for users
     Route::post('users/{id}/update', [UserController::class, 'update'])->name('user.update');
     Route::post('users/list', [UserController::class, 'list'])->name('user.list');
     // Role Routes
-    Route::post('/roles', [UserRolesController::class, 'list']);
+    Route::post('roles/list', [UserRolesController::class, 'list']);
     Route::get('/roles/menus', [UserRolesController::class, 'modules_list']);
-    Route::get('/roles/{id}', [UserRolesController::class, 'edit']);
-    Route::post('/roles/add', [UserRolesController::class, 'store']);
-    Route::delete('/roles/delete/{id}', [UserRolesController::class, 'destroy']);
-    Route::post('/roles/update/{id}', [UserRolesController::class, 'update']);
+    Route::resource('roles', UserRolesController::class); // Resource Controller
 });

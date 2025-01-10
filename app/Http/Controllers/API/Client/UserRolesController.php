@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\API\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserPermission;
@@ -136,9 +136,8 @@ class UserRolesController extends Controller
         ]);
     }
     //List the Particular User Roles and Permisssions
-    public function edit(Request $request)
+    public function show(string $user_role_id)
     {
-        $user_role_id = $request->id;
         // Find the client by ID
         $userrole = SubUserRole::findOrFail($user_role_id);
         // Optionally, you can eager load the 'user' relationship if needed
@@ -149,10 +148,9 @@ class UserRolesController extends Controller
         ], 200);
     }
     //Delete the User Roles and Permisssions
-    public function destroy(Request $request)
+    public function destroy(string $user_role_id)
     {
         try {
-            $user_role_id = $request->id;
             // Find the role by ID
             $userRole = SubUserRole::findOrFail($user_role_id);
             // Delete related user_permission records

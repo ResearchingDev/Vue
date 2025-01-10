@@ -14,14 +14,13 @@ import userEdit from "../pages/clients/profile/userEdit.vue";
 import users from "../pages/users/index.vue";
 
 /* Dashboard */
-import apex_chart from "../pages/advance/charts/ApexChart/apex_chart.vue";
+import apexChart from "../pages/advance/charts/ApexChart/apex_chart.vue";
 
 /* Error Page */
 
 import Error404 from "../pages/error/error404.vue";
 
-import Roles from "../pages/roles/index.vue";
-import userPermission from "../pages/roles/userPermission.vue";
+import roles from "../pages/roles/index.vue";
 const routes = [
     {
         path: "/",
@@ -30,7 +29,7 @@ const routes = [
             {
                 path: "",
                 name: "defaultRoot",
-                component: apex_chart,
+                component: apexChart,
                 meta: {
                     title: "Subscription - ERP Software",
                 },
@@ -66,7 +65,7 @@ const routes = [
             {
                 path: "dashboard",
                 name: "dashboard",
-                component: apex_chart,
+                component: apexChart,
                 meta: {
                     title: " Dashboard | Subscription - ERP Software",
                 }
@@ -88,7 +87,7 @@ const routes = [
             {
                 path: "dashboard",
                 name: "Dashboard",
-                component: apex_chart,
+                component: apexChart,
                 meta: {
                     title: " Dashboard | Subscription - ERP Software",
                 },
@@ -105,7 +104,7 @@ const routes = [
             {
                 path: "roles",
                 name: "Role",
-                component: Roles,
+                component: roles,
                 meta: {
                     title: " Roles | Subscription - ERP Software",
                 },

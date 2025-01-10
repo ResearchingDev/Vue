@@ -112,7 +112,8 @@
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">User Type</label>
-                                    <select v-model="user_role" class="form-control " required>
+                                    <select v-model="user_role" class="form-control" required>
+                                        <option value="">Select User Role</option>
                                         <option v-for="role in roles" :key="role.id" :value="role.id">
                                             {{ role.role_name }}
                                         </option>
@@ -182,6 +183,7 @@ export default {
             isEdit:false,
             validationErrors: {},
             roles: [],
+            user_role:""
         };
     },
     methods: {
@@ -328,6 +330,7 @@ export default {
             this.profilePicPreview = null;
             this.$refs.profilePicture.value = '';
             this.role_id = '';
+            this.user_role = "";
             this.isEdit = false;
             this.errors = {};
             this.validationErrors = {};
