@@ -347,3 +347,35 @@ export default {
     }
 }
 </script>
+<style>
+.add-user-roles {
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.actions .btn {
+    margin: 0 10px;
+}
+</style>
