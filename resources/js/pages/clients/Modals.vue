@@ -1,15 +1,15 @@
 <template>
-    <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
+    <Button buttonClass="btn btn-success btn-sm btn-block btn-mail w-100" data-bs-toggle="modal"
         data-bs-target="#clientModal">Add
-    </button>
+    </Button>
     <div class="modal fade modal-bookmark" id="clientModal" ref="clientModal" tabindex="-1" role="dialog"
         aria-labelledby="clientModalLabel">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientModalLabel">{{this.isEdit ? "Edit Client" : "Add Client" }}</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
-                        @click="clearForm"></button>
+                    <Button buttonClass="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        @click="clearForm"></Button>
                 </div>
                 <form class="form-bookmark needs-validation" id="client-form" novalidate
                     @submit.prevent="submitClient">
@@ -21,51 +21,56 @@
                                     <!-- Client Details -->
                                     <div class="col-sm-6 col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Client Name</label>
-                                            <input v-model="client_name" class="form-control" type="text"
-                                                placeholder="Client Name" required>
-                                            <span v-if="errors.client_name" class="text-danger">{{ errors.client_name[0]
-                                                }}</span>
+                                            <Label labelClass="form-label">Client Name</Label>
+                                            <Commoninput v-model="client_name" inputClass="form-control" type="text"
+                                                placeholder="Client Name" required/>
+                                            <ErrorMessage :errorMessage="errors.client_name ? errors.client_name[0] : ''" />
+
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Email Address</label>
-                                            <input v-model="email" class="form-control" type="email" placeholder="Client Email"
-                                                required>
-                                            <span v-if="errors.email" class="text-danger">{{ errors.email[0] }}</span>
+                                            <Label labelClass="form-label">Email Address</Label>
+                                            <Commoninput v-model="email" inputClass="form-control" type="email" placeholder="Client Email"
+                                                required/>
+                                            <ErrorMessage :errorMessage="errors.email ? errors.email[0] : ''" />
+
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Phone Number</label>
-                                            <input v-model="phone_number" class="form-control" type="text"
-                                                placeholder="Phone Number" required>
-                                            <span v-if="errors.phone_number" class="text-danger">{{ errors.phone_number[0]
-                                                }}</span>
+                                            <Label labelClass="form-label">Phone Number</Label>
+                                            <Commoninput v-model="phone_number" inputClass="form-control" type="text"
+                                                placeholder="Phone Number" required />
+                                            <ErrorMessage :errorMessage="errors.phone_number ? errors.phone_number[0] : ''" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Alternate Phone Number</label>
-                                            <input v-model="alternate_phone_number" class="form-control" type="text"
-                                                placeholder="Alternate Phone Number">
+                                            <Label labelClass="form-label">Alternate Phone Number</Label>
+                                            <Commoninput v-model="alternate_phone_number" inputClass="form-control" type="text"
+                                                placeholder="Alternate Phone Number" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <input v-model="address" class="form-control" type="text"
-                                                placeholder="Client Address">
+                                            <Label labelClass="form-label">Address</Label>
+                                            <Commoninput v-model="address" inputClass="form-control" type="text"
+                                                placeholder="Client Address" />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Status</label>
-                                            <select v-model="status" class="form-control btn-square" required>
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
+                                            <Label labelClass="form-label">Status</Label>
+                                            <CommonSelect
+                                                v-model="status"
+                                                :options="[
+                                                    { value: 'Active', text: 'Active' },
+                                                    { value: 'Inactive', text: 'Inactive' }
+                                                ]"
+                                                selectClass="form-control btn-square"
+                                                required
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -77,18 +82,18 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Username</label>
-                                                <input v-model="username" class="form-control" type="text"
-                                                    placeholder="Username" required>
-                                                <span v-if="errors.username" class="text-danger">{{ errors.username[0] }}</span>
+                                                <Label labelClass="form-label">Username</Label>
+                                                <Commoninput v-model="username" inputClass="form-control" type="text"
+                                                    placeholder="Username" required />
+                                                <ErrorMessage :errorMessage="errors.username ? errors.username[0] : ''" />
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Password</label>
-                                                <input v-model="password" class="form-control" type="password"
-                                                    placeholder="Password" required>
-                                                <span v-if="errors.password" class="text-danger">{{ errors.password[0] }}</span>
+                                                <Label labelClass="form-label">Password</Label>
+                                                <Commoninput v-model="password" inputClass="form-control" type="password"
+                                                    placeholder="Password" required />
+                                                <ErrorMessage :errorMessage="errors.password ? errors.password[0] : ''" />
                                             </div>
                                         </div>
                                     </div>
@@ -101,7 +106,7 @@
                                         <input type="file" class="form-control" @change="handleFileChange" ref="profilePicture"
                                             accept="image/*">
                                     </div>
-                                    <span v-if="errors.profile_picture" class="text-danger">{{ errors.profile_picture[0] }}</span>
+                                    <ErrorMessage :errorMessage="errors.profile_picture ? errors.profile_picture[0] : ''" />
                                     <div v-if="profilePicPreview">
                                         <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
                                             style="max-width: 100px; max-height: 100px;">
@@ -111,9 +116,9 @@
                         </div>
                      </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="submit">Save Client</button>
-                        <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
-                            @click="clearForm">Cancel</button>
+                        <Button buttonClass="btn btn-secondary" type="submit">Save Client</Button>
+                        <Button buttonClass="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
+                            @click="clearForm">Cancel</Button>
                     </div>
                 </form>
             </div>
@@ -122,8 +127,20 @@
 </template>
 
 <script>
+import Button from '../../components/formElements/Button.vue';
+import Label from '../../components/formElements/Label.vue';
+import Commoninput from '../../components/formElements/Commoninput.vue';
+import CommonSelect from '../../components/formElements/CommonSelect.vue';
+import ErrorMessage from '../../components/formElements/ErrorMessage.vue';
 import { toast } from 'vue3-toastify';
 export default {
+    components: {
+        Button,
+        Label,
+        Commoninput,
+        CommonSelect,
+        ErrorMessage,
+    },
     data() {
         return {
             client_name: '',
