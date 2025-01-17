@@ -70,7 +70,7 @@ export var menuItems = {
                 iconf:"fill-social",
                 type: "link",
                 badgeType: "light-primary",
-                active: true,
+                active: false,
             },
         ],
     },

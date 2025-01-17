@@ -39,21 +39,28 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- User Access -->
-                    <div class="form-group">
-                        <label>User Access</label>
-                        <div class="form-check">
-                            <input id="webAccess" value="Web Access" type="checkbox" v-model="role.userAccess" class="form-check-input" />
-                            <label for="webAccess" class="form-check-label">Web Access</label>
+                    <!-- User Access and Status -->
+                     <div class="row">
+                        <div class="form-group col-md-6 mt-3">
+                            <label>User Access</label>
+                            <div class="form-check">
+                                <input id="webAccess" value="Web Access" type="checkbox" v-model="role.userAccess" class="form-check-input" />
+                                <label for="webAccess" class="form-check-label">Web Access</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="mobileAccess" value="Mobile Access" type="checkbox" v-model="role.userAccess" class="form-check-input" />
+                                <label for="mobileAccess" class="form-check-label">Mobile Access</label>
+                            </div>
+                            <span class="text-danger" v-if="errors.userAccess">{{ errors.userAccess }}</span>
                         </div>
-                        <div class="form-check">
-                            <input id="mobileAccess" value="Mobile Access" type="checkbox" v-model="role.userAccess" class="form-check-input" />
-                            <label for="mobileAccess" class="form-check-label">Mobile Access</label>
+                        <div class="form-group col-md-6 mt-3">
+                            <label for="status" class="">Status</label>
+                            <select id="status" v-model="role.status" class="form-control">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
                         </div>
-                        <span class="text-danger" v-if="errors.userAccess">{{ errors.userAccess }}</span>
                     </div>
-
                     <!-- Permissions -->
                     <div class="form-group">
                         <h5>Permissions</h5>
@@ -79,14 +86,12 @@
                         </table>
                         <span class="text-danger" v-if="errors.permissions">{{ errors.permissions }}</span>
                     </div>
-
                     <!-- Actions -->
                     <div class="mt-3 text-center">
-                        <button type="submit" class="btn btn-primary">{{ isEditMode ? "Update" : "Save" }}</button>
+                        <button type="submit" class="btn btn-primary m-3">{{ isEditMode ? "Update" : "Save" }}</button>
                         <button type="button" class="btn btn-secondary" @click="cancelBtn">Cancel</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -128,13 +133,19 @@ export default {
             return access.join(", ") || "-";
         },
         renderActions(row) {
-            return `
-                <button class="btn btn-primary btn-sm edit-btn" data-edit-id="${row.id}"">
+            let actions = `
+                <button class="btn btn-primary btn-sm edit-btn" data-edit-id="${row.id}">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="btn btn-danger btn-sm delete-btn" data-delete-id="${row.id}">
-                    <i class="fa fa-trash"></i>
-                </button>`;
+            `;
+            if (row.role_unique_code !== "admin" && row.role_unique_code !== "supervisor") {
+                actions += `
+                    <button class="btn btn-danger btn-sm delete-btn" data-delete-id="${row.id}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                `;
+            }
+            return actions;
         },
         async fetchModules() {
             try {

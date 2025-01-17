@@ -54,13 +54,13 @@
       </div>
       <div class="card-footer text-end">
         <button class="btn btn-primary" type="submit">Update Profile</button>
+        <router-link class="link btn btn-danger m-2" to="/"> Cancel</router-link>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 import { toast } from 'vue3-toastify';
 
 export default {
@@ -105,7 +105,7 @@ export default {
                 this.user.profilePicPreview = imagePath;
               };
 
-              img.onerror = () => { 
+              img.onerror = () => {
                 this.user.profilePicPreview = '/assets/images/dashboard/profile.png'; // Fallback image
               };
 
@@ -155,7 +155,7 @@ export default {
       } catch (error) {
         console.log(error);
         if (error && error.status_code === 422) {
-            this.errors = error.data.errors; 
+            this.errors = error.data.errors;
         } else {
             console.error('Error saving client:', error?.data || error.message);
         }
