@@ -48,6 +48,7 @@ export default createStore({
       jobs,
       courses,language,
       common,contact,bootsrap
-    }
+    },
+
 });
 

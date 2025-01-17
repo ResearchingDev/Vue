@@ -79,10 +79,10 @@ class UserRolesController extends Controller
             ->select(
                 'sub_module_menus.id',
                 'sub_module_menus.parent_id',
-                'sub_module_menus.module_name as name',
-                'sub_module_menus.module_type',
+                'sub_module_menus.title as name',
+                'sub_module_menus.type as module_type',
                 'sub_module_menus.unique_code',
-                'sub_module_menus.sequence_order',
+                'sub_module_menus.sort_order',
                 'sub_module_menus.status'
             )
             ->get();

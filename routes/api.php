@@ -6,12 +6,14 @@ use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Admin\ClientController;
 use App\Http\Controllers\API\Client\UserController;
 use App\Http\Controllers\API\Client\UserRolesController;
+use App\Http\Controllers\API\Menu\MenuController;
 
 // Auth Routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('/users/save_users/{id}', [UserController::class, 'update']);
+    Route::post('/menus', [MenuController::class, 'list']);
 });
 // Admin routes
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {

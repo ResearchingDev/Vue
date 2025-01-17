@@ -12,20 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sub_module_menus', function (Blueprint $table) {
-            $table->id(); // `id` will default to unsignedBigInteger
-            $table->unsignedBigInteger('parent_id')->default(0)->nullable()->index()->comment('Parent menu ID for hierarchical structure'); // Default value set to 0
-            $table->string('module_name', 100);
-            $table->string('icon', 50)->nullable();
-            $table->string('url', 50)->nullable();
-            $table->enum('module_type', ['Menu', 'SubMenu', 'Custom']);
-            $table->string('unique_code', 50)->unique();
-            $table->unsignedInteger('sequence_order');
-            $table->text('description')->nullable();
-            $table->enum('status', ['Active', 'Inactive', 'Hidden']);
-            $table->softDeletes(); // Soft delete support
-            $table->timestamps();
 
-            // Define foreign key relationship for parent_id
+            $table->id(); // Auto-incrementing ID
+            $table->string('title'); // Menu title
+            $table->string('path')->nullable(); // Path for link-type items
+            $table->enum('type', ['link', 'sub', 'headtitle', 'custom']); // Type of menu item
+            $table->unsignedBigInteger('parent_id')->nullable(); // Parent ID for submenus (NULL for top-level)
+            $table->string('icon')->nullable(); // Icon for the menu item
+            $table->string('iconf')->nullable(); // Filled icon for the menu item
+            $table->string('badge_type', 50)->nullable(); // Badge type (e.g., light-primary)
+            $table->boolean('active')->default(true); // Whether the menu item is active
+            $table->enum('role', ['super_admin', 'client', 'custom']); // Role-based visibility
+            $table->integer('sort_order')->default(0); // Used for ordering items
+            $table->string('unique_code')->unique(); // Unique identifier for the menu item
+            $table->text('description')->nullable(); // Optional description of the menu item
+            $table->enum('status', ['Active', 'Inactive', 'Hidden']); // Status of the menu item
+            $table->timestamp('deleted_at')->nullable(); // Soft delete timestamp
+            $table->timestamps(); // Created at and Updated at timestamps
+            // Foreign key constraint for parent_id
             $table->foreign('parent_id')->references('id')->on('sub_module_menus')->onDelete('cascade');
         });
     }
