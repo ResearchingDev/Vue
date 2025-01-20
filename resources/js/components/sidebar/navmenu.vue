@@ -17,9 +17,12 @@
             </li>
             <li v-for="(menuItem, index) in menuItems" :key="index" class="sidebar-list"
                 :class="{ ' sidebar-main-title': menuItem.type == 'headtitle', }, menuItem.showPin ? 'pined' : ''">
+                <div v-if="menuItem.type == 'headtitle'">
+                    <h6 class="lan-1">{{ (menuItem.headTitle1) }}</h6>
+                </div>
 
-                <i v-if="menuItem.type != 'headtitle'" class="fa fa-thumb-tack"
-                    @click="togglePinnedName({ item: menuItem })"></i>
+                <!-- <i v-if="menuItem.type != 'headtitle'" class="fa fa-thumb-tack"
+                    @click="togglePinnedName({ item: menuItem })"></i> -->
                 <label :class="'badge badge-' + menuItem.badgeType" v-if="menuItem.badgeType">{{ (menuItem.badgeValue)
                 }}</label>
                 <a href="javascript:void(0)" class="sidebar-link sidebar-title" :class="{ 'active': menuItem.active }"
@@ -41,6 +44,7 @@
                        <i class="fa fa-angle-right pull-right"></i>
                    </div>
                 </a>
+
 
                 <router-link :to="menuItem.path" class="sidebar-link sidebar-title" v-if="menuItem.type == 'link'"
                     :class="{ 'active': menuItem.active }" v-on:click="hidesecondmenu()"
@@ -194,14 +198,12 @@ export default {
         }),
         showPinTitle: {
             get() {
-                if (Array.isArray(this.menuItems)) {
+                let show = false;
                 this.menuItems.every(item => {
-                    if (item.showPin) {
-                        show = true;
-                    }
-                    return !show; // Stop iteration when show is true
-                });
-            }
+                    item.showPin && (show = true)
+                    return !show
+                })
+                return show
             }
         },
         layoutobject: {
@@ -267,7 +269,6 @@ export default {
             let pinIndex = this.menuItems.findIndex(menu => menu.title == pin);
             pinIndex > -1 && (this.menuItems[pinIndex].showPin = true)
         })
-        if (Array.isArray(this.menuItems)) {
             this.menuItems.filter(items => {
                 if (items.path === this.$route.path)
                     this.$store.dispatch('menu/setActiveRoute', items);
@@ -282,7 +283,6 @@ export default {
                     });
                 });
             });
-        }
 
     },
     methods: {

@@ -1,5 +1,5 @@
-import BonusUI from "../../data/bonusui";
-import axios from "axios";
+import { menuItems } from '../../data/menu.js';
+import BonusUI from '../../data/bonusui';
 
 const state = {
     data: [],
@@ -9,7 +9,7 @@ const state = {
     togglesidebar: true,
     activeoverlay: false,
     searchOpen: false,
-    customizer: "",
+  customizer: '',
     hideRightArrowRTL: false,
     hideLeftArrowRTL: true,
     hideRightArrow: true,
@@ -21,40 +21,22 @@ const state = {
 };
 
 const mutations = {
-    setUserData: async (state) => {
-        if (state.data.length === 0) {
-            const token = localStorage.getItem("token");
-            const user = localStorage.getItem("User");
+  setUserData: (state) => {
+    const user = localStorage.getItem('User');
+    if (user) {
+      try {
             const parsedUser = JSON.parse(user);
-            const roleUniqueCode = parsedUser.role_code;
-
-            // Set loading to true when fetching data
-            state.loading = true;
-
-            try {
-                const response = await axios.post(
-                    "/api/menus",
-                    { role_code: roleUniqueCode },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-
-                const menuList = response.data.data;
-                state.data = menuList; // Set the data once it's fetched
-
-                // Set loading to false after data is fetched
-                state.loading = false;
+        // Set the data immediately after fetching from localStorage
+        state.data = menuItems[parsedUser.role_code]?.data || menuItems.client.data;
             } catch (error) {
-                console.error("Error fetching menu data:", error);
-
-                // Set loading to false if there's an error
-                state.loading = false;
+        console.error('Error parsing user data:', error);
+        state.data = menuItems.client.data; // Fallback
             }
+    } else {
+      state.data = menuItems.super_admin.data; // Fallback if no user in localStorage
         }
     },
+
     // Update Sidebar state
     opensidebar: (state) => {
         state.togglesidebar = !state.togglesidebar;
@@ -78,30 +60,20 @@ const mutations = {
     searchTerm: (state, term) => {
         let items = [];
         const searchval = term.toLowerCase();
-        state.data.forEach((menuItems) => {
+    state.data.forEach(menuItems => {
             if (menuItems.title) {
-                if (
-                    menuItems.title.toLowerCase().includes(searchval) &&
-                    menuItems.type === "link"
-                ) {
+        if (menuItems.title.toLowerCase().includes(searchval) && menuItems.type === 'link') {
                     items.push(menuItems);
                 }
                 if (menuItems.children) {
-                    menuItems.children.forEach((subItems) => {
-                        if (
-                            subItems.title.toLowerCase().includes(searchval) &&
-                            subItems.type === "link"
-                        ) {
+          menuItems.children.forEach(subItems => {
+            if (subItems.title.toLowerCase().includes(searchval) && subItems.type === 'link') {
                             subItems.icon = menuItems.icon;
                             items.push(subItems);
                         }
                         if (subItems.children) {
-                            subItems.children.forEach((suSubItems) => {
-                                if (
-                                    suSubItems.title
-                                        .toLowerCase()
-                                        .includes(searchval)
-                                ) {
+              subItems.children.forEach(suSubItems => {
+                if (suSubItems.title.toLowerCase().includes(searchval)) {
                                     suSubItems.icon = menuItems.icon;
                                     items.push(suSubItems);
                                 }
@@ -117,10 +89,10 @@ const mutations = {
     // Set active state for Bonus Navigation
     setBonusNavActive: (state, item) => {
         if (!item.active) {
-            state.megamenu.forEach((a) => {
+      state.megamenu.forEach(a => {
                 if (state.megamenu.includes(item)) a.active = false;
                 if (a.children) {
-                    a.children.forEach((b) => {
+          a.children.forEach(b => {
                         if (a.children.includes(item)) {
                             b.active = false;
                         }
@@ -134,11 +106,10 @@ const mutations = {
     // Set active state for Navigation
     setNavActive: (state, item) => {
         if (!item.active) {
-            if (Array.isArray(state.data)) {
-                state.data.forEach((a) => {
+      state.data.forEach(a => {
                     if (state.data.includes(item)) a.active = false;
                     if (a.children) {
-                        a.children.forEach((b) => {
+          a.children.forEach(b => {
                             if (a.children.includes(item)) {
                                 b.active = false;
                             }
@@ -146,24 +117,20 @@ const mutations = {
                     }
                 });
             }
-        }
         item.active = !item.active;
     },
 
     // Set active route for navigation
     setActiveRoute: (state, item) => {
-        state.data.forEach((menuItem) => {
+    state.data.forEach(menuItem => {
             if (menuItem !== item) menuItem.active = false;
             if (menuItem.children && menuItem.children.includes(item)) {
                 item.active = true;
                 menuItem.active = true;
             }
             if (menuItem.children) {
-                menuItem.children.forEach((submenuItems) => {
-                    if (
-                        submenuItems.children &&
-                        submenuItems.children.includes(item)
-                    ) {
+        menuItem.children.forEach(submenuItems => {
+          if (submenuItems.children && submenuItems.children.includes(item)) {
                         item.active = true;
                         menuItem.active = true;
                         submenuItems.active = true;
@@ -171,44 +138,44 @@ const mutations = {
                 });
             }
         });
-    },
+  }
 };
 
 const actions = {
     // Load user data from localStorage immediately after page load
     loadUserData: (context) => {
-        context.commit("setUserData");
+    context.commit('setUserData');
     },
 
     // Open/close the sidebar
     opensidebar: (context) => {
-        context.commit("opensidebar");
+    context.commit('opensidebar');
     },
 
     // Handle resize toggle
     resizetoggle: (context) => {
-        context.commit("resizetoggle");
+    context.commit('resizetoggle');
     },
 
     // Set active state for bonus navigation
     setBonusNavActive: (context, term) => {
-        context.commit("setBonusNavActive", term);
+    context.commit('setBonusNavActive', term);
     },
 
     // Handle search term filtering
     searchTerm: (context, term) => {
-        context.commit("searchTerm", term);
+    context.commit('searchTerm', term);
     },
 
     // Set active state for navigation
     setNavActive: (context, item) => {
-        context.commit("setNavActive", item);
+    context.commit('setNavActive', item);
     },
 
     // Set active route for navigation
     setActiveRoute: (context, item) => {
-        context.commit("setActiveRoute", item);
-    },
+    context.commit('setActiveRoute', item);
+  }
 };
 
 export default {
@@ -216,5 +183,5 @@ export default {
     state,
     getters: {},
     actions,
-    mutations,
+  mutations
 };
