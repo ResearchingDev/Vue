@@ -6,6 +6,7 @@ use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Admin\ClientController;
 use App\Http\Controllers\API\Client\UserController;
 use App\Http\Controllers\API\Client\UserRolesController;
+use App\Http\Middleware\HandleCustomCORS;
 
 // Auth Routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -32,4 +33,7 @@ Route::middleware(['auth:sanctum'])->prefix('client')->group(function () {
     Route::post('roles/list', [UserRolesController::class, 'list']);
     Route::get('/roles/menus', [UserRolesController::class, 'modules_list']);
     Route::resource('roles', UserRolesController::class); // Resource Controller
+});
+Route::middleware(['auth:sanctum', 'custom-cors'])->group(function () {
+    Route::get('/user-roles', [UserRoleController::class, 'list']);
 });

@@ -109,6 +109,8 @@ class UserRolesController extends Controller
             ->where('role_unique_code', '!=', 'client')
             ->where('client_id', '=', $clientId)
             ->where('deleted_at', null);
+            // Total records count
+        $totalRecords = $query->count();
         // Apply search filter
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
@@ -124,8 +126,6 @@ class UserRolesController extends Controller
             ->offset($start)
             ->limit($limit)
             ->get();
-        // Total records count
-        $totalRecords = DB::table('sub_user_roles')->count();
         // Return a properly structured JSON response
         return response()->json([
             'draw' => (int) $request->input('draw', 1),

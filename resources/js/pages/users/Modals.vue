@@ -1,8 +1,7 @@
 <template>
-    <button class="btn btn-success btn-sm btn-block btn-mail w-100" type="button" data-bs-toggle="modal"
+    <Button buttonClass="btn btn-success btn-sm btn-block btn-mail w-100" data-bs-toggle="modal"
         data-bs-target="#UserModal" id="add_user" @click="handleAddUser">Add
-    </button>
-
+    </Button>
     <div class="modal fade modal-bookmark" id="UserModal" ref="UserModal" tabindex="-1" role="dialog"
         aria-labelledby="UserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -19,115 +18,106 @@
                             <!-- First Name -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">First Name</label>
-                                    <input v-model="first_name" class="form-control" type="text"
-                                        placeholder="First Name" required>
-                                    <div v-if="validationErrors.first_name" class="text-danger err">
-                                        {{ validationErrors.first_name[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">First Name</Label>
+                                    <Commoninput v-model="first_name" inputClass="form-control" type="text"
+                                                placeholder="First Name" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.first_name ? validationErrors.first_name[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Last Name -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Last Name</label>
-                                    <input v-model="last_name" class="form-control" type="text" placeholder="Last Name"
-                                        required>
-                                    <div v-if="validationErrors.last_name" class="text-danger err">
-                                        {{ validationErrors.last_name[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">Last Name</Label>
+                                    <Commoninput v-model="last_name" inputClass="form-control" type="text"
+                                            placeholder="Last Name" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.last_name ? validationErrors.last_name[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Email Address -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Email address</label>
-                                    <input v-model="email" class="form-control" type="email" placeholder="Email"
-                                        required>
-                                    <div v-if="validationErrors.email" class="text-danger err">
-                                        {{ validationErrors.email[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">Email address</Label>
+                                    <Commoninput v-model="email" inputClass="form-control" type="email"
+                                            placeholder="Email" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.email ? validationErrors.email[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Username -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input v-model="username" class="form-control" type="text" placeholder="Username"
-                                        required>
-                                    <div v-if="validationErrors.username" class="text-danger err">
-                                        {{ validationErrors.username[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">Username</Label>
+                                    <Commoninput v-model="username" inputClass="form-control" type="text"
+                                            placeholder="Username" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.username ? validationErrors.username[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Password -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input v-model="password" class="form-control" type="password"
-                                        placeholder="Password" required>
-                                    <div v-if="validationErrors.password" class="text-danger err">
-                                        {{ validationErrors.password[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">Password</Label>
+                                    <Commoninput v-model="password" inputClass="form-control" type="password"
+                                            placeholder="Password" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.password ? validationErrors.password[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Phone Number -->
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Phone number</label>
-                                    <input v-model="phone_number" class="form-control" type="text"
-                                        placeholder="Phone Number" required>
-                                    <div v-if="validationErrors.phone_number" class="text-danger err">
-                                        {{ validationErrors.phone_number[0] }}
-                                    </div>
+                                    <Label labelClass="form-label">Phone number</Label>
+                                    <Commoninput v-model="phone_number" inputClass="form-control" type="text"
+                                        placeholder="Phone Number" required/>
+                                    <ErrorMessage :errorMessage="validationErrors.phone_number ? validationErrors.phone_number[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Alternate Number -->
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Alternate number</label>
-                                    <input v-model="alter_phone_number" class="form-control" type="text"
-                                        placeholder="Alternate number">
+                                    <Label labelClass="form-label">Alternate number</Label>
+                                    <Commoninput v-model="alter_phone_number" inputClass="form-control" type="text"
+                                        placeholder="Alternate number" required/>
                                 </div>
                             </div>
 
                             <!-- Status -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">Status</label>
-                                    <select v-model="status" class="form-control " required>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
+                                    <Label labelClass="form-label">Status</Label>
+                                    <CommonSelect
+                                        v-model="status"
+                                        :options="[
+                                            { value: 'Active', text: 'Active' },
+                                            { value: 'Inactive', text: 'Inactive' }
+                                        ]"
+                                        selectClass="form-control btn-square"
+                                        required
+                                    />
                                 </div>
                             </div>
 
                             <!-- User Type -->
                             <div class="col-sm-6 col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">User Type</label>
+                                    <Label labelClass="form-label">User Type</Label>
                                     <select v-model="user_role" class="form-control" required>
                                         <option value="">Select User Role</option>
                                         <option v-for="role in roles" :key="role.id" :value="role.id">
                                             {{ role.role_name }}
                                         </option>
                                     </select>
-                                    <div v-if="validationErrors.role_id" class="text-danger err">
-                                        {{ validationErrors.role_id[0] }}
-                                    </div>
+                                    <ErrorMessage :errorMessage="validationErrors.role_id ? validationErrors.role_id[0] : ''" />
                                 </div>
                             </div>
 
                             <!-- Address -->
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Address</label>
+                                    <Label labelClass="form-label">Address</Label>
                                     <textarea v-model="address" class="form-control" placeholder="Enter your address"
                                         required></textarea>
                                 </div>
@@ -140,9 +130,7 @@
                                     <input type="file" class="form-control" @change="handleFileChange"
                                         ref="profilePicture" accept="image/*">
                                 </div>
-                                <div v-if="validationErrors.profile_picture" class="text-danger err">
-                                    {{ validationErrors.profile_picture[0] }}
-                                </div>
+                                <ErrorMessage :errorMessage="validationErrors.profile_picture ? validationErrors.profile_picture[0] : ''" />
                                 <div v-if="profilePicPreview" class="mb-3">
                                     <img :src="profilePicPreview" alt="Profile Preview" class="img-fluid"
                                         style="max-width: 100px; max-height: 100px;">
@@ -152,9 +140,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="submit">Save</button>
-                        <button class="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
-                            @click="clearForm">Cancel</button>
+                        <Button buttonClass="btn btn-secondary" type="submit">Save</Button>
+                        <Button buttonClass="btn btn-primary ms-2" type="button" data-bs-dismiss="modal"
+                            @click="clearForm">Cancel</Button>
                     </div>
                 </form>
             </div>
@@ -164,7 +152,19 @@
 
 <script>
 import { toast } from 'vue3-toastify';
+import Button from '../../components/formElements/Button.vue';
+import Label from '../../components/formElements/Label.vue';
+import Commoninput from '../../components/formElements/Commoninput.vue';
+import CommonSelect from '../../components/formElements/CommonSelect.vue';
+import ErrorMessage from '../../components/formElements/ErrorMessage.vue';
 export default {
+    components:{
+        Button,
+        Label,
+        Commoninput,
+        CommonSelect,
+        ErrorMessage,
+    },
     data() {
         return {
             username: '',
