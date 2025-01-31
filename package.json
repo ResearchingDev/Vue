@@ -45,6 +45,7 @@
         "datatables.net-vue3": "^3.0.3",
         "dotenv": "^16.4.7",
         "dropzone-vue": "^0.1.11",
+        "feather-icons": "^4.29.2",
         "form-wizard-vue3": "^1.0.0",
         "jquery": "^3.7.1",
         "moment": "^2.29.4",
